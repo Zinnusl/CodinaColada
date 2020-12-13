@@ -3,9 +3,10 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
+file(GLOB_RECURSE SOURCES LIST_DIRECTORIES true *.h *.cpp)
 
 # Add source to this project's executable.
-add_executable (CodingColada "CodingColada.cpp" "CodingColada.h" "App.h" "App.cpp")
+add_executable (CodingColada ${SOURCES})
 
 # TODO: Add tests and install targets if needed.
 

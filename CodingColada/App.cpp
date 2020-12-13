@@ -7,5 +7,5 @@ App::App(std::ostream& logger)
 
 void App::run()
 {
-	logger_ << "Ich bin eine App?\n";
+	logger_ << "Ich bin eine App?\n"; // <-- mich auskommentieren um den test zu testen(falls man sowas tut?)
 }

@@ -1,7 +1,7 @@
 ﻿// CodingColada.cpp : Defines the entry point for the application.
 //
 
-#include "CodingColada.h"
+#include "main.h"
 #include "boost/di.hpp"
 
 #include "App.h"
