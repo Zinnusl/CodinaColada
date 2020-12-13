@@ -1,0 +1,5 @@
+C:/Users/zarax/source/repos/CodingColada/out/build/x64-Debug (default)/CMakeFiles/edit_cache.dir
+C:/Users/zarax/source/repos/CodingColada/out/build/x64-Debug (default)/CMakeFiles/rebuild_cache.dir
+C:/Users/zarax/source/repos/CodingColada/out/build/x64-Debug (default)/CodingColada/CMakeFiles/CodingColada.dir
+C:/Users/zarax/source/repos/CodingColada/out/build/x64-Debug (default)/CodingColada/CMakeFiles/edit_cache.dir
+C:/Users/zarax/source/repos/CodingColada/out/build/x64-Debug (default)/CodingColada/CMakeFiles/rebuild_cache.dir

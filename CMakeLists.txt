@@ -5,5 +5,6 @@ cmake_minimum_required (VERSION 3.8)
 
 project ("CodingColada")
 
+
 # Include sub-projects.
 add_subdirectory ("CodingColada")
