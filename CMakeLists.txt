@@ -12,3 +12,4 @@ add_subdirectory ("CodingColadaTests")
 # REQUIRED PACKAGES:
 # vcpkg install boost-di:x64-windows
 # vcpkg install gtest:x64-windows
+# vcpkg install sdl2:x64-windows 

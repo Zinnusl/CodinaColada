@@ -21,7 +21,8 @@ public:
 	}
 };
 
-int main()
+//SDL demands this signature for main()
+int main(int argc, char* args[])
 {
 	/*auto injector = di::make_injector<injected_and_bound>(		
 		di::bind<std::ostream>.to(std::cerr),
@@ -53,5 +54,6 @@ int main()
 	auto app = injector.create<std::unique_ptr<App>>();
 	app->run();
 
+	
 	return 0;
 }

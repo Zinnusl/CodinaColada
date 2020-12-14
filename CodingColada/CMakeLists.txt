@@ -12,3 +12,6 @@ add_executable (CodingColada ${SOURCES})
 
 find_path(BOOST_DI_INCLUDE_DIRS "boost/di.hpp")
 target_include_directories(CodingColada PRIVATE ${BOOST_DI_INCLUDE_DIRS})
+
+find_package(SDL2)
+target_link_libraries(CodingColada PRIVATE SDL2::SDL2 SDL2::SDL2main)
