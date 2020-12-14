@@ -1,10 +1,10 @@
 ﻿// CodingColada.cpp : Defines the entry point for the application.
 //
 
-#include "main.h"
 #include "boost/di.hpp"
 
 #include "App.h"
+#include "SDLEngine.h"
 
 namespace di = boost::di;
 using std::cout;
@@ -48,7 +48,8 @@ int main(int argc, char* args[])
 
 	auto injector = di::make_injector<injected_and_bound>(
 		di::bind<std::ostream>.to(std::cerr),
-		di::bind<std::istream>.to(std::cin)
+		di::bind<std::istream>.to(std::cin),
+		di::bind<IEngine>.to<SDLEngine>()
 	);
 
 	auto app = injector.create<std::unique_ptr<App>>();

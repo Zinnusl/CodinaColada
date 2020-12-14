@@ -20,3 +20,6 @@ target_include_directories(CodingColadaTests PRIVATE ${BOOST_DI_INCLUDE_DIRS})
 
 find_package(GTest CONFIG REQUIRED)
 target_link_libraries(CodingColadaTests PRIVATE GTest::gmock GTest::gtest GTest::gmock_main GTest::gtest_main)
+
+find_package(SDL2)
+target_link_libraries(CodingColadaTests PRIVATE SDL2::SDL2 SDL2::SDL2main)
