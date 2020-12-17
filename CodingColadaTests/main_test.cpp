@@ -1,6 +1,8 @@
 ﻿// CodingColadaTests.cpp : Main entry point for unit tests
 //
 
+/*
+
 #include "..\CodingColada\src\App.h"
 
 #include <sstream>
@@ -13,6 +15,8 @@ using std::endl;
 
 class AppTest : public ::testing::Test {};
 
+*/
+
 /*class MockEngine : public IEngine
 {
     void CreateWindow(const int x, const int y) override
@@ -22,6 +26,7 @@ class AppTest : public ::testing::Test {};
     }
 };*/
 
+/*
 class MockEngine : public IEngine
 {
 public:
@@ -49,4 +54,4 @@ int main(int argc, char** argv)
 {
 	::testing::InitGoogleTest(&argc, argv);
 	return RUN_ALL_TESTS();
-}
+}*/

@@ -1,8 +1,16 @@
 #pragma once
+
 #include "IShape.h"
+#include "Vector2.h"
+
+#include <memory>
 
 class IRenderer
 {
-	virtual void Draw(IShape) = 0;
-	virtual void OnClick(int x, int y) = 0;
+public:
+	virtual ~IRenderer() {};
+	virtual void Draw() = 0;
+	virtual void AddShape(std::unique_ptr<IShape> shape) = 0;
+	virtual void OnClick(Vector2 clickPosition) = 0;
+	virtual void CreateWindow(int x, int y) = 0;
 };

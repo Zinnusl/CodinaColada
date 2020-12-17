@@ -2,9 +2,14 @@
 
 #include <functional>
 
+#include "Vector2.h"
+
 class IShape
 {
-	virtual void OnClick(int x, int y) = 0;
-	virtual void RegisterClickHandler(std::function<void> callback) = 0;
+public:
+	typedef std::function<void(void)> handlerCallbackType;
+	virtual ~IShape() {};
+	virtual void OnClick(Vector2 clickPosition) = 0;
+	virtual void RegisterClickHandler(handlerCallbackType callback) = 0;
 	virtual void Draw() = 0;
 };

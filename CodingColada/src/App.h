@@ -1,17 +1,17 @@
 #pragma once
 
 #include <iostream>
-#include "IEngine.h"
+#include "Engine.h"
 
 class App
 {
 protected:
 	std::ostream& logger_;
-	std::unique_ptr<IEngine> engine_;
+	std::unique_ptr<Engine> engine_;
 	
 public:
 
-	App(std::ostream& logger, std::unique_ptr<IEngine> engine);
+	App(std::ostream& logger, std::unique_ptr<Engine> engine);
 
 	void run();
 };
