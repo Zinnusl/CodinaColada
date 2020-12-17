@@ -3,7 +3,9 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
-file(GLOB_RECURSE SOURCES LIST_DIRECTORIES true *.h *.cpp)
+project ("CodingColada")
+
+file(GLOB_RECURSE SOURCES LIST_DIRECTORIES true src/*.h src/*.cpp)
 
 # Add source to this project's executable.
 add_executable (CodingColada ${SOURCES})
@@ -13,5 +15,11 @@ add_executable (CodingColada ${SOURCES})
 find_path(BOOST_DI_INCLUDE_DIRS "boost/di.hpp")
 target_include_directories(CodingColada PRIVATE ${BOOST_DI_INCLUDE_DIRS})
 
+find_package(GTest CONFIG REQUIRED)
+target_link_libraries(CodingColada PRIVATE GTest::gmock GTest::gtest GTest::gmock_main GTest::gtest_main)
+
 find_package(SDL2)
 target_link_libraries(CodingColada PRIVATE SDL2::SDL2 SDL2::SDL2main)
+
+find_package(glfw3)
+target_link_libraries(CodingColada PRIVATE glfw)

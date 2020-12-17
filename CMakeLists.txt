@@ -3,8 +3,9 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
-project ("CodingColada")
 
+
+message("Start outer Makelist")
 # Include sub-projects.
 add_subdirectory ("CodingColada")
 add_subdirectory ("CodingColadaTests")
@@ -13,3 +14,4 @@ add_subdirectory ("CodingColadaTests")
 # vcpkg install boost-di:x64-windows
 # vcpkg install gtest:x64-windows
 # vcpkg install sdl2:x64-windows 
+# vcpkg install glfw3:x64-windows

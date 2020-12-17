@@ -11,7 +11,7 @@ protected:
 	
 public:
 
-	explicit App(std::ostream& logger, std::unique_ptr<IEngine> engine);
+	App(std::ostream& logger, std::unique_ptr<IEngine> engine);
 
 	void run();
 };

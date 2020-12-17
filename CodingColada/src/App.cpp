@@ -1,5 +1,6 @@
 #include "App.h"
 
+
 App::App(std::ostream& logger, std::unique_ptr<IEngine> engine)
 	: logger_(logger), engine_(std::move(engine))
 {	
