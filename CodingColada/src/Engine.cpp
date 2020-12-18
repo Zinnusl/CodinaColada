@@ -8,7 +8,7 @@
 Engine::Engine(std::unique_ptr<IRenderer> renderer, std::unique_ptr<IInput> input)
 	: renderer_(std::move(renderer)), input_(std::move(input))
 {
-
+	printf("engine created\n!");
 }
 
 void Engine::StartGame()

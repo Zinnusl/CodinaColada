@@ -49,12 +49,13 @@ int main(int argc, char* args[])
 				);
 				*/
 
-	//auto injector = di::make_injector(
-	auto injector = di::make_injector<injected_and_bound>(
+	auto injector = di::make_injector(
+	//auto injector = di::make_injector<injected_and_bound>(
 		di::bind<std::ostream>.to(std::cerr),
 		di::bind<std::istream>.to(std::cin),
 		di::bind<IRenderer>.to<OpenGLRenderer>(),
 		di::bind<IInput>.to<OpenGLInput>(),
+		di::bind<Engine>.in(di::singleton).to<Engine>(),
 		di::bind<boost::di::extension::ifactory<GameManager>>.to(boost::di::extension::factory<GameManager>{})
 	);
 
