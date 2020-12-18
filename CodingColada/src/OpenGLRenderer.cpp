@@ -22,7 +22,10 @@ OpenGLRenderer::~OpenGLRenderer()
 
 void OpenGLRenderer::Draw()
 {
-
+	for (const auto& shape : shapes_)
+	{
+		shape->Draw();
+	}
 }
 
 void OpenGLRenderer::AddShape(std::unique_ptr<IShape> shape)
@@ -34,8 +37,9 @@ void OpenGLRenderer::OnClick(Vector2 clickPosition)
 {
 }
 
-void OpenGLRenderer::CreateWindow(int x, int y)
+void* OpenGLRenderer::CreateWindow(int x, int y)
 {
 	glfwWindowHint(GLFW_RESIZABLE, true);
 	window_ = glfwCreateWindow(x, y, "GLFWWindow", nullptr, nullptr);
+	return window_;
 }

@@ -1,5 +1,11 @@
 #include "RectangleShape.h"
 
+RectangleShape::RectangleShape(Vector2 topLeft, Vector2 bottomRight)
+	: topLeft_(topLeft), bottomRight_(bottomRight)
+{
+
+}
+
 void RectangleShape::OnClick(Vector2 clickPosition)
 {
 	if (clickPosition.GetX() >= topLeft_.GetX() &&
@@ -23,5 +29,5 @@ void RectangleShape::RegisterClickHandler(handlerCallbackType callback)
 
 void RectangleShape::Draw()
 {
-
+	printf("DrawingRect\n");
 }

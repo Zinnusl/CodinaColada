@@ -14,7 +14,7 @@ Engine::Engine(std::unique_ptr<IRenderer> renderer, std::unique_ptr<IInput> inpu
 void Engine::StartGame()
 {
 	auto lastFrame = std::chrono::steady_clock::now();
-	//TODO termination condition
+
 	while (!stopGame)
 	{
 		auto currentFrame = std::chrono::steady_clock::now();
@@ -26,7 +26,8 @@ void Engine::StartGame()
 		//update (physics...)
 		for (const auto& gameobject : gameobjects_)
 		{
-			gameobject.second->OnUpdate(deltaTime);
+			//gameobject.second->OnUpdate(*this, deltaTime);
+			gameobject.second->OnUpdate(*this, deltaTime);
 		}
 
 		//draw

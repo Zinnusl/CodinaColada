@@ -22,5 +22,5 @@ public:
 
 	virtual void OnClick(Vector2 clickPosition) override;
 
-	virtual void CreateWindow(int x, int y) override;
+	virtual void* CreateWindow(int x, int y) override;
 };
