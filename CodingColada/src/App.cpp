@@ -43,8 +43,7 @@ void App::run()
 
 	auto gameManager = std::make_unique<GameManager>();
 
-	RectangleShape rect = RectangleShape(Vector2(0), Vector2(100));
-	gameManager->AddComponent(std::make_unique<ShapeComponent>(rect));
+	gameManager->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<RectangleShape>(Vector2(0), Vector2(100))));
 	
 	engine_->AddGameObject(std::move(gameManager));
 
