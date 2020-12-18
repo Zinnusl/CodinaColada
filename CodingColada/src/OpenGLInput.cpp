@@ -1,5 +1,12 @@
 #include "OpenGLInput.h"
 
+#include <GLFW/glfw3.h>
+
+void OpenGLInput::ProcessInput()
+{
+	glfwPollEvents();
+}
+
 void OpenGLInput::GetKeyDown(int key)
 {
 }

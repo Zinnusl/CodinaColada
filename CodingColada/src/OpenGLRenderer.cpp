@@ -38,9 +38,4 @@ void OpenGLRenderer::CreateWindow(int x, int y)
 {
 	glfwWindowHint(GLFW_RESIZABLE, true);
 	window_ = glfwCreateWindow(x, y, "GLFWWindow", nullptr, nullptr);
-
-	while (1)
-	{
-		//mach was
-	}
 }
