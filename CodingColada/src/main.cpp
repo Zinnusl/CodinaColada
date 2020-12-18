@@ -2,11 +2,12 @@
 //
 
 #include "boost/di.hpp"
+#include "boost/di/extension/injections/factory.hpp"
 
 #include "App.h"
 #include "OpenGLRenderer.h"
 #include "OpenGLInput.h"
-//#include "SDLEngine.h"
+
 
 namespace di = boost::di;
 using std::cout;
@@ -48,12 +49,13 @@ int main(int argc, char* args[])
 				);
 				*/
 
-	auto injector = di::make_injector(
-	//auto injector = di::make_injector<injected_and_bound>(
+	//auto injector = di::make_injector(
+	auto injector = di::make_injector<injected_and_bound>(
 		di::bind<std::ostream>.to(std::cerr),
 		di::bind<std::istream>.to(std::cin),
 		di::bind<IRenderer>.to<OpenGLRenderer>(),
-		di::bind<IInput>.to<OpenGLInput>()
+		di::bind<IInput>.to<OpenGLInput>(),
+		di::bind<boost::di::extension::ifactory<GameManager>>.to(boost::di::extension::factory<GameManager>{})
 	);
 
 	auto app = injector.create<std::unique_ptr<App>>();

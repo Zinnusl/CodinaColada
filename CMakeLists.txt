@@ -4,7 +4,6 @@
 cmake_minimum_required (VERSION 3.8)
 
 
-
 message("Start outer Makelist")
 # Include sub-projects.
 add_subdirectory ("CodingColada")
