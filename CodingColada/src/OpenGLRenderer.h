@@ -5,7 +5,7 @@
 #include <vector>
 #include <memory>
 
-class GLFWwindow;
+struct GLFWwindow;
 class OpenGLRenderer : public IRenderer
 {
 protected:

@@ -11,26 +11,26 @@
 class ChessPiece : public GameObject
 {
 public:
-	ChessPiece(Engine& engine)
+	ChessPiece(IEngine& engine)
 		: GameObject(engine)
 	{
 
 	}
 
-	void OnUpdate(Engine& engine, float deltaTime) override
+	void OnUpdate(IEngine& engine, float deltaTime) override
 	{
 		//printf("ChessPiece OnUpdate with deltaTime %f\n", deltaTime);
 	}
 };
 
 
-GameManager::GameManager(Engine& engine)
+GameManager::GameManager(IEngine& engine)
 	: GameObject(engine)
 {
 
 }
 
-void GameManager::OnUpdate(Engine& engine, float deltaTime)
+void GameManager::OnUpdate(IEngine& engine, float deltaTime)
 {
 	int GLFW_KEY_ESCAPE = 256;
 	if (engine.GetInput().GetKey(GLFW_KEY_ESCAPE))
@@ -40,7 +40,7 @@ void GameManager::OnUpdate(Engine& engine, float deltaTime)
 }
 
 
-App::App(std::ostream& logger, Engine& engine, boost::di::extension::ifactory<GameManager>& f_gm)
+App::App(std::ostream& logger, IEngine& engine, boost::di::extension::ifactory<GameManager>& f_gm)
 	: logger_(logger), engine_(engine), f_gm_(f_gm)
 {
 }
@@ -49,8 +49,6 @@ void App::run()
 {
 	logger_ << "Ich bin eine App? Dachte da an so ein Schachspiel.\n"; // <-- mich auskommentieren um den test zu testen(falls man sowas tut?)
 
-
-	auto manager = std::make_unique<GameManager>(engine_);
 	auto gameManager = f_gm_.create();
 	gameManager->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<RectangleShape>(Vector2(0), Vector2(100))));
 	engine_.AddGameObject(std::move(gameManager));
@@ -60,9 +58,6 @@ void App::run()
 	{
 		engine_.AddGameObject(std::make_unique<ChessPiece>(engine_));
 	}
-
-	void* window = engine_.GetRenderer().CreateWindow(640, 480);
-	engine_.GetInput().RegisterWindow(window);
-
+	
 	engine_.StartGame();
 }

@@ -3,11 +3,12 @@
 
 #include "boost/di.hpp"
 #include "boost/di/extension/injections/factory.hpp"
+#include "boost/di/extension/injections/shared_factory.hpp"
 
 #include "App.h"
 #include "OpenGLRenderer.h"
 #include "OpenGLInput.h"
-
+#include "Engine.h"
 
 namespace di = boost::di;
 using std::cout;
@@ -49,13 +50,21 @@ int main(int argc, char* args[])
 				);
 				*/
 
+	//auto renderer = std::make_unique<OpenGLRenderer>();
+	//auto input = std::make_unique<OpenGLInput>();
+	//auto engine = std::make_unique<Engine>(std::move(renderer), std::move(input));
+	/*auto x = GameManager(*engine);
+	auto fact = std::make_unique<boost::di::extension::factory<GameManager>>();	
+	auto app = std::make_unique<App>(std::cout, *engine, *fact);
+	app->run();*/
+	
 	auto injector = di::make_injector(
 	//auto injector = di::make_injector<injected_and_bound>(
 		di::bind<std::ostream>.to(std::cerr),
 		di::bind<std::istream>.to(std::cin),
-		di::bind<IRenderer>.to<OpenGLRenderer>(),
-		di::bind<IInput>.to<OpenGLInput>(),
-		di::bind<Engine>.in(di::singleton).to<Engine>(),
+		di::bind<IRenderer>.to<OpenGLRenderer>().in(di::singleton),
+		di::bind<IInput>.to<OpenGLInput>().in(di::singleton),
+		di::bind<IEngine>().to<Engine>().in(di::singleton),
 		di::bind<boost::di::extension::ifactory<GameManager>>.to(boost::di::extension::factory<GameManager>{})
 	);
 

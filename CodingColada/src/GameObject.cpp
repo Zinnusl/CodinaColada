@@ -2,12 +2,12 @@
 
 #include "GameObject.h"
 
-GameObject::GameObject(Engine& engine)
+GameObject::GameObject(IEngine& engine)
 	: engine_(engine)
 {
 }
 
-void GameObject::OnUpdate(Engine& engine, float deltaTime)
+void GameObject::OnUpdate(IEngine& engine, float deltaTime)
 {
 }
 

@@ -5,8 +5,8 @@
 
 #include <chrono>
 
-Engine::Engine(std::unique_ptr<IRenderer> renderer, std::unique_ptr<IInput> input)
-	: renderer_(std::move(renderer)), input_(std::move(input))
+Engine::Engine(IRenderer& renderer, IInput& input)
+	: renderer_(renderer), input_(input)
 {
 	printf("engine created\n!");
 }
@@ -15,13 +15,16 @@ void Engine::StartGame()
 {
 	auto lastFrame = std::chrono::steady_clock::now();
 
+	void* window = GetRenderer().CreateWindow(640, 480);
+	GetInput().RegisterWindow(window);
+
 	while (!stopGame)
 	{
 		auto currentFrame = std::chrono::steady_clock::now();
-		auto deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentFrame - lastFrame).count();
+		auto deltaTime = (float)std::chrono::duration_cast<std::chrono::milliseconds>(currentFrame - lastFrame).count();
 		
 		//input
-		input_->ProcessInput();
+		input_.ProcessInput();
 
 		//update (physics...)
 		for (const auto& gameobject : gameobjects_)
@@ -31,7 +34,7 @@ void Engine::StartGame()
 		}
 
 		//draw
-		renderer_->Draw();
+		renderer_.Draw();
 		lastFrame = currentFrame;
 	}
 }
@@ -50,10 +53,10 @@ void Engine::AddGameObject(std::unique_ptr<GameObject> gameobject)
 
 IRenderer& Engine::GetRenderer() const
 {
-	return *renderer_;
+	return renderer_;
 }
 
 IInput& Engine::GetInput() const
 {
-	return *input_;
+	return input_;
 }

@@ -1,28 +1,24 @@
 #pragma once
 
-#include "IRenderer.h"
-#include "IInput.h"
-#include "GameObject.h"
-
 #include <memory>
 #include <unordered_map>
 
-class Engine
-{
-public:
-	typedef int32_t idType;
+#include "IEngine.h"
+#include "GameObject.h"
 
+class Engine : public IEngine
+{
 protected:
 	bool stopGame = false;
-	std::unique_ptr<IRenderer> renderer_;
-	std::unique_ptr<IInput> input_;
+	IRenderer& renderer_;
+	IInput& input_;
 
 	
 	std::unordered_map<idType, std::unique_ptr<GameObject>> gameobjects_;
 
 public:
 
-	Engine(std::unique_ptr<IRenderer> renderer, std::unique_ptr<IInput> input);
+	Engine(IRenderer& renderer, IInput& input);
 	~Engine() {}
 
 	void StartGame();
