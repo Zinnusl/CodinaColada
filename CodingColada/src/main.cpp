@@ -62,12 +62,16 @@ int main(int argc, char* args[])
 	//auto injector = di::make_injector<injected_and_bound>(
 		di::bind<std::ostream>.to(std::cerr),
 		di::bind<std::istream>.to(std::cin),
-		di::bind<IRenderer>.to<OpenGLRenderer>().in(di::singleton),
-		di::bind<IInput>.to<OpenGLInput>().in(di::singleton),
-		di::bind<IEngine>().to<Engine>().in(di::singleton),
-		di::bind<boost::di::extension::ifactory<GameManager>>.to(boost::di::extension::factory<GameManager>{})
+		di::bind<IRenderer>().in(di::singleton).to<OpenGLRenderer>(),
+		di::bind<IInput>().in(di::singleton).to<OpenGLInput>(),
+		di::bind<IEngine>().in(di::singleton).to<Engine>(),
+		di::bind<boost::di::extension::ifactory<GameManager>>.to([&](auto const& injector, auto const& dependency) {
+			return boost::di::extension::factory<GameManager>{}(injector, dependency);
+		})
 	);
 
+	auto gm = injector.create<GameManager>();
+	
 	auto app = injector.create<std::unique_ptr<App>>();
 	app->run();
 	
