@@ -8,6 +8,7 @@
 Engine::Engine(std::unique_ptr<IRenderer> renderer, std::unique_ptr<IInput> input)
 	: renderer_(std::move(renderer)), input_(std::move(input))
 {
+	GameObject::engine_ = this;
 	printf("engine created\n!");
 }
 
@@ -27,7 +28,7 @@ void Engine::StartGame()
 		for (const auto& gameobject : gameobjects_)
 		{
 			//gameobject.second->OnUpdate(*this, deltaTime);
-			gameobject.second->OnUpdate(*this, deltaTime);
+			gameobject.second->OnUpdate(deltaTime);
 		}
 
 		//draw

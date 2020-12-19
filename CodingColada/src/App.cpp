@@ -11,58 +11,64 @@
 class ChessPiece : public GameObject
 {
 public:
-	ChessPiece(Engine& engine)
-		: GameObject(engine)
+	ChessPiece()
 	{
 
 	}
 
-	void OnUpdate(Engine& engine, float deltaTime) override
+	void OnUpdate(float deltaTime) override
 	{
-		//printf("ChessPiece OnUpdate with deltaTime %f\n", deltaTime);
+		printf("ChessPiece OnUpdate with deltaTime %f\n", deltaTime);
 	}
 };
 
 
-GameManager::GameManager(Engine& engine)
-	: GameObject(engine)
+GameManager::GameManager()
 {
 
 }
 
-void GameManager::OnUpdate(Engine& engine, float deltaTime)
+void GameManager::OnUpdate(float deltaTime)
 {
 	int GLFW_KEY_ESCAPE = 256;
-	if (engine.GetInput().GetKey(GLFW_KEY_ESCAPE))
+	if (engine_->GetInput().GetKey(GLFW_KEY_ESCAPE))
 	{
-		engine.StopGame();
+		engine_->StopGame();
 	}
 }
 
 
-App::App(std::ostream& logger, Engine& engine, boost::di::extension::ifactory<GameManager>& f_gm)
-	: logger_(logger), engine_(engine), f_gm_(f_gm)
+App::App(std::unique_ptr<Engine> engine)
+	: engine_(std::move(engine))
 {
 }
 
+/*
+App::App(std::ostream& logger, Engine& engine)
+	: logger_(logger), engine_(engine)
+{
+}
+*/
+
 void App::run()
 {
-	logger_ << "Ich bin eine App? Dachte da an so ein Schachspiel.\n"; // <-- mich auskommentieren um den test zu testen(falls man sowas tut?)
+	//logger_ << "Ich bin eine App? Dachte da an so ein Schachspiel.\n"; // <-- mich auskommentieren um den test zu testen(falls man sowas tut?)
 
-
-	auto manager = std::make_unique<GameManager>(engine_);
-	auto gameManager = f_gm_.create();
-	gameManager->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<RectangleShape>(Vector2(0), Vector2(100))));
-	engine_.AddGameObject(std::move(gameManager));
+	//auto gameManager = std::make_unique<GameManager>(engine_);
+	auto gameManager = std::make_unique<GameManager>();
+	auto shape = std::make_unique<RectangleShape>(Vector2(0), Vector2(100));
+	auto shapeComponent = std::make_unique<ShapeComponent>(std::move(shape));
+	gameManager->AddComponent(std::move(shapeComponent));
+	engine_->AddGameObject(std::move(gameManager));
 
 	//Chess has 32 pieces
 	for (int i = 0; i < 32; i++)
 	{
-		engine_.AddGameObject(std::make_unique<ChessPiece>(engine_));
+		engine_->AddGameObject(std::make_unique<ChessPiece>());
 	}
 
-	void* window = engine_.GetRenderer().CreateWindow(640, 480);
-	engine_.GetInput().RegisterWindow(window);
+	void* window = engine_->GetRenderer().CreateWindow(640, 480);
+	engine_->GetInput().RegisterWindow(window);
 
-	engine_.StartGame();
+	engine_->StartGame();
 }

@@ -2,19 +2,23 @@
 
 #include "GameObject.h"
 
-GameObject::GameObject(Engine& engine)
-	: engine_(engine)
+#include "Engine.h"
+
+Engine* GameObject::engine_;
+
+GameObject::GameObject()
 {
 }
 
-void GameObject::OnUpdate(Engine& engine, float deltaTime)
+void GameObject::OnUpdate(float deltaTime)
 {
 }
 
 void GameObject::AddComponent(std::unique_ptr<IComponent> component)
 {
+	//calling event before pushing so unique_ptr isnt empty
+	component->OnAdded(*engine_);
 	components_.push_back(std::move(component));
-	//component->OnAdded()
 }
 
 void GameObject::RemoveComponent(std::unique_ptr<IComponent> component)

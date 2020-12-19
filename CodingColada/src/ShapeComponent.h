@@ -8,8 +8,8 @@
 class ShapeComponent : public IComponent
 {
 protected:
-	std::weak_ptr<IShape> shape_;
-	std::unique_ptr<IShape> tmpShape_;
+	std::unique_ptr<IShape> shape_;
+	//std::unique_ptr<IShape> tmpShape_;
 	
 public:
 	ShapeComponent(std::unique_ptr<IShape> shape);

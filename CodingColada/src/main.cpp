@@ -1,28 +1,24 @@
 ﻿// CodingColada.cpp : Defines the entry point for the application.
 //
 
-#include "boost/di.hpp"
-#include "boost/di/extension/injections/factory.hpp"
-
 #include "App.h"
 #include "OpenGLRenderer.h"
 #include "OpenGLInput.h"
 
-
-namespace di = boost::di;
+//namespace di = boost::di;
 using std::cout;
 using std::endl;
 
-class injected_and_bound : public di::config {
-public:
-	static auto policies(...) noexcept {
-		using namespace di::policies;
-		using namespace di::policies::operators;
-		return di::make_policies(
-			constructible(is_bound<di::_>{})
-		);
-	}
-};
+//class injected_and_bound : public di::config {
+//public:
+//	static auto policies(...) noexcept {
+//		using namespace di::policies;
+//		using namespace di::policies::operators;
+//		return di::make_policies(
+//			constructible(is_bound<di::_>{})
+//		);
+//	}
+//};
 
 //SDL demands this signature for main()
 int main(int argc, char* args[])
@@ -48,7 +44,7 @@ int main(int argc, char* args[])
 				di::bind<ICardHandle::ifactory_t>.to(CardHandle::factory_t{})
 				);
 				*/
-
+	/*
 	auto injector = di::make_injector(
 	//auto injector = di::make_injector<injected_and_bound>(
 		di::bind<std::ostream>.to(std::cerr),
@@ -58,8 +54,14 @@ int main(int argc, char* args[])
 		di::bind<Engine>.in(di::singleton).to<Engine>(),
 		di::bind<boost::di::extension::ifactory<GameManager>>.to(boost::di::extension::factory<GameManager>{})
 	);
+	*/
+	std::unique_ptr<IRenderer> renderer = std::make_unique<OpenGLRenderer>();
+	std::unique_ptr<IInput> input = std::make_unique<OpenGLInput>();
 
-	auto app = injector.create<std::unique_ptr<App>>();
+
+
+	std::unique_ptr<Engine> engine = std::make_unique<Engine>(std::move(renderer), std::move(input));
+	auto app = std::make_unique<App>(std::move(engine));
 	app->run();
 	
 	return 0;

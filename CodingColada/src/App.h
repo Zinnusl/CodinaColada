@@ -2,27 +2,24 @@
 
 #include <iostream>
 
-#include "boost/di/extension/injections/factory.hpp"
-
 #include "Engine.h"
 
 class GameManager : public GameObject
 {
 public:
-	GameManager(Engine& engine);
-	void OnUpdate(Engine& engine, float deltaTime) override;
+	GameManager();
+	void OnUpdate(float deltaTime) override;
 };
 
 class App
 {
 protected:
-	std::ostream& logger_;
-	Engine& engine_;
-	boost::di::extension::ifactory<GameManager>& f_gm_;
+	//std::ostream& logger_;
+	std::unique_ptr<Engine> engine_;
 	
 public:
-
-	App(std::ostream& logger, Engine& engine, boost::di::extension::ifactory<GameManager>& f_gm);
+	App(std::unique_ptr<Engine> engine);
+	//App(std::ostream& logger, Engine& engine);
 
 	void run();
 };
