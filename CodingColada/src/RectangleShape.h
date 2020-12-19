@@ -17,5 +17,4 @@ public:
 	RectangleShape(Vector2 topLeft, Vector2 bottomRight);
 	void OnClick(Vector2 clickPosition) override;
 	void RegisterClickHandler(handlerCallbackType callback) override;
-	void Draw() override;
 };

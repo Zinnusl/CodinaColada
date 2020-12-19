@@ -2,8 +2,8 @@
 //
 
 #include "App.h"
-#include "OpenGLRenderer.h"
-#include "OpenGLInput.h"
+#include "opengl/OpenGLRenderer.h"
+#include "opengl/OpenGLInput.h"
 
 //namespace di = boost::di;
 using std::cout;
@@ -58,10 +58,8 @@ int main(int argc, char* args[])
 	std::unique_ptr<IRenderer> renderer = std::make_unique<OpenGLRenderer>();
 	std::unique_ptr<IInput> input = std::make_unique<OpenGLInput>();
 
-
-
 	std::unique_ptr<Engine> engine = std::make_unique<Engine>(std::move(renderer), std::move(input));
-	auto app = std::make_unique<App>(std::move(engine));
+	auto app = std::make_unique<App>(std::cout, std::move(engine));
 	app->run();
 	
 	return 0;

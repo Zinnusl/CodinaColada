@@ -33,3 +33,9 @@ target_link_libraries(CodingColada PRIVATE SDL2::SDL2 SDL2::SDL2main)
 
 find_package(glfw3)
 target_link_libraries(CodingColada PRIVATE glfw)
+
+find_package(glad CONFIG REQUIRED)
+target_link_libraries(CodingColada PRIVATE glad::glad)
+
+find_package(glm CONFIG REQUIRED)
+target_link_libraries(CodingColada PRIVATE glm)

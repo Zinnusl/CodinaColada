@@ -13,3 +13,5 @@ add_subdirectory ("CodingColadaTests")
 # vcpkg install gtest:x64-windows
 # vcpkg install sdl2:x64-windows 
 # vcpkg install glfw3:x64-windows
+# vcpkg install glad:x64-windows
+# vcpkg install glm:x64-windows

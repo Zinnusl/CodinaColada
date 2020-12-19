@@ -1,9 +1,11 @@
 #include "RectangleShape.h"
 
+
+
 RectangleShape::RectangleShape(Vector2 topLeft, Vector2 bottomRight)
 	: topLeft_(topLeft), bottomRight_(bottomRight)
 {
-
+	
 }
 
 void RectangleShape::OnClick(Vector2 clickPosition)
@@ -13,8 +15,6 @@ void RectangleShape::OnClick(Vector2 clickPosition)
 		clickPosition.GetY() >= topLeft_.GetY() &&
 		clickPosition.GetY() <= bottomRight_.GetY())
 	{
-		//TODO removen
-		printf("RectangleShape calls its callbacks\n");
 		for (const auto& callback : clickHandlers_)
 		{
 			callback();
@@ -25,9 +25,4 @@ void RectangleShape::OnClick(Vector2 clickPosition)
 void RectangleShape::RegisterClickHandler(handlerCallbackType callback)
 {
 	clickHandlers_.push_back(callback);
-}
-
-void RectangleShape::Draw()
-{
-	printf("DrawingRect\n");
 }

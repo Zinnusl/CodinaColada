@@ -14,12 +14,11 @@ public:
 class App
 {
 protected:
-	//std::ostream& logger_;
+	std::ostream& logger_;
 	std::unique_ptr<Engine> engine_;
 	
 public:
-	App(std::unique_ptr<Engine> engine);
-	//App(std::ostream& logger, Engine& engine);
+	App(std::ostream& logger, std::unique_ptr<Engine> engine);
 
 	void run();
 };

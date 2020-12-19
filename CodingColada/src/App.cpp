@@ -5,8 +5,9 @@
 
 #include "IRenderer.h"
 #include "GameObject.h"
-#include "RectangleShape.h"
 #include "ShapeComponent.h"
+#include "opengl/OpenGLRectangleShape.h"
+
 
 class ChessPiece : public GameObject
 {
@@ -22,7 +23,6 @@ public:
 	}
 };
 
-
 GameManager::GameManager()
 {
 
@@ -37,18 +37,10 @@ void GameManager::OnUpdate(float deltaTime)
 	}
 }
 
-
-App::App(std::unique_ptr<Engine> engine)
-	: engine_(std::move(engine))
+App::App(std::ostream& logger, std::unique_ptr<Engine> engine)
+	: logger_(logger), engine_(std::move(engine))
 {
 }
-
-/*
-App::App(std::ostream& logger, Engine& engine)
-	: logger_(logger), engine_(engine)
-{
-}
-*/
 
 void App::run()
 {
@@ -56,9 +48,11 @@ void App::run()
 
 	//auto gameManager = std::make_unique<GameManager>(engine_);
 	auto gameManager = std::make_unique<GameManager>();
-	auto shape = std::make_unique<RectangleShape>(Vector2(0), Vector2(100));
+ 	
+	auto shape = std::make_unique<OpenGLRectangleShape>(Vector2(0), Vector2(100));
 	auto shapeComponent = std::make_unique<ShapeComponent>(std::move(shape));
 	gameManager->AddComponent(std::move(shapeComponent));
+	
 	engine_->AddGameObject(std::move(gameManager));
 
 	//Chess has 32 pieces
@@ -66,9 +60,6 @@ void App::run()
 	{
 		engine_->AddGameObject(std::make_unique<ChessPiece>());
 	}
-
-	void* window = engine_->GetRenderer().CreateWindow(640, 480);
-	engine_->GetInput().RegisterWindow(window);
 
 	engine_->StartGame();
 }
