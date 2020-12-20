@@ -13,9 +13,6 @@ Engine::Engine(std::unique_ptr<IRenderer> renderer, std::unique_ptr<IInput> inpu
 
 void Engine::StartGame()
 {
-	void* window = renderer_->CreateWindow(640, 480);
-	input_->RegisterWindow(window);
-
 	auto lastFrame = std::chrono::steady_clock::now();
 
 	while (!stopGame)

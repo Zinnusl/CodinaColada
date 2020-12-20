@@ -5,6 +5,7 @@
 
 class OpenGLRectangleShape : public RectangleShape
 {
+	unsigned int VAO;
 public:
 	OpenGLRectangleShape(Vector2 topLeft, Vector2 bottomRight);
 	void Draw() override;

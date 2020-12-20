@@ -44,6 +44,11 @@ App::App(std::ostream& logger, std::unique_ptr<Engine> engine)
 
 void App::run()
 {
+
+	void* window = engine_->GetRenderer().CreateWindow(640, 480);
+	engine_->GetInput().RegisterWindow(window);
+
+
 	//logger_ << "Ich bin eine App? Dachte da an so ein Schachspiel.\n"; // <-- mich auskommentieren um den test zu testen(falls man sowas tut?)
 
 	//auto gameManager = std::make_unique<GameManager>(engine_);

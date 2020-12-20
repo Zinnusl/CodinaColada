@@ -4,6 +4,7 @@
 
 #include "Vector2.h"
 
+class IRenderer;
 class IShape
 {
 public:
