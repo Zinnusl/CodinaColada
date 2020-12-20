@@ -1,11 +1,13 @@
 #include "OpenGLRectangleShape.h"
 
 #include <iostream>
+#include <string>
 
 #include <glad/glad.h>
 #include "GLFW/glfw3.h"
 
 #include "OpenGLRenderer.h"
+#include "OpenGLShader.h"
 
 
 OpenGLRectangleShape::OpenGLRectangleShape(Vector2 topLeft, Vector2 bottomRight)
@@ -41,8 +43,11 @@ OpenGLRectangleShape::OpenGLRectangleShape(Vector2 topLeft, Vector2 bottomRight)
 
 void OpenGLRectangleShape::Draw()
 {
-	printf("OpenGLRectangleShape\n");
+	//printf("OpenGLRectangleShape\n");
     //glUseProgram(shaderProgram);
+    auto defaultShader = OpenGLRenderer::shaders_[std::string("default")];
+    defaultShader.SetVector4f("color", glm::vec4(0.4, 0.7, 0.2, rand() % 10 / 10.f));
+    defaultShader.Use();
     glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
     glDrawArrays(GL_TRIANGLES, 0, 3);
 }

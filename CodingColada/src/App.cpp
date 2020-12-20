@@ -19,7 +19,7 @@ public:
 
 	void OnUpdate(float deltaTime) override
 	{
-		printf("ChessPiece OnUpdate with deltaTime %f\n", deltaTime);
+		//printf("ChessPiece OnUpdate with deltaTime %f\n", deltaTime);
 	}
 };
 

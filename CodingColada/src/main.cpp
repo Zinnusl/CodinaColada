@@ -55,8 +55,8 @@ int main(int argc, char* args[])
 		di::bind<boost::di::extension::ifactory<GameManager>>.to(boost::di::extension::factory<GameManager>{})
 	);
 	*/
-	std::unique_ptr<IRenderer> renderer = std::make_unique<OpenGLRenderer>();
-	std::unique_ptr<IInput> input = std::make_unique<OpenGLInput>();
+	std::unique_ptr<OpenGLRenderer> renderer = std::make_unique<OpenGLRenderer>();
+	std::unique_ptr<OpenGLInput> input = std::make_unique<OpenGLInput>();
 
 	std::unique_ptr<Engine> engine = std::make_unique<Engine>(std::move(renderer), std::move(input));
 	auto app = std::make_unique<App>(std::cout, std::move(engine));
