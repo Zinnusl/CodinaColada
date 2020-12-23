@@ -16,6 +16,7 @@ public:
     // sets the current shader as active
     OpenGLShader& Use();
     // compiles the shader from given source code
+    static OpenGLShader CompileFromFile(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile);
     void    Compile(const char* vertexSource, const char* fragmentSource, const char* geometrySource = nullptr); // note: geometry source code is optional 
     // utility functions
     void    SetFloat(const char* name, float value, bool useShader = false);

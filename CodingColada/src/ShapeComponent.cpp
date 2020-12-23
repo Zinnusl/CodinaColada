@@ -12,12 +12,22 @@ void ShapeComponent::OnUpdate(Engine& engine, float deltaTime)
 {
 }
 
-void ShapeComponent::OnAdded(Engine& engine)
-{
-	engine.GetRenderer().AddShape(std::move(shape_));
-}
-
 void ShapeComponent::OnRemove(Engine& engine)
 {
+	
+}
 
+void ShapeComponent::OnDraw(Engine& engine)
+{
+	shape_->Draw(engine, *gameobject_);
+}
+
+GameObject& ShapeComponent::GetGameobject()
+{
+	return *gameobject_;
+}
+
+void ShapeComponent::OnAdded(Engine& engine, GameObject& gameobject)
+{
+	gameobject_ = &gameobject;
 }

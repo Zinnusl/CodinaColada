@@ -13,8 +13,6 @@ class OpenGLRenderer : public IRenderer
 {
 protected:
 	GLFWwindow* window_;
-	std::vector<std::unique_ptr<IShape>> shapes_;
-	
 
 public:
 	OpenGLRenderer();
@@ -22,13 +20,15 @@ public:
 
 	static std::unordered_map<std::string, OpenGLShader> shaders_;
 
-	virtual void Draw() override;
-	virtual void AddShape(std::unique_ptr<IShape> shape) override;
 
 	virtual void OnClick(Vector2 clickPosition) override;
 
 	virtual void* CreateWindow(int x, int y) override;
 
+	GLFWwindow* GetWindow();
+
 	// Inherited via IRenderer
-	virtual void RemoveShape(std::unique_ptr<IShape> shape) override;
+	void BeginFrame() override;
+	void Draw(GameObject& gameobject) override;
+	void EndFrame() override;
 };

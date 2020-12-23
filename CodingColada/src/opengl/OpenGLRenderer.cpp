@@ -3,26 +3,13 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
+#include "../GameObject.h"
 #include "OpenGLShader.h"
 
 #include <iostream>
 
 std::unordered_map<std::string, OpenGLShader> OpenGLRenderer::shaders_;
 
-const char* vertexShaderSource = "#version 330 core\n"
-"layout (location = 0) in vec3 aPos;\n"
-"void main()\n"
-"{\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-"}\0";
-
-const char* fragmentShaderSource = "#version 330 core\n"
-"uniform vec4 color;\n"
-"out vec4 FragColor;\n"
-"void main()\n"
-"{\n"
-"	FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f) * color;\n"
-"}\0";
 
 OpenGLRenderer::OpenGLRenderer()
 	: window_(nullptr)
@@ -41,22 +28,6 @@ OpenGLRenderer::~OpenGLRenderer()
 	glfwTerminate();
 }
 
-void OpenGLRenderer::Draw()
-{
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
-	for (const auto& shape : shapes_)
-	{
-		shape->Draw();
-	}
-	glfwSwapBuffers(window_);
-}
-
-void OpenGLRenderer::AddShape(std::unique_ptr<IShape> shape)
-{
-	shapes_.push_back(std::move(shape));
-}
-
 void OpenGLRenderer::OnClick(Vector2 clickPosition)
 {
 
@@ -69,8 +40,8 @@ void* OpenGLRenderer::CreateWindow(int x, int y)
 	int xPos, yPos, width, height;
 	auto primaryMonitor = glfwGetPrimaryMonitor();
 	glfwGetMonitorWorkarea(primaryMonitor, &xPos, &yPos , &width, &height);
-	window_ = glfwCreateWindow(x, y, "GLFWWindow", nullptr, nullptr);
 	//window_ = glfwCreateWindow(x, y, "GLFWWindow", nullptr, nullptr);
+	window_ = glfwCreateWindow(width, height, "GLFWWindow", glfwGetPrimaryMonitor(), nullptr);
 	glfwMakeContextCurrent(window_);
 	
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -82,18 +53,60 @@ void* OpenGLRenderer::CreateWindow(int x, int y)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	OpenGLShader shader = OpenGLShader();
-	shader.Compile(vertexShaderSource, fragmentShaderSource);
-	shaders_.emplace(std::make_pair("default", shader));
+	//origin is bottom left
+	glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(x), 0.0f, static_cast<float>(y), -1.f, 1.f);
 
+	OpenGLShader defaultShader = OpenGLShader::CompileFromFile("C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\default.vert", "C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\default.frag", nullptr);
+	defaultShader.SetMatrix4("projection", projection, true);
+	shaders_.emplace(std::make_pair("default", defaultShader));
+
+	OpenGLShader circleShader = OpenGLShader::CompileFromFile("C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\default.vert", "C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\circle.frag", nullptr);
+	circleShader.SetMatrix4("projection", projection, true);
+	shaders_.emplace(std::make_pair("circle", circleShader));
+
+	/*
+	OpenGLShader coolShader = OpenGLShader::CompileFromFile("C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\cool.vert", "C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\cool.frag", nullptr);
+	shaders_.emplace(std::make_pair("cool", coolShader));
+
+	OpenGLShader dragonShader = OpenGLShader::CompileFromFile("C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\default.vert", "C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\dragon.frag", nullptr);
+	shaders_.emplace(std::make_pair("dragon", dragonShader));
+
+	OpenGLShader waterShader = OpenGLShader::CompileFromFile("C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\default.vert", "C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\water.frag", nullptr);
+	shaders_.emplace(std::make_pair("water", waterShader));
+
+	OpenGLShader ledCircleShader = OpenGLShader::CompileFromFile("C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\default.vert", "C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\ledcircle.frag", nullptr);
+	shaders_.emplace(std::make_pair("ledcircle", ledCircleShader));
+
+	OpenGLShader glowCircleShader = OpenGLShader::CompileFromFile("C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\default.vert", "C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\glowcircle.frag", nullptr);
+	shaders_.emplace(std::make_pair("glowcircle", glowCircleShader));
+	*/
 	return window_;
 }
 
-void OpenGLRenderer::RemoveShape(std::unique_ptr<IShape> shape)
+GLFWwindow* OpenGLRenderer::GetWindow()
 {
-	auto position = std::find(shapes_.begin(), shapes_.end(), shape);
-	if (position != shapes_.end())
+	return window_;
+}
+
+void OpenGLRenderer::BeginFrame()
+{
+	for (auto& shader : shaders_)
 	{
-		shapes_.erase(position);
+		shader.second.Use();
+		shader.second.SetFloat("time", glfwGetTime());
+		shader.second.SetVector2f("screenresolution", glm::vec2(1600, 900));
 	}
+
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void OpenGLRenderer::Draw(GameObject& gameobject)
+{
+	gameobject.OnDraw();
+}
+
+void OpenGLRenderer::EndFrame()
+{
+	glfwSwapBuffers(window_);
 }

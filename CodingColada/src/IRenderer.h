@@ -5,13 +5,14 @@
 
 #include <memory>
 
+class GameObject;
 class IRenderer
 {
 public:
 	virtual ~IRenderer() {};
-	virtual void Draw() = 0;
-	virtual void AddShape(std::unique_ptr<IShape> shape) = 0;
-	virtual void RemoveShape(std::unique_ptr<IShape> shape) = 0;
+	virtual void BeginFrame() = 0;
+	virtual void Draw(GameObject& gameobject) = 0;
+	virtual void EndFrame() = 0;
 	virtual void OnClick(Vector2 clickPosition) = 0;
 
 	//TODO. IInput needs a way to get the window so it can register for the input events

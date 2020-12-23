@@ -21,7 +21,7 @@ using std::endl;
 //};
 
 //SDL demands this signature for main()
-int main(int argc, char* args[])
+int main(int argc, char* argv[])
 {
 	/*auto injector = di::make_injector<injected_and_bound>(		
 		di::bind<std::ostream>.to(std::cerr),
@@ -55,6 +55,7 @@ int main(int argc, char* args[])
 		di::bind<boost::di::extension::ifactory<GameManager>>.to(boost::di::extension::factory<GameManager>{})
 	);
 	*/
+
 	std::unique_ptr<OpenGLRenderer> renderer = std::make_unique<OpenGLRenderer>();
 	std::unique_ptr<OpenGLInput> input = std::make_unique<OpenGLInput>();
 

@@ -50,6 +50,12 @@ Vector2 Vector2::operator/(float divisor) const
 	return Vector2(x_ * divisor, y_ * divisor);
 }
 
+bool Vector2::operator==(const Vector2& other) const
+{
+	//TODO we are comparing floats with == without an epsilon
+	return x_ == other.x_ && y_ == other.y_;
+}
+
 float Vector2::dot(const Vector2& other) const
 {
 	return x_ * other.x_ + +y_ * other.y_;
@@ -63,4 +69,14 @@ float Vector2::GetX() const
 float Vector2::GetY() const
 {
 	return y_;
+}
+
+void Vector2::SetX(float value)
+{
+	x_ = value;
+}
+
+void Vector2::SetY(float value)
+{
+	y_ = value;
 }

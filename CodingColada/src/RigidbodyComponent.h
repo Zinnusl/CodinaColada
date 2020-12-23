@@ -1,23 +1,24 @@
 #pragma once
 
 #include "IComponent.h"
-#include "IShape.h"
+#include "Vector2.h"
 
-#include <memory>
-
-class ShapeComponent : public IComponent
+class RigidbodyComponent : public IComponent
 {
 protected:
 	//TODO this really shouldnt be a raw pointer
 	GameObject* gameobject_;
-	std::shared_ptr<IShape> shape_;
-	
+	Vector2 offset_; //distance from GameObject
+	Vector2 size_;
+
 public:
-	ShapeComponent(std::unique_ptr<IShape> shape);
+	RigidbodyComponent(Vector2 size);
 
 	void OnUpdate(Engine& engine, float deltaTime) override;
 	void OnAdded(Engine& engine, GameObject& gameobject) override;
 	void OnRemove(Engine& engine) override;
 	void OnDraw(Engine& engine) override;
 	GameObject& GetGameobject() override;
+
+	bool CheckCollision(RigidbodyComponent& other);
 };

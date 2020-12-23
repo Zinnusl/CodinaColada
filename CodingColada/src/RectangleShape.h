@@ -4,17 +4,20 @@
 #include <vector>
 
 #include "Vector2.h"
+#include "Color.h"
 
 class RectangleShape : public IShape
 {
 protected:
-	Vector2 topLeft_;
-	Vector2 bottomRight_;
+	Vector2 offset_;
+
+	Vector2 size_;
+	Color color_;
 
 	std::vector<handlerCallbackType> clickHandlers_;
 
 public:
-	RectangleShape(Vector2 topLeft, Vector2 bottomRight);
+	RectangleShape(Vector2 size, Color color);
 	void OnClick(Vector2 clickPosition) override;
 	void RegisterClickHandler(handlerCallbackType callback) override;
 };

@@ -5,6 +5,8 @@
 #include "Vector2.h"
 
 class IRenderer;
+class Engine;
+class GameObject;
 class IShape
 {
 public:
@@ -12,5 +14,5 @@ public:
 	virtual ~IShape() {};
 	virtual void OnClick(Vector2 clickPosition) = 0;
 	virtual void RegisterClickHandler(handlerCallbackType callback) = 0;
-	virtual void Draw() = 0;
+	virtual void Draw(Engine& engine, GameObject& gameobject) = 0;
 };

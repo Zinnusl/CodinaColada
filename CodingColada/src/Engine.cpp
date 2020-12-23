@@ -2,7 +2,7 @@
 
 #include "IRenderer.h"
 #include "IInput.h"
-
+#include "RigidbodyComponent.h"
 #include <chrono>
 
 Engine::Engine(std::unique_ptr<IRenderer> renderer, std::unique_ptr<IInput> input)
@@ -30,8 +30,43 @@ void Engine::StartGame()
 			gameobject.second->OnUpdate(deltaTime);
 		}
 
-		//draw
-		renderer_->Draw();
+		for (const auto& gameobject : gameobjects_)
+		{
+			RigidbodyComponent* rb = gameobject.second->GetFirstComponentOfType<RigidbodyComponent>();
+			if (!rb)
+			{
+				continue;
+			}
+			for (const auto& gameobject : gameobjects_)
+			{
+				auto otherRb = gameobject.second->GetFirstComponentOfType<RigidbodyComponent>();
+				if (!otherRb)
+				{
+					continue;
+				}
+				if (rb != otherRb)
+				{
+					bool isCollided = rb->CheckCollision(*otherRb);
+					if (isCollided)
+					{
+						otherRb->GetGameobject().OnCollision(*rb);
+						printf("Collision\n");
+					}
+				}
+			}
+		}
+
+		renderer_->BeginFrame();
+
+		//draw gameobjects
+		for (const auto& gameobject : gameobjects_)
+		{
+			//gameobject.second->OnUpdate(*this, deltaTime);
+			gameobject.second->OnDraw();
+		}
+
+		renderer_->EndFrame();
+
 		lastFrame = currentFrame;
 	}
 }
