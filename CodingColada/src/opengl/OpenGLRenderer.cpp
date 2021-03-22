@@ -40,8 +40,8 @@ void* OpenGLRenderer::CreateWindow(int x, int y)
 	int xPos, yPos, width, height;
 	auto primaryMonitor = glfwGetPrimaryMonitor();
 	glfwGetMonitorWorkarea(primaryMonitor, &xPos, &yPos, &width, &height);
-	//window_ = glfwCreateWindow(x, y, "GLFWWindow", nullptr, nullptr);
-	window_ = glfwCreateWindow(width, height, "GLFWWindow", glfwGetPrimaryMonitor(), nullptr);
+	window_ = glfwCreateWindow(x, y, "GLFWWindow", nullptr, nullptr);
+	//window_ = glfwCreateWindow(width, height, "GLFWWindow", glfwGetPrimaryMonitor(), nullptr);
 	glfwMakeContextCurrent(window_);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -64,6 +64,8 @@ void* OpenGLRenderer::CreateWindow(int x, int y)
 	circleShader.SetMatrix4("projection", projection, true);
 	shaders_.emplace(std::make_pair("circle", circleShader));
 
+	//Disable vsync. works very bad
+	glfwSwapInterval(0);
 	/*
 	OpenGLShader coolShader = OpenGLShader::CompileFromFile("C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\cool.vert", "C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\cool.frag", nullptr);
 	shaders_.emplace(std::make_pair("cool", coolShader));
