@@ -56,11 +56,11 @@ void* OpenGLRenderer::CreateWindow(int x, int y)
 	//origin is bottom left
 	glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(x), 0.0f, static_cast<float>(y), -1.f, 1.f);
 
-	OpenGLShader defaultShader = OpenGLShader::CompileFromFile("C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\default.vert", "C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\default.frag", nullptr);
+	OpenGLShader defaultShader = OpenGLShader::CompileFromFile("..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\default.frag", nullptr);
 	defaultShader.SetMatrix4("projection", projection, true);
 	shaders_.emplace(std::make_pair("default", defaultShader));
 
-	OpenGLShader circleShader = OpenGLShader::CompileFromFile("C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\default.vert", "C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\circle.frag", nullptr);
+	OpenGLShader circleShader = OpenGLShader::CompileFromFile("..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\circle.frag", nullptr);
 	circleShader.SetMatrix4("projection", projection, true);
 	shaders_.emplace(std::make_pair("circle", circleShader));
 
