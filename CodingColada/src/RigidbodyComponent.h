@@ -3,6 +3,9 @@
 #include "IComponent.h"
 #include "Vector2.h"
 
+/*
+* Disclaimer: Collisions are buggy
+*/
 class RigidbodyComponent : public IComponent
 {
 protected:

@@ -3,7 +3,6 @@
 #include <thread>
 #include <chrono>
 
-
 #include "IRenderer.h"
 #include "GameObject.h"
 #include "ShapeComponent.h"
@@ -11,7 +10,6 @@
 #include "opengl/OpenGLRectangleShape.h"
 #include "opengl/OpenGLRenderer.h"
 #include "Color.h"
-
 
 
 class Ball : public GameObject
@@ -27,7 +25,8 @@ public:
 	{
 		static float runtime = 0;
 		runtime += deltaTime;
-		Vector2 newPos = position_ +  velocity_ * deltaTime;
+		Vector2 newPos = position_ +  velocity_ * deltaTime * 0.001;;
+
 		if (newPos.GetY() <= 0)
 		{
 			newPos.SetY(0);
@@ -77,7 +76,7 @@ public:
 			float yPos = position_.GetY();
 			if (position_.GetY() > 0)
 			{
-				float newPos = position_.GetY() - speed * deltaTime;
+				float newPos = position_.GetY() - speed * deltaTime * 0.001;
 				if (newPos < 0)
 				{
 					newPos = 0;
@@ -90,7 +89,7 @@ public:
 			float yPos = position_.GetY();
 			if (position_.GetY() < maxMove)
 			{
-				float newPos = position_.GetY() + speed * deltaTime;
+				float newPos = position_.GetY() + speed * deltaTime * 0.001;
 				if (newPos > maxMove)
 				{
 					newPos = maxMove;
@@ -155,7 +154,7 @@ void App::run()
 	paddle2->AddComponent(std::make_unique<RigidbodyComponent>(paddleSize));
 
 	auto ball = std::make_unique<Ball>(Vector2(800, 450));
-	ball->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2(10), Color(0, 1, 0, 1))));
+	ball->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2(30, 20), Color(0, 1, 0, 1))));
 	ball->AddComponent(std::make_unique<RigidbodyComponent>(Vector2(10)));
 
 	engine_->AddGameObject(std::move(gameManager));
