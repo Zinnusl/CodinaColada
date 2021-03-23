@@ -103,9 +103,9 @@ void OpenGLRenderer::BeginFrame()
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void OpenGLRenderer::Draw(GameObject& gameobject)
+void OpenGLRenderer::Draw(GameObject& gameobject, float subframe)
 {
-	gameobject.OnDraw();
+	gameobject.OnDraw(subframe);
 }
 
 void OpenGLRenderer::EndFrame()

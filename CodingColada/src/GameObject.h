@@ -12,8 +12,8 @@ class RigidbodyComponent;
 class GameObject
 {
 protected:
-	
-	Vector2 position_;
+	Vector2 previousPosition_;
+	Vector2 currentPosition_;
 	Vector2 rotation_;
 
 	std::vector<std::unique_ptr<IComponent>> components_;
@@ -23,10 +23,12 @@ public:
 	GameObject(Vector2 position);
 	static Engine* engine_;
 	virtual void OnUpdate(float deltaTime);
-	virtual void OnDraw();
+	virtual void OnDraw(float subframe);
 	virtual void OnCollision(RigidbodyComponent& other);
 	
+	Vector2 GetPreviousPosition();
 	Vector2 GetPosition();
+	Vector2 GetDrawPosition(float t);
 
 	void AddComponent(std::unique_ptr <IComponent> component);
 	void RemoveComponent(IComponent& component);

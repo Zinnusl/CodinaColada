@@ -16,16 +16,18 @@ class Ball : public GameObject
 {
 	Vector2 velocity_;
 public:
-	Ball(Vector2 position, Vector2 velocity = { 0.6,0.3 })
+	Ball(Vector2 position, Vector2 velocity = { 0.06,0.03 })
 		: GameObject(position), velocity_(velocity)
 	{
 	}
 
 	void OnUpdate(float deltaTime) override
 	{
+		previousPosition_ = currentPosition_;
+
 		static float runtime = 0;
 		runtime += deltaTime;
-		Vector2 newPos = position_ +  velocity_ * deltaTime * 0.001;;
+		Vector2 newPos = currentPosition_ +  velocity_ * deltaTime;
 
 		if (newPos.GetY() <= 0)
 		{
@@ -41,9 +43,9 @@ public:
 		if (newPos.GetX() < 0 || newPos.GetX() > 1600)
 		{
 			newPos = Vector2(800, 450);
-			velocity_ = Vector2(abs(1 * sinf(runtime)) +0.3, 1* sinf(runtime));
+			velocity_ = Vector2(abs(0.01 * sinf(runtime)) +0.03, 0.01* sinf(runtime)) * 8;
 		}
-		position_ = newPos;
+		currentPosition_ = newPos;
 	}
 
 	void OnCollision(RigidbodyComponent& other)
@@ -68,33 +70,35 @@ public:
 	
 	void OnUpdate(float deltaTime) override
 	{
+		previousPosition_ = currentPosition_;
+
 		#define 	GLFW_KEY_DOWN   264
 		#define 	GLFW_KEY_UP   265
 		const int maxMove = 700;
 		if (engine_->GetInput().GetKey(GLFW_KEY_DOWN))
 		{
-			float yPos = position_.GetY();
-			if (position_.GetY() > 0)
+			float yPos = currentPosition_.GetY();
+			if (currentPosition_.GetY() > 0)
 			{
-				float newPos = position_.GetY() - speed * deltaTime * 0.001;
+				float newPos = currentPosition_.GetY() - speed * deltaTime;
 				if (newPos < 0)
 				{
 					newPos = 0;
 				}
-				position_.SetY(newPos);
+				currentPosition_.SetY(newPos);
 			}
 		}
 		if (engine_->GetInput().GetKey(GLFW_KEY_UP))
 		{
-			float yPos = position_.GetY();
-			if (position_.GetY() < maxMove)
+			float yPos = currentPosition_.GetY();
+			if (currentPosition_.GetY() < maxMove)
 			{
-				float newPos = position_.GetY() + speed * deltaTime * 0.001;
+				float newPos = currentPosition_.GetY() + speed * deltaTime;
 				if (newPos > maxMove)
 				{
 					newPos = maxMove;
 				}
-				position_.SetY(newPos);
+				currentPosition_.SetY(newPos);
 			}
 		}
 	}
@@ -154,7 +158,7 @@ void App::run()
 	paddle2->AddComponent(std::make_unique<RigidbodyComponent>(paddleSize));
 
 	auto ball = std::make_unique<Ball>(Vector2(800, 450));
-	ball->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2(30, 20), Color(0, 1, 0, 1))));
+	ball->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2(10), Color(0, 1, 0, 1))));
 	ball->AddComponent(std::make_unique<RigidbodyComponent>(Vector2(10)));
 
 	engine_->AddGameObject(std::move(gameManager));

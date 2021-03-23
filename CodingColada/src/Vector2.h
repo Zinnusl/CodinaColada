@@ -27,4 +27,6 @@ public:
 	float distance(const Vector2& other) const;
 
 	float dot(const Vector2& other) const;
+
+	static Vector2 lerp(const Vector2& first, const Vector2& second, float t);
 };

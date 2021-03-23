@@ -11,5 +11,5 @@ class OpenGLRectangleShape : public RectangleShape
 	unsigned int VAO;
 public:
 	OpenGLRectangleShape(Vector2 size, Color color);
-	void Draw(Engine& engine, GameObject& gameobject) override;
+	void Draw(Engine& engine, GameObject& gameobject, float subframe) override;
 };

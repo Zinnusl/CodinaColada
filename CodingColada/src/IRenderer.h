@@ -11,7 +11,7 @@ class IRenderer
 public:
 	virtual ~IRenderer() {};
 	virtual void BeginFrame() = 0;
-	virtual void Draw(GameObject& gameobject) = 0;
+	virtual void Draw(GameObject& gameobject, float subframe) = 0;
 	virtual void EndFrame() = 0;
 	virtual void OnClick(Vector2 clickPosition) = 0;
 

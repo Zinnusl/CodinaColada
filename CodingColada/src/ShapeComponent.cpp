@@ -17,9 +17,9 @@ void ShapeComponent::OnRemove(Engine& engine)
 	
 }
 
-void ShapeComponent::OnDraw(Engine& engine)
+void ShapeComponent::OnDraw(Engine& engine, float subframe)
 {
-	shape_->Draw(engine, *gameobject_);
+	shape_->Draw(engine, *gameobject_, subframe);
 }
 
 GameObject& ShapeComponent::GetGameobject()

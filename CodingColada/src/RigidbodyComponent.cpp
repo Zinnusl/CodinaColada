@@ -21,7 +21,7 @@ void RigidbodyComponent::OnRemove(Engine& engine)
 {
 }
 
-void RigidbodyComponent::OnDraw(Engine& engine)
+void RigidbodyComponent::OnDraw(Engine& engine, float subframe)
 {
 }
 

@@ -61,6 +61,12 @@ float Vector2::dot(const Vector2& other) const
 	return x_ * other.x_ + +y_ * other.y_;
 }
 
+Vector2 Vector2::lerp(const Vector2& first, const Vector2& second, float t)
+{
+	auto tmp = first * (1.f - t) + second * t;
+	return tmp;
+}
+
 float Vector2::GetX() const
 {
 	return x_;

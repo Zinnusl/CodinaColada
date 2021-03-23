@@ -29,6 +29,6 @@ public:
 
 	// Inherited via IRenderer
 	void BeginFrame() override;
-	void Draw(GameObject& gameobject) override;
+	void Draw(GameObject& gameobject, float subframe) override;
 	void EndFrame() override;
 };

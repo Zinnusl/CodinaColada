@@ -11,7 +11,7 @@ GameObject::GameObject()
 }
 
 GameObject::GameObject(Vector2 position)
-	: position_(position)
+	: currentPosition_(position)
 {
 	
 }
@@ -24,11 +24,11 @@ void GameObject::OnUpdate(float deltaTime)
 	}
 }
 
-void GameObject::OnDraw()
+void GameObject::OnDraw(float subframe)
 {
 	for (auto& component : components_)
 	{
-		component->OnDraw(*engine_);
+		component->OnDraw(*engine_, subframe);
 	}
 }
 
@@ -36,9 +36,19 @@ void GameObject::OnCollision(RigidbodyComponent& other)
 {
 }
 
+Vector2 GameObject::GetPreviousPosition()
+{
+	return previousPosition_;
+}
+
 Vector2 GameObject::GetPosition()
 {
-	return position_;
+	return currentPosition_;
+}
+
+Vector2 GameObject::GetDrawPosition(float t)
+{
+	return Vector2::lerp(previousPosition_, currentPosition_, t);
 }
 
 void GameObject::AddComponent(std::unique_ptr<IComponent> component)
