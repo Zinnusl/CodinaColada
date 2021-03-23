@@ -18,38 +18,39 @@ Engine::Engine(std::unique_ptr<IRenderer> renderer, std::unique_ptr<IInput> inpu
 void Engine::StartGame()
 {
 	auto lastFrame = std::chrono::steady_clock::now();
-	long long time = 0;
+
+	//fps display
+	int32_t fpsTimer = 0;
 	int32_t fps = 0;
 	int32_t fpsDisplay = 0;
-	uint64_t tick = 0;
 
-	int32_t ticksPerSecond = 120;
-	int32_t microSecondsPerTick = 1000000 / ticksPerSecond;
-	int32_t lastPhysicsTick = 0;
-
-	int64_t timeSinceLastPhysicsTick = 0;
+	//physics
+	const int32_t ticksPerSecond = 120;
+	const int32_t microSecondsPerTick = 1000000 / ticksPerSecond;
+	int32_t timeSinceLastPhysicsTick = 0;
 
 	while (!stopGame)
 	{
 		auto currentFrame = std::chrono::steady_clock::now();
 		auto deltaTime = std::chrono::duration_cast<std::chrono::microseconds>(currentFrame - lastFrame).count();
-		//printf("deltaTime %d\n", deltaTime);
-		time += deltaTime;
-		tick += deltaTime;
+
+		fpsTimer += deltaTime;
 		timeSinceLastPhysicsTick += deltaTime;
 		fps++;
 
-		if (time >= 1000000)
+		//Check if 1 second has passed
+		if (fpsTimer >= 1000000)
 		{
-			time = 0;
+			fpsTimer = 0;
 			fpsDisplay = fps;
 			fps = 0;
 			printf("fps: %d\n", fpsDisplay);
 		}
 
-		//input
+		//Handle input
 		input_->ProcessInput();
 
+		//Check for collisions. This should be part of physics simulation. It is also very buggy and O(n^2)
 		for (const auto& gameobject : gameobjects_)
 		{
 			RigidbodyComponent* rb = gameobject.second->GetFirstComponentOfType<RigidbodyComponent>();
@@ -75,29 +76,26 @@ void Engine::StartGame()
 			}
 		}
 
-		if (tick >= lastPhysicsTick + microSecondsPerTick)
+
+		//Since the physics simulation is not tied to the framerate, we need to interpolate between the old and the new positions.
+		//The t value for interpolation is the subframe.
+		float subframe = timeSinceLastPhysicsTick / (float)microSecondsPerTick;
+
+		//Check if its time to run physics
+		if (timeSinceLastPhysicsTick >= microSecondsPerTick)
 		{
-			//update (physics...)
-			printf("Physics Tick %d\n", timeSinceLastPhysicsTick);
+			//run physics simulation
 			for (const auto& gameobject : gameobjects_)
 			{
 				gameobject.second->OnUpdate(timeSinceLastPhysicsTick / 400.f);
-				
-				//fixed timestep
-				//gameobject.second->OnUpdate(microSecondsPerTick / 500.f);
 			}
 			timeSinceLastPhysicsTick = 0;
-			lastPhysicsTick = tick;
 		}
 
-		float subframe = (tick - lastPhysicsTick) / (float)microSecondsPerTick;
-		printf("subframe %f\n", subframe);
-
+		//Draw 
 		renderer_->BeginFrame();
 		for (const auto& gameobject : gameobjects_)
 		{
-			//printf("prev: %f %f curr: %f %f\n", gameobject.second->GetPreviousPosition().GetX(), gameobject.second->GetPreviousPosition().GetY(), gameobject.second->GetPosition().GetX(), gameobject.second->GetPosition().GetY());
-			
 			gameobject.second->OnDraw(subframe);
 		}
 		renderer_->EndFrame();
