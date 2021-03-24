@@ -25,7 +25,7 @@ void Engine::StartGame()
 	int32_t fpsDisplay = 0;
 
 	//physics
-	const int32_t ticksPerSecond = 32;
+	const int32_t ticksPerSecond = 4;
 	const int32_t microSecondsPerTick = 1000000 / ticksPerSecond;
 	int32_t timeSinceLastPhysicsTick = 0;
 
@@ -79,6 +79,8 @@ void Engine::StartGame()
 		//Since the physics simulation is not tied to the framerate, we need to interpolate between the old and the new positions.
 		//The t value for interpolation is the subframe.
 		float subframe = timeSinceLastPhysicsTick / (float)microSecondsPerTick;
+		
+		
 
 		//printf("Subframe %f\n", subframe);
 		//Check if its time to run physics
@@ -88,23 +90,28 @@ void Engine::StartGame()
 			//run physics simulation
 			for (const auto& gameobject : gameobjects_)
 			{
-				//gameobject.second->OnUpdate(timeSinceLastPhysicsTick);
-				gameobject.second->OnUpdate(microSecondsPerTick);
+				gameobject.second->OnUpdate(timeSinceLastPhysicsTick);
+				//gameobject.second->OnUpdate(microSecondsPerTick);
 			}
 			timeSinceLastPhysicsTick = 0;
 		}
-		else 
+
+		//TODO ghetto fix
+		if (subframe > 1)
 		{
-			//Draw 
-			renderer_->BeginFrame();
-			for (const auto& gameobject : gameobjects_)
-			{
-				//gameobject.second->OnDraw(0);
-				gameobject.second->OnDraw(subframe);
-				//gameobject.second->OnDraw(1);
-			}
-			renderer_->EndFrame();
+			subframe = 0;
 		}
+
+		printf("subframe %f\n", subframe);
+		//Draw 
+		renderer_->BeginFrame();
+		for (const auto& gameobject : gameobjects_)
+		{
+			//gameobject.second->OnDraw(0);
+			gameobject.second->OnDraw(subframe);
+			//gameobject.second->OnDraw(1);
+		}
+		renderer_->EndFrame();
 
 		lastFrame = currentFrame;
 	}
