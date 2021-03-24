@@ -23,3 +23,6 @@ target_link_libraries(CodingColada PRIVATE glad::glad)
 
 find_package(glm CONFIG REQUIRED)
 target_link_libraries(CodingColada PRIVATE glm::glm)
+
+find_package(imgui CONFIG REQUIRED)
+target_link_libraries(CodingColada PRIVATE imgui::imgui) 

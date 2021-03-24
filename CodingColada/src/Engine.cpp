@@ -25,7 +25,7 @@ void Engine::StartGame()
 	int32_t fpsDisplay = 0;
 
 	//physics
-	const int32_t ticksPerSecond = 4;
+	const int32_t ticksPerSecond = 64;
 	const int32_t microSecondsPerTick = 1000000 / ticksPerSecond;
 	int32_t timeSinceLastPhysicsTick = 0;
 
@@ -80,8 +80,6 @@ void Engine::StartGame()
 		//The t value for interpolation is the subframe.
 		float subframe = timeSinceLastPhysicsTick / (float)microSecondsPerTick;
 		
-		
-
 		//printf("Subframe %f\n", subframe);
 		//Check if its time to run physics
 		if (timeSinceLastPhysicsTick >= microSecondsPerTick)
@@ -96,13 +94,13 @@ void Engine::StartGame()
 			timeSinceLastPhysicsTick = 0;
 		}
 
-		//TODO ghetto fix
+		//TODO ghetto fix. Or is it?
 		if (subframe > 1)
 		{
-			subframe = 0;
+			subframe = subframe - 1.f;
 		}
 
-		printf("subframe %f\n", subframe);
+		//printf("subframe %f\n", subframe);
 		//Draw 
 		renderer_->BeginFrame();
 		for (const auto& gameobject : gameobjects_)

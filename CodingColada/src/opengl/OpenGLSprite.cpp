@@ -2,6 +2,9 @@
 
 #include "../GameObject.h"
 
+#include "glad/glad.h"
+#include <glm/gtc/type_ptr.hpp>
+
 void OpenGLSprite::initRenderData()
 {
     // configure VAO/VBO
