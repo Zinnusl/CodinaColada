@@ -1,13 +1,9 @@
-
-
-//This has to be included before glad is
+//This has to be included before glad, glm etc
 #include "imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 
-
 #include "OpenGLRenderer.h"
-
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
@@ -15,10 +11,7 @@
 #include "../GameObject.h"
 #include "OpenGLShader.h"
 
-
 #include <glm/gtc/type_ptr.hpp>
-
-
 #include <iostream>
 
 std::unordered_map<std::string, OpenGLShader> OpenGLRenderer::shaders_;
@@ -132,8 +125,6 @@ void OpenGLRenderer::BeginFrame()
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
-	static bool show_demo_window = true;
-	ImGui::ShowDemoWindow(&show_demo_window);
 
 	for (auto& shader : shaders_)
 	{

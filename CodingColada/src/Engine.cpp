@@ -4,8 +4,11 @@
 #include "IInput.h"
 #include "RigidbodyComponent.h"
 
+#include "imgui.h"
+
 #include <chrono>
 #include <iostream>
+#include <string> 
 
 
 
@@ -108,6 +111,29 @@ void Engine::StartGame()
 			//gameobject.second->OnDraw(0);
 			gameobject.second->OnDraw(subframe);
 			//gameobject.second->OnDraw(1);
+		}
+		{
+			static float f = 0.0f;
+			static int counter = 0;
+
+			ImGui::Begin("CodinaColada - Engine - Debug");                          // Create a window called "Hello, world!" and append into it.
+
+			if (ImGui::TreeNode("GameObjects"))
+			{
+				for (auto& it : gameobjects_)
+				{
+					GameObject* gameobject = it.second.get();
+					if (ImGui::TreeNode(std::to_string(it.first).c_str()))
+					{
+						ImGui::Text("x: %f, y: %f", gameobject->GetPosition().GetX(), gameobject->GetPosition().GetY());
+						ImGui::TreePop();
+					}
+				}
+				ImGui::TreePop();
+			}
+
+			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+			ImGui::End();
 		}
 		renderer_->EndFrame();
 

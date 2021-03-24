@@ -4,13 +4,6 @@
 
 #include "Engine.h"
 
-class GameManager : public GameObject
-{
-public:
-	GameManager();
-	void OnUpdate(float deltaTime) override;
-};
-
 class App
 {
 protected:

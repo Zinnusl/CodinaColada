@@ -12,6 +12,7 @@
 #include "opengl/OpenGLRenderer.h"
 #include "opengl/OpenGLSprite.h"
 #include "Color.h"
+#include "imgui.h"
 
 class Ball : public GameObject
 {
@@ -116,26 +117,28 @@ public:
 	}
 };
 
-GameManager::GameManager()
-{
 
-}
-
-void GameManager::OnUpdate(float deltaTime)
+class GameManager : public GameObject
 {
-	int GLFW_KEY_ESCAPE = 256;
-	if (engine_->GetInput().GetKeyDown(GLFW_KEY_ESCAPE))
+public:
+	GameManager() {}
+	void OnUpdate(float deltaTime) override
 	{
-		if (components_.size() > 0)
+		int GLFW_KEY_ESCAPE = 256;
+		if (engine_->GetInput().GetKeyDown(GLFW_KEY_ESCAPE))
 		{
-			RemoveComponent(*components_[0]);
-		}
-		else
-		{
-			engine_->StopGame();
+			if (components_.size() > 0)
+			{
+				RemoveComponent(*components_[0]);
+			}
+			else
+			{
+				engine_->StopGame();
+			}
 		}
 	}
-}
+};
+
 
 App::App(std::ostream& logger, std::unique_ptr<Engine> engine)
 	: logger_(logger), engine_(std::move(engine))
