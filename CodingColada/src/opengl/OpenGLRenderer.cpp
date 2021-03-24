@@ -9,6 +9,7 @@
 #include <iostream>
 
 std::unordered_map<std::string, OpenGLShader> OpenGLRenderer::shaders_;
+std::unordered_map<std::string, OpenGLTexture2D> OpenGLRenderer::textures_;
 
 
 OpenGLRenderer::OpenGLRenderer()
@@ -52,6 +53,7 @@ void* OpenGLRenderer::CreateWindow(int x, int y)
 	glViewport(0, 0, x, y);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glfwSwapInterval(0); //disable vsync
 
 	//origin is bottom left
 	glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(x), 0.0f, static_cast<float>(y), -1.f, 1.f);
@@ -63,25 +65,28 @@ void* OpenGLRenderer::CreateWindow(int x, int y)
 	OpenGLShader circleShader = OpenGLShader::CompileFromFile("..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\circle.frag", nullptr);
 	circleShader.SetMatrix4("projection", projection, true);
 	shaders_.emplace(std::make_pair("circle", circleShader));
-
-	//Disable vsync. works very bad
-	glfwSwapInterval(0);
-	/*
-	OpenGLShader coolShader = OpenGLShader::CompileFromFile("C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\cool.vert", "C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\cool.frag", nullptr);
+	
+	OpenGLShader coolShader = OpenGLShader::CompileFromFile("..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\cool.vert", "..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\cool.frag", nullptr);
 	shaders_.emplace(std::make_pair("cool", coolShader));
 
-	OpenGLShader dragonShader = OpenGLShader::CompileFromFile("C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\default.vert", "C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\dragon.frag", nullptr);
+	OpenGLShader dragonShader = OpenGLShader::CompileFromFile("..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\dragon.frag", nullptr);
 	shaders_.emplace(std::make_pair("dragon", dragonShader));
 
-	OpenGLShader waterShader = OpenGLShader::CompileFromFile("C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\default.vert", "C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\water.frag", nullptr);
+	OpenGLShader waterShader = OpenGLShader::CompileFromFile("..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\water.frag", nullptr);
 	shaders_.emplace(std::make_pair("water", waterShader));
 
-	OpenGLShader ledCircleShader = OpenGLShader::CompileFromFile("C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\default.vert", "C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\ledcircle.frag", nullptr);
+	OpenGLShader ledCircleShader = OpenGLShader::CompileFromFile("..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\ledcircle.frag", nullptr);
 	shaders_.emplace(std::make_pair("ledcircle", ledCircleShader));
 
-	OpenGLShader glowCircleShader = OpenGLShader::CompileFromFile("C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\default.vert", "C:\\Users\\Fahersto\\source\\repos\\CodinaColada\\CodingColada\\src\\opengl\\shader\\glowcircle.frag", nullptr);
+	OpenGLShader glowCircleShader = OpenGLShader::CompileFromFile("..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\glowcircle.frag", nullptr);
 	shaders_.emplace(std::make_pair("glowcircle", glowCircleShader));
-	*/
+
+	OpenGLShader spriteShader = OpenGLShader::CompileFromFile("..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\sprite.vert", "..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\sprite.frag", nullptr);
+	shaders_.emplace(std::make_pair("sprite", spriteShader));
+
+	OpenGLTexture2D watermelonTexture = OpenGLTexture2D::LoadTextureFromFile("..\\..\\..\\..\\CodingColada\\src\\resources\\watermelon.png", true);
+	textures_.emplace(std::make_pair("watermelon", watermelonTexture));
+	
 	return window_;
 }
 

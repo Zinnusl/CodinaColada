@@ -60,20 +60,6 @@ OpenGLRectangleShape::OpenGLRectangleShape(Vector2 size, Color color)
 
 void OpenGLRectangleShape::Draw(Engine& engine, GameObject& gameobject, float subframe)
 {
-	
-	/*
-	if (GameObject::engine_->GetInput().GetKey(GFLW_KEY_MO))
-	if (clickPosition.GetX() >= position_.GetX() &&
-		clickPosition.GetX() <= position_.GetX() + size_.GetX() &&
-		clickPosition.GetY() >= position_.GetY() &&
-		clickPosition.GetY() <= position_.GetY() + size_.GetY())
-	{
-		for (const auto& callback : clickHandlers_)
-		{
-			callback();
-		}
-	}
-	*/
 	//wireframe mode
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -117,19 +103,6 @@ void OpenGLRectangleShape::Draw(Engine& engine, GameObject& gameobject, float su
 		defaultShader.SetVector2f("iMouse", glm::vec2(mousePosition.GetX(), mousePosition.GetY()));
 		defaultShader.Use();
 	}
-	/*
-	else
-	{
-	  auto defaultShader = OpenGLRenderer::shaders_[std::string("ledcircle")];
-	  defaultShader.SetVector4f("color", glm::vec4(color_.r_, color_.g_, color_.b_, color_.a_));
-	  defaultShader.SetMatrix4("model", model);
-	  defaultShader.SetFloat("iTime", glfwGetTime());
-	  defaultShader.SetFloat("ghsThickness", 0.1f);
-	  defaultShader.SetVector2f("iResolution", glm::vec2(1600, 900));
-	  defaultShader.Use();
-	}
-	*/
-
 
 	glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
 	//glDrawArrays(GL_TRIANGLES, 0, 4);

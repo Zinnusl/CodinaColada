@@ -2,6 +2,7 @@
 
 #include "../IRenderer.h"
 #include "OpenGLShader.h"
+#include "OpenGLTexture2D.h"
 
 #include <vector>
 #include <memory>
@@ -19,6 +20,7 @@ public:
 	~OpenGLRenderer();
 
 	static std::unordered_map<std::string, OpenGLShader> shaders_;
+	static std::unordered_map<std::string, OpenGLTexture2D> textures_;
 
 
 	virtual void OnClick(Vector2 clickPosition) override;
