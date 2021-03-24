@@ -41,8 +41,12 @@ void* OpenGLRenderer::CreateWindow(int x, int y)
 	int xPos, yPos, width, height;
 	auto primaryMonitor = glfwGetPrimaryMonitor();
 	glfwGetMonitorWorkarea(primaryMonitor, &xPos, &yPos, &width, &height);
-	window_ = glfwCreateWindow(x, y, "GLFWWindow", nullptr, nullptr);
+	//window_ = glfwCreateWindow(x, y, "GLFWWindow", nullptr, nullptr);
+	window_ = glfwCreateWindow(width, height, "GLFWWindow", glfwGetPrimaryMonitor(), nullptr);
+
 	//window_ = glfwCreateWindow(width, height, "GLFWWindow", glfwGetPrimaryMonitor(), nullptr);
+	//glfwSetWindowMonitor(window_, nullptr, 0, 0, width, height, GLFW_DONT_CARE);
+
 	glfwMakeContextCurrent(window_);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -53,7 +57,7 @@ void* OpenGLRenderer::CreateWindow(int x, int y)
 	glViewport(0, 0, x, y);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glfwSwapInterval(0); //disable vsync
+	//glfwSwapInterval(0); //disable vsync
 
 	//origin is bottom left
 	glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(x), 0.0f, static_cast<float>(y), -1.f, 1.f);
@@ -82,6 +86,7 @@ void* OpenGLRenderer::CreateWindow(int x, int y)
 	shaders_.emplace(std::make_pair("glowcircle", glowCircleShader));
 
 	OpenGLShader spriteShader = OpenGLShader::CompileFromFile("..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\sprite.vert", "..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\sprite.frag", nullptr);
+	spriteShader.SetMatrix4("projection", projection, true);
 	shaders_.emplace(std::make_pair("sprite", spriteShader));
 
 	OpenGLTexture2D watermelonTexture = OpenGLTexture2D::LoadTextureFromFile("..\\..\\..\\..\\CodingColada\\src\\resources\\watermelon.png", true);

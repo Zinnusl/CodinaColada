@@ -34,10 +34,10 @@ void OpenGLSprite::Draw(Engine& engine, GameObject& gameobject, float subframe)
 {
     //TODO conversion between engine Vector2 and glm::vector annoying. Solution?
     //TODO pass values from sprite? Gameobject?
-    glm::vec2 position = glm::vec2(gameobject.GetPosition().GetX(), gameobject.GetPosition().GetY());
-    glm::vec2 size(1, 1);
+    glm::vec2 position = glm::vec2(gameobject.GetDrawPosition(subframe).GetX(), gameobject.GetDrawPosition(subframe).GetY());
+    glm::vec2 size(64, 64);
     glm::vec4 color(1, 1, 1, 1);
-    float rotate = 0;
+    float rotate = 180;
     
 
     // prepare transformations
@@ -47,6 +47,7 @@ void OpenGLSprite::Draw(Engine& engine, GameObject& gameobject, float subframe)
 
     model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f));
     model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 1.0f, 0.0f));
     model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f));
 
     model = glm::scale(model, glm::vec3(size, 1.0f));

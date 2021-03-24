@@ -17,7 +17,7 @@ class Ball : public GameObject
 {
 	Vector2 velocity_;
 public:
-	Ball(Vector2 position, Vector2 velocity = { 0.3,0.1 })
+	Ball(Vector2 position, Vector2 velocity = { 0.0005,0.0005 })
 		: GameObject(position), velocity_(velocity)
 	{
 	}
@@ -169,8 +169,8 @@ void App::run()
 	paddle2->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(paddleSize, Color(1, 0, 0, 1))));
 	paddle2->AddComponent(std::make_unique<RigidbodyComponent>(paddleSize));
 
-		auto ball = std::make_unique<Ball>(Vector2(800, 450));
-	ball->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2(20), Color(0, 1, 0, 1))));
+	auto ball = std::make_unique<Ball>(Vector2(800, 450));
+	//ball->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2(20), Color(0, 1, 0, 1))));
 	ball->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(OpenGLRenderer::shaders_["sprite"], OpenGLRenderer::textures_["watermelon"])));
 	ball->AddComponent(std::make_unique<RigidbodyComponent>(Vector2(20)));
 
