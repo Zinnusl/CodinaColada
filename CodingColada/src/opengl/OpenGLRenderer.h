@@ -9,7 +9,6 @@
 #include <unordered_map>
 
 class GLFWwindow;
-
 class OpenGLRenderer : public IRenderer
 {
 protected:
@@ -27,10 +26,12 @@ public:
 
 	virtual void* CreateWindow(int x, int y) override;
 
-	GLFWwindow* GetWindow();
 
 	// Inherited via IRenderer
 	void BeginFrame() override;
 	void Draw(GameObject& gameobject, float subframe) override;
 	void EndFrame() override;
+
+	// Inherited via IRenderer
+	virtual CodinaColadaWindow GetWindow() override;
 };

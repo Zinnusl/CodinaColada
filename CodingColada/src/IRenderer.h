@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IShape.h"
+#include "CodinaColadaWindow.h"
 #include "Vector2.h"
 
 #include <memory>
@@ -17,4 +18,5 @@ public:
 
 	//TODO. IInput needs a way to get the window so it can register for the input events
 	virtual void* CreateWindow(int x, int y) = 0;
+	virtual CodinaColadaWindow GetWindow() = 0;
 };

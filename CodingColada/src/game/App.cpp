@@ -32,13 +32,14 @@ void App::run()
 
 	auto gameManager = std::make_unique<GameManager>();
 	auto grid = std::make_unique<Grid>(64, 64, 8, 16);
+	grid->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(windowSize, Color(0, 0, 1, 0.1), &OpenGLRenderer::shaders_["grid"])));
 
 	Vector2 paddleSize = { 20, 200 };
 	auto paddle1 = std::make_unique<Paddle>(Vector2(40, 400));
 	paddle1->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(paddleSize, Color(0, 0, 1, 1))));
 	paddle1->AddComponent(std::make_unique<RigidbodyComponent>(std::make_unique<OpenGLRectangleShape>(paddleSize, Color(0, 1, 0, 0.2))));
 
-	auto paddle2 = std::make_unique<Paddle>(Vector2(1540, 400));
+	auto paddle2 = std::make_unique<Paddle>(Vector2(windowSize.GetX() - 60, 400));
 	paddle2->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(paddleSize, Color(1, 0, 0, 1))));
 	paddle2->AddComponent(std::make_unique<RigidbodyComponent>(std::make_unique<OpenGLRectangleShape>(paddleSize, Color(0, 1, 0, 0.2))));
 

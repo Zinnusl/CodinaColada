@@ -1,5 +1,8 @@
 #include "Ball.h"
 
+#include "../Engine.h"
+#include "../CodinaColadaWindow.h"
+
 #include "imgui.h"
 
 Ball::Ball(Vector2 position, Vector2 velocity)
@@ -20,9 +23,9 @@ void Ball::OnUpdate(float deltaTime)
 		newPos.SetY(0);
 		velocity_.SetY(-velocity_.GetY());
 	}
-	if (newPos.GetY() >= 900) //size nicht vergessen
+	if (newPos.GetY() >= engine_->GetRenderer().GetWindow().GetResolution().GetY()) //size nicht vergessen
 	{
-		newPos.SetY(900);
+		newPos.SetY(engine_->GetRenderer().GetWindow().GetResolution().GetY());
 		velocity_.SetY(-velocity_.GetY());
 	}
 
@@ -31,9 +34,9 @@ void Ball::OnUpdate(float deltaTime)
 		newPos.SetX(0);
 		velocity_.SetX(-velocity_.GetX());
 	}
-	if (newPos.GetX() >= 1600) //size nicht vergessen
+	if (newPos.GetX() >= engine_->GetRenderer().GetWindow().GetResolution().GetX()) //size nicht vergessen
 	{
-		newPos.SetX(1600);
+		newPos.SetX(engine_->GetRenderer().GetWindow().GetResolution().GetX());
 		velocity_.SetX(-velocity_.GetX());
 	}
 	currentPosition_ = newPos;

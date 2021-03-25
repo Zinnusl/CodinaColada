@@ -12,11 +12,54 @@
 #include "../GameObject.h"
 #include "../Engine.h"
 
+unsigned int OpenGLRectangleShape::VAO;
 
 OpenGLRectangleShape::OpenGLRectangleShape(Vector2 size, Color color)
-	: RectangleShape(size, color)
+	: RectangleShape(size, color), customShader_(nullptr)
 {
-	// set up vertex data (and buffer(s)) and configure vertex attributes
+
+}
+
+OpenGLRectangleShape::OpenGLRectangleShape(Vector2 size, Color color, OpenGLShader* customShader)
+	: RectangleShape(size, color), customShader_(customShader)
+{
+}
+
+void OpenGLRectangleShape::Draw(Engine& engine, GameObject& gameobject, float subframe)
+{
+	//wireframe mode
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	glm::mat4 model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(gameobject.GetDrawPosition(subframe).GetX() + size_.GetX() / 2, gameobject.GetDrawPosition(subframe).GetY() + size_.GetY() / 2, 0.0f));
+	model = glm::scale(model, glm::vec3(size_.GetX(), size_.GetY(), 1.0f));
+
+	if (customShader_)
+	{
+		customShader_->Use();
+		customShader_->SetVector4f("color", glm::vec4(color_.r_, color_.g_, color_.b_, color_.a_));
+		customShader_->SetMatrix4("model", model);
+	}
+	else
+	{
+		auto defaultShader = OpenGLRenderer::shaders_[std::string("default")];
+		defaultShader.Use();
+
+		defaultShader.SetVector4f("color", glm::vec4(color_.r_, color_.g_, color_.b_, color_.a_));
+		defaultShader.SetMatrix4("model", model);
+	}
+	//TODO we throw away like 300fps with these 2 lines. lmao. solving this requires redisgn. We have to do batch rendering (first draw all using shader "rectangle", then all using "sprite" etc.)
+
+
+	glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
+	//glDrawArrays(GL_TRIANGLES, 0, 4);
+	//glDrawArrays(GL_LINES, 0, 4);
+	//glDrawElements(GL_LINES, 6, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+}
+
+void OpenGLRectangleShape::InitRenderData()
+{	// set up vertex data (and buffer(s)) and configure vertex attributes
 	// ------------------------------------------------------------------
 	float vertices[] = {
 		 -0.5f,  0.5f,  // top left  
@@ -58,57 +101,4 @@ OpenGLRectangleShape::OpenGLRectangleShape(Vector2 size, Color color)
 	// You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
 	// VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
 	glBindVertexArray(0);
-}
-
-void OpenGLRectangleShape::Draw(Engine& engine, GameObject& gameobject, float subframe)
-{
-	//wireframe mode
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-	auto test = gameobject.GetDrawPosition(subframe).GetX();
-
-	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(gameobject.GetDrawPosition(subframe).GetX() + size_.GetX() / 2, gameobject.GetDrawPosition(subframe).GetY() + size_.GetY() / 2, 0.0f));
-	model = glm::scale(model, glm::vec3(size_.GetX(), size_.GetY(), 1.0f));
-
-	auto defaultShader = OpenGLRenderer::shaders_[std::string("default")];
-	defaultShader.Use();
-	defaultShader.SetVector4f("color", glm::vec4(color_.r_, color_.g_, color_.b_, color_.a_));
-	defaultShader.SetMatrix4("model", model);
-
-	if (GameObject::engine_->GetInput().GetKey(49))
-	{
-		//trippy shader
-		auto defaultShader = OpenGLRenderer::shaders_[std::string("dragon")];
-		defaultShader.SetMatrix4("model", model);
-		defaultShader.SetFloat("iTime", glfwGetTime());
-		defaultShader.SetVector2f("iResolution", glm::vec2(1600, 900));
-		defaultShader.Use();
-	}
-	else if (GameObject::engine_->GetInput().GetKey(50))
-	{
-		auto defaultShader = OpenGLRenderer::shaders_[std::string("water")];
-		defaultShader.SetMatrix4("model", model);
-		defaultShader.SetFloat("iTime", glfwGetTime());
-		defaultShader.SetVector2f("iResolution", glm::vec2(1600, 900));
-		Vector2 mousePosition = GameObject::engine_->GetInput().GetMousePosition();
-		defaultShader.SetVector2f("iMouse", glm::vec2(mousePosition.GetX(), mousePosition.GetY()));
-		defaultShader.Use();
-	}
-	else if (GameObject::engine_->GetInput().GetKey(51))
-	{
-		auto defaultShader = OpenGLRenderer::shaders_[std::string("glowcircle")];
-		defaultShader.SetMatrix4("model", model);
-		defaultShader.SetFloat("iTime", glfwGetTime());
-		defaultShader.SetVector2f("iResolution", glm::vec2(1600, 900));
-		Vector2 mousePosition = GameObject::engine_->GetInput().GetMousePosition();
-		defaultShader.SetVector2f("iMouse", glm::vec2(mousePosition.GetX(), mousePosition.GetY()));
-		defaultShader.Use();
-	}
-
-	glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-	//glDrawArrays(GL_TRIANGLES, 0, 4);
-	//glDrawArrays(GL_LINES, 0, 4);
-	//glDrawElements(GL_LINES, 6, GL_UNSIGNED_INT, 0);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }

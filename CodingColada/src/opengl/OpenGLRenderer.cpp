@@ -10,6 +10,7 @@
 
 #include "../GameObject.h"
 #include "OpenGLShader.h"
+#include "OpenGLRectangleShape.h"
 
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
@@ -85,37 +86,19 @@ void* OpenGLRenderer::CreateWindow(int x, int y)
 	defaultShader.SetMatrix4("projection", projection, true);
 	shaders_.emplace(std::make_pair("default", defaultShader));
 
-	OpenGLShader circleShader = OpenGLShader::CompileFromFile("..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\circle.frag", nullptr);
-	circleShader.SetMatrix4("projection", projection, true);
-	shaders_.emplace(std::make_pair("circle", circleShader));
-	
-	OpenGLShader coolShader = OpenGLShader::CompileFromFile("..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\cool.vert", "..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\cool.frag", nullptr);
-	shaders_.emplace(std::make_pair("cool", coolShader));
-
-	OpenGLShader dragonShader = OpenGLShader::CompileFromFile("..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\dragon.frag", nullptr);
-	shaders_.emplace(std::make_pair("dragon", dragonShader));
-
-	OpenGLShader waterShader = OpenGLShader::CompileFromFile("..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\water.frag", nullptr);
-	shaders_.emplace(std::make_pair("water", waterShader));
-
-	OpenGLShader ledCircleShader = OpenGLShader::CompileFromFile("..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\ledcircle.frag", nullptr);
-	shaders_.emplace(std::make_pair("ledcircle", ledCircleShader));
-
-	OpenGLShader glowCircleShader = OpenGLShader::CompileFromFile("..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\glowcircle.frag", nullptr);
-	shaders_.emplace(std::make_pair("glowcircle", glowCircleShader));
-
 	OpenGLShader spriteShader = OpenGLShader::CompileFromFile("..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\sprite.vert", "..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\sprite.frag", nullptr);
 	spriteShader.SetMatrix4("projection", projection, true);
 	shaders_.emplace(std::make_pair("sprite", spriteShader));
 
+	OpenGLShader gridShader = OpenGLShader::CompileFromFile("..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\grid.frag", nullptr);
+	gridShader.SetMatrix4("projection", projection, true);
+	shaders_.emplace(std::make_pair("grid", gridShader));
+
 	OpenGLTexture2D watermelonTexture = OpenGLTexture2D::LoadTextureFromFile("..\\..\\..\\..\\CodingColada\\src\\resources\\watermelon.png", true);
 	textures_.emplace(std::make_pair("watermelon", watermelonTexture));
 	
-	return window_;
-}
+	OpenGLRectangleShape::InitRenderData();
 
-GLFWwindow* OpenGLRenderer::GetWindow()
-{
 	return window_;
 }
 
@@ -126,11 +109,15 @@ void OpenGLRenderer::BeginFrame()
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
+	int width;
+	int height;
+	glfwGetWindowSize(window_, &width, &height);
+	
 	for (auto& shader : shaders_)
 	{
 		shader.second.Use();
 		shader.second.SetFloat("time", glfwGetTime());
-		shader.second.SetVector2f("screenresolution", glm::vec2(1600, 900));
+		shader.second.SetVector2f("screenresolution", glm::vec2(width, height));
 	}
 
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -154,4 +141,11 @@ void OpenGLRenderer::EndFrame()
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	glfwSwapBuffers(window_);
+}
+
+CodinaColadaWindow OpenGLRenderer::GetWindow()
+{
+	int display_w, display_h;
+	glfwGetFramebufferSize(window_, &display_w, &display_h);
+	return CodinaColadaWindow(Vector2(display_w, display_h));
 }
