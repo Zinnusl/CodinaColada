@@ -37,6 +37,7 @@ void App::run()
 
 	auto hoverTile = std::make_unique<HoverTile>(Vector2(90,90));
 	hoverTile->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2(90, 90), Color(0, 0, 1, 0.1), &OpenGLRenderer::shaders_["hover"])));
+	hoverTile->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(90, 90), OpenGLRenderer::shaders_["sprite"], OpenGLRenderer::textures_["hovertile"])));
 
 	Vector2 paddleSize = { 20, 200 };
 	auto paddle1 = std::make_unique<Paddle>(Vector2(40, 400));
@@ -49,7 +50,7 @@ void App::run()
 
 	auto ball = std::make_unique<Ball>(Vector2(800, 450));
 	//ball->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2(20), Color(0, 1, 0, 1))));
-	ball->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(OpenGLRenderer::shaders_["sprite"], OpenGLRenderer::textures_["watermelon"])));
+	ball->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(64,64), OpenGLRenderer::shaders_["sprite"], OpenGLRenderer::textures_["watermelon"])));
 	ball->AddComponent(std::make_unique<RigidbodyComponent>(std::make_unique<OpenGLRectangleShape>(Vector2(64), Color(0, 1, 0, 0.2))));
 
 	engine_->AddGameObject(std::move(gameManager));

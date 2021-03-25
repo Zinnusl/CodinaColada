@@ -8,5 +8,5 @@ uniform float time;
 
 void main() 
 {
-	gl_FragColor = vec4(1,1,0.33,0.3); 
+	gl_FragColor = vec4(0.1, 1, 0.2, min(sin(time*4), 0.8)); 
 }

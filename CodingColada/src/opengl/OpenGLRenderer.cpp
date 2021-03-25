@@ -101,6 +101,9 @@ void* OpenGLRenderer::CreateWindow(int x, int y)
 	OpenGLTexture2D watermelonTexture = OpenGLTexture2D::LoadTextureFromFile("..\\..\\..\\..\\CodingColada\\src\\resources\\watermelon.png", true);
 	textures_.emplace(std::make_pair("watermelon", watermelonTexture));
 	
+	OpenGLTexture2D hoverTileTexture = OpenGLTexture2D::LoadTextureFromFile("..\\..\\..\\..\\CodingColada\\src\\resources\\Tile_Hover.png", true);
+	textures_.emplace(std::make_pair("hovertile", hoverTileTexture));
+
 	OpenGLRectangleShape::InitRenderData();
 
 	return window_;
