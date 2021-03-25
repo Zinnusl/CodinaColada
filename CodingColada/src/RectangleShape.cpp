@@ -17,3 +17,8 @@ void RectangleShape::RegisterClickHandler(handlerCallbackType callback)
 {
 	clickHandlers_.push_back(callback);
 }
+
+Vector2 RectangleShape::GetSize()
+{
+	return size_;
+}

@@ -9,8 +9,6 @@
 class RectangleShape : public IShape
 {
 protected:
-	Vector2 offset_;
-
 	Vector2 size_;
 	Color color_;
 
@@ -20,4 +18,5 @@ public:
 	RectangleShape(Vector2 size, Color color);
 	void OnClick(Vector2 clickPosition) override;
 	void RegisterClickHandler(handlerCallbackType callback) override;
+	Vector2 GetSize();
 };

@@ -3,6 +3,7 @@
 #include "IComponent.h"
 #include "Vector2.h"
 
+#include "RectangleShape.h"
 /*
 * Disclaimer: Collisions are buggy
 */
@@ -11,11 +12,10 @@ class RigidbodyComponent : public IComponent
 protected:
 	//TODO this really shouldnt be a raw pointer
 	GameObject* gameobject_;
-	Vector2 offset_; //distance from GameObject
-	Vector2 size_;
+	std::shared_ptr<RectangleShape> shape_;
 
 public:
-	RigidbodyComponent(Vector2 size);
+	RigidbodyComponent(std::unique_ptr<RectangleShape> shape);
 
 	void OnUpdate(Engine& engine, float deltaTime) override;
 	void OnAdded(Engine& engine, GameObject& gameobject) override;

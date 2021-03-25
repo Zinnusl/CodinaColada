@@ -12,9 +12,6 @@ add_executable (CodingColada ${SOURCES})
 
 # TODO: Add tests and install targets if needed.
 
-find_package(SDL2)
-target_link_libraries(CodingColada PRIVATE SDL2::SDL2 SDL2::SDL2main)
-
 find_package(glfw3)
 target_link_libraries(CodingColada PRIVATE glfw)
 

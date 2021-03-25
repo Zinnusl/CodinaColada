@@ -68,7 +68,7 @@ void OpenGLRectangleShape::Draw(Engine& engine, GameObject& gameobject, float su
 	auto test = gameobject.GetDrawPosition(subframe).GetX();
 
 	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(gameobject.GetDrawPosition(subframe).GetX() + offset_.GetX() + size_.GetX() / 2, gameobject.GetDrawPosition(subframe).GetY() + offset_.GetY() + size_.GetY() / 2, 0.0f));
+	model = glm::translate(model, glm::vec3(gameobject.GetDrawPosition(subframe).GetX() + size_.GetX() / 2, gameobject.GetDrawPosition(subframe).GetY() + size_.GetY() / 2, 0.0f));
 	model = glm::scale(model, glm::vec3(size_.GetX(), size_.GetY(), 1.0f));
 
 	auto defaultShader = OpenGLRenderer::shaders_[std::string("default")];

@@ -26,26 +26,26 @@ App::App(std::ostream& logger, std::unique_ptr<Engine> engine)
 
 void App::run()
 {
-	const Vector2 windowSize = { 1600, 900 };
+	const Vector2 windowSize = { 2560, 1440 };
 	void* window = engine_->GetRenderer().CreateWindow(windowSize.GetX(), windowSize.GetY());
 	engine_->GetInput().RegisterWindow(window);
 
 	auto gameManager = std::make_unique<GameManager>();
-	auto grid = std::make_unique<Grid>(8, 8);
+	auto grid = std::make_unique<Grid>(64, 64, 8, 16);
 
 	Vector2 paddleSize = { 20, 200 };
 	auto paddle1 = std::make_unique<Paddle>(Vector2(40, 400));
 	paddle1->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(paddleSize, Color(0, 0, 1, 1))));
-	paddle1->AddComponent(std::make_unique<RigidbodyComponent>(paddleSize));
+	paddle1->AddComponent(std::make_unique<RigidbodyComponent>(std::make_unique<OpenGLRectangleShape>(paddleSize, Color(0, 1, 0, 0.2))));
 
 	auto paddle2 = std::make_unique<Paddle>(Vector2(1540, 400));
 	paddle2->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(paddleSize, Color(1, 0, 0, 1))));
-	paddle2->AddComponent(std::make_unique<RigidbodyComponent>(paddleSize));
+	paddle2->AddComponent(std::make_unique<RigidbodyComponent>(std::make_unique<OpenGLRectangleShape>(paddleSize, Color(0, 1, 0, 0.2))));
 
 	auto ball = std::make_unique<Ball>(Vector2(800, 450));
 	//ball->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2(20), Color(0, 1, 0, 1))));
 	ball->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(OpenGLRenderer::shaders_["sprite"], OpenGLRenderer::textures_["watermelon"])));
-	ball->AddComponent(std::make_unique<RigidbodyComponent>(Vector2(20)));
+	ball->AddComponent(std::make_unique<RigidbodyComponent>(std::make_unique<OpenGLRectangleShape>(Vector2(64), Color(0, 1, 0, 0.2))));
 
 	engine_->AddGameObject(std::move(gameManager));
 	engine_->AddGameObject(std::move(grid));
