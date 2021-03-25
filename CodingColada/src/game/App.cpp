@@ -3,74 +3,24 @@
 #include <thread>
 #include <chrono>
 
-#include "IRenderer.h"
-#include "GameObject.h"
-#include "ShapeComponent.h"
-#include "SpriteComponent.h"
-#include "RigidbodyComponent.h"
-#include "opengl/OpenGLRectangleShape.h"
-#include "opengl/OpenGLRenderer.h"
-#include "opengl/OpenGLSprite.h"
-#include "Color.h"
+#include "../IRenderer.h"
+#include "../GameObject.h"
+#include "../ShapeComponent.h"
+#include "../SpriteComponent.h"
+#include "../RigidbodyComponent.h"
+#include "../opengl/OpenGLRectangleShape.h"
+#include "../opengl/OpenGLRenderer.h"
+#include "../opengl/OpenGLSprite.h"
+#include "../Color.h"
 #include "imgui.h"
 
-class Ball : public GameObject
-{
-	Vector2 velocity_;
-public:
-	Ball(Vector2 position, Vector2 velocity = { 0.0005,0.0005 })
-		: GameObject(position), velocity_(velocity)
-	{
-	}
-
-	void OnUpdate(float deltaTime) override
-	{
-		previousPosition_ = currentPosition_;
-
-		static float runtime = 0;
-		runtime += deltaTime;
-		Vector2 newPos = currentPosition_ +  velocity_ * deltaTime;
-
-		if (newPos.GetY() <= 0)
-		{
-			newPos.SetY(0);
-			velocity_.SetY(-velocity_.GetY());
-		}
-		if (newPos.GetY() >= 900) //size nicht vergessen
-		{
-			newPos.SetY(900);
-			velocity_.SetY(-velocity_.GetY());
-		}
-		
-		/*if (newPos.GetX() < 0 || newPos.GetX() > 1600)
-		{
-			newPos = Vector2(800, 450);
-			velocity_ = Vector2(abs(0.01 * sinf(runtime)) +0.03, 0.01* sinf(runtime)) * 8;
-		}*/
-
-		if (newPos.GetX() <= 0)
-		{
-			newPos.SetX(0);
-			velocity_.SetX(-velocity_.GetX());
-		}
-		if (newPos.GetX() >= 1600) //size nicht vergessen
-		{
-			newPos.SetX(1600);
-			velocity_.SetX(-velocity_.GetX());
-		}
-		currentPosition_ = newPos;
-	}
-
-	void OnCollision(RigidbodyComponent& other)
-	{
-		velocity_.SetX(-velocity_.GetX());
-	}
-};
+#include "Ball.h"
+#include "GameManager.h"
 
 
 class Paddle : public GameObject
 {
-	float speed = 0.4;
+	float speed = 0.001;
 public:
 	Paddle()
 	{
@@ -115,29 +65,15 @@ public:
 			}
 		}
 	}
-};
 
-
-class GameManager : public GameObject
-{
-public:
-	GameManager() {}
-	void OnUpdate(float deltaTime) override
+	void OnDebugTreeNode() override
 	{
-		int GLFW_KEY_ESCAPE = 256;
-		if (engine_->GetInput().GetKeyDown(GLFW_KEY_ESCAPE))
-		{
-			if (components_.size() > 0)
-			{
-				RemoveComponent(*components_[0]);
-			}
-			else
-			{
-				engine_->StopGame();
-			}
-		}
+		ImGui::Text("Paddle");
 	}
 };
+
+
+
 
 
 App::App(std::ostream& logger, std::unique_ptr<Engine> engine)
@@ -150,18 +86,8 @@ void App::run()
 	const Vector2 windowSize = { 1600, 900 };
 	void* window = engine_->GetRenderer().CreateWindow(windowSize.GetX(), windowSize.GetY());
 	engine_->GetInput().RegisterWindow(window);
-	//logger_ << "Ich bin eine App? Dachte da an so ein Schachspiel.\n"; // <-- mich auskommentieren um den test zu testen(falls man sowas tut?)
 
-	//auto gameManager = std::make_unique<GameManager>(engine_);
 	auto gameManager = std::make_unique<GameManager>();
-
-	/*
-	auto shape = std::make_unique<OpenGLRectangleShape>(Vector2(200, 300), Vector2(200, 70), Color(1, 0, 0, 1));
-	auto shapeComponent = std::make_unique<ShapeComponent>(std::move(shape));
-	gameManager->AddComponent(std::move(shapeComponent));
-	*/
-
-	//Vector2(windowSize.GetX() - paddleSize.GetX() * 2 - paddleSize.GetX(), windowSize.GetY() / 2 - paddleSize.GetY() / 2)
 
 	Vector2 paddleSize = { 20, 200 };
 	auto paddle1 = std::make_unique<Paddle>(Vector2(40, 400));

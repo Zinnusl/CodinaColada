@@ -36,6 +36,10 @@ void GameObject::OnCollision(RigidbodyComponent& other)
 {
 }
 
+void GameObject::OnDebugTreeNode()
+{
+}
+
 Vector2 GameObject::GetPreviousPosition()
 {
 	return previousPosition_;

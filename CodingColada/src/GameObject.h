@@ -25,6 +25,7 @@ public:
 	virtual void OnUpdate(float deltaTime);
 	virtual void OnDraw(float subframe);
 	virtual void OnCollision(RigidbodyComponent& other);
+	virtual void OnDebugTreeNode();
 	
 	Vector2 GetPreviousPosition();
 	Vector2 GetPosition();

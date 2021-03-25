@@ -1,7 +1,7 @@
 ﻿// CodingColada.cpp : Defines the entry point for the application.
 //
 
-#include "App.h"
+#include "game/App.h"
 #include "opengl/OpenGLRenderer.h"
 #include "opengl/OpenGLInput.h"
 

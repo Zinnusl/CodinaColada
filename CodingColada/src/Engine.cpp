@@ -25,14 +25,16 @@ void Engine::StartGame()
 
 	float subframe = 0;
 	//physics
-	const int32_t ticksPerSecond = 64;
-	const int32_t microSecondsPerTick = 1000000 / ticksPerSecond;
+	int32_t ticksPerSecond = 64;
+	int32_t microSecondsPerTick = 0;
 	int32_t timeSinceLastPhysicsTick = 0;
 
 	bool pauseGame = false;
 
 	while (!stopGame)
 	{
+		microSecondsPerTick = 1000000 / ticksPerSecond;
+
 		//Handle input
 		//needs to be outside to allow to pause game
 		input_->ProcessInput();
@@ -102,8 +104,13 @@ void Engine::StartGame()
 			//gameobject.second->OnDraw(1);
 		}
 		{
-			ImGui::Begin("CodinaColada - Engine - Debug");                          // Create a window called "Hello, world!" and append into it.
+			ImGui::Begin("CodinaColada - Engine - Debug");
+			ImGui::Text("%.1f FPS (subframe %f)", ImGui::GetIO().Framerate, subframe);
+			ImGui::SameLine();
 			ImGui::Checkbox("Pause", &pauseGame);
+			ImGui::Separator();
+			ImGui::SliderInt("Physic tps", &ticksPerSecond, 1, 128);
+			
 			if (ImGui::TreeNode("GameObjects"))
 			{
 				for (auto& it : gameobjects_)
@@ -111,13 +118,12 @@ void Engine::StartGame()
 					GameObject* gameobject = it.second.get();
 					if (ImGui::TreeNode(std::to_string(it.first).c_str()))
 					{
-						ImGui::Text("x: %f, y: %f", gameobject->GetPosition().GetX(), gameobject->GetPosition().GetY());
+						gameobject->OnDebugTreeNode();
 						ImGui::TreePop();
 					}
 				}
 				ImGui::TreePop();
 			}
-			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 			ImGui::End();
 		}
 		renderer_->EndFrame();
