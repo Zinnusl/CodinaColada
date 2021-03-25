@@ -1,9 +1,9 @@
 ﻿// CodingColadaTests.cpp : Main entry point for unit tests
 //
 
-/*
 
-#include "..\CodingColada\src\App.h"
+
+#include "..\CodingColada\src\Engine.h"
 
 #include <sstream>
 #include "gtest/gtest.h"
@@ -14,44 +14,47 @@ using std::cout;
 using std::endl;
 
 class AppTest : public ::testing::Test {};
+class EngineTest : public ::testing::Test {};
 
-*/
 
-/*class MockEngine : public IEngine
-{
-    void CreateWindow(const int x, const int y) override
-    {
-        // Ich tu nur so als waere ich eine Engine
-        // hier koennte man mit google_mock testen, ob der CreateWindow aufruft, oder so
-    }
-};*/
 
-/*
-class MockEngine : public IEngine
+class MockRenderer : public IRenderer
 {
 public:
-   // MOCK_METHOD(void, CreateWindow, (const int, const int), (override));
+    MOCK_METHOD(void, Draw, (), ());
+    MOCK_METHOD(void, AddShape, (std::unique_ptr<IShape>), ());
+    MOCK_METHOD(void, OnClick, (Vector2), ());
+    MOCK_METHOD(void, CreateWindow, (int, int, IInput&), ());
 };
 
-TEST_F(AppTest, runOutputsANonEmptyString)
+class MockInput : public IInput
 {
-    using ::testing::AtLeast;
+public:
+    MOCK_METHOD(void, RegisterWindow, (void*), ());
+    MOCK_METHOD(void, ProcessInput, (), ());
+    MOCK_METHOD(bool, GetKeyDown, (int), ());
+    MOCK_METHOD(bool, GetKey, (int), ());
+    MOCK_METHOD(void, AddHandler, (int, IInput::handlerCallbackType), ());
+};
+
+TEST_F(EngineTest, EngineCreatesWindowExactlyOnce)
+{
+    using ::testing::Exactly;
     using ::testing::_;
 
-    std::stringstream ss;
-    //std::unique_ptr<IEngine> mock_engine = std::make_unique<MockEngine>();
-    //App a(ss, std::move(mock_engine));
+    auto mock_renderer = std::make_unique<MockRenderer>();
+    auto mock_input = std::make_unique<MockInput>();
+    Engine unit_under_test(*mock_renderer, *mock_input);
 
-    //EXPECT_CALL(*mock_engine, CreateWindow(_, _))
-    //    .Times(AtLeast(1));
+    EXPECT_CALL(*mock_renderer, CreateWindow(_, _, _))
+        .Times(Exactly(1));
 
-    //a.run();
-        
-    EXPECT_GT(ss.str().length(), 0);
+    unit_under_test.StopGame();
+    unit_under_test.StartGame();
 }
 
 int main(int argc, char** argv)
 {
 	::testing::InitGoogleTest(&argc, argv);
 	return RUN_ALL_TESTS();
-}*/
+}

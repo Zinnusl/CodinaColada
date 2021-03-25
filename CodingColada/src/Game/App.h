@@ -4,8 +4,8 @@
 
 #include "boost/di/extension/injections/factory.hpp"
 
-#include "IEngine.h"
-#include "GameObject.h"
+#include "../IEngine.h"
+#include "../GameObject.h"
 
 class GameManager : public GameObject
 {

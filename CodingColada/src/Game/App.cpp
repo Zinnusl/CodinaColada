@@ -3,10 +3,10 @@
 #include <thread>
 #include <chrono>
 
-#include "IRenderer.h"
-#include "GameObject.h"
-#include "RectangleShape.h"
-#include "ShapeComponent.h"
+#include "../IRenderer.h"
+#include "../GameObject.h"
+#include "../RectangleShape.h"
+#include "../ShapeComponent.h"
 
 class ChessPiece : public GameObject
 {
@@ -19,7 +19,6 @@ public:
 
 	void OnUpdate(IEngine& engine, float deltaTime) override
 	{
-		//printf("ChessPiece OnUpdate with deltaTime %f\n", deltaTime);
 	}
 };
 
@@ -47,11 +46,10 @@ App::App(std::ostream& logger, IEngine& engine, boost::di::extension::ifactory<G
 
 void App::run()
 {
-	logger_ << "Ich bin eine App? Dachte da an so ein Schachspiel.\n"; // <-- mich auskommentieren um den test zu testen(falls man sowas tut?)
+	logger_ << "Ich bin eine App? Dachte da an so ein Schachspiel.\n"
+	 << "Oder vllt. doch so ein Ameisen Simulator.\n";
 
-	logger_ << "Ist das weirklich hier? 1\n";
 	auto gameManager = f_gm_.create();
-	logger_ << "Ist das weirklich hier? 2\n";
 
 	gameManager->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<RectangleShape>(Vector2(0), Vector2(100))));
 	engine_.AddGameObject(std::move(gameManager));

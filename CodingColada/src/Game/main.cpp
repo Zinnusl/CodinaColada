@@ -6,9 +6,13 @@
 #include "boost/di/extension/injections/shared_factory.hpp"
 
 #include "App.h"
-#include "OpenGLRenderer.h"
-#include "OpenGLInput.h"
-#include "Engine.h"
+#include "../Engine.h"
+
+#include "../ConsoleRenderer/ConsoleRenderer.h"
+#include "../ConsoleRenderer/ConsoleInput.h"
+
+//#include "OpenGLRenderer.h"
+//#include "OpenGLInput.h"
 
 namespace di = boost::di;
 using std::cout;
@@ -62,16 +66,16 @@ int main(int argc, char* args[])
 	//auto injector = di::make_injector<injected_and_bound>(
 		di::bind<std::ostream>.to(std::cerr),
 		di::bind<std::istream>.to(std::cin),
-		di::bind<IRenderer>().in(di::singleton).to<OpenGLRenderer>(),
-		di::bind<IInput>().in(di::singleton).to<OpenGLInput>(),
+		//di::bind<IRenderer>().in(di::singleton).to<OpenGLRenderer>(),
+		//di::bind<IInput>().in(di::singleton).to<OpenGLInput>(),
+		di::bind<IRenderer>().in(di::singleton).to<ConsoleRenderer>(),
+		di::bind<IInput>().in(di::singleton).to<ConsoleInput>(),
 		di::bind<IEngine>().in(di::singleton).to<Engine>(),
 		di::bind<boost::di::extension::ifactory<GameManager>>.to([&](auto const& injector, auto const& dependency) {
 			return boost::di::extension::factory<GameManager>{}(injector, dependency);
 		})
 	);
 
-	auto gm = injector.create<GameManager>();
-	
 	auto app = injector.create<std::unique_ptr<App>>();
 	app->run();
 	

@@ -8,16 +8,14 @@
 Engine::Engine(IRenderer& renderer, IInput& input)
 	: renderer_(renderer), input_(input)
 {
-	printf("engine created\n!");
 }
 
 void Engine::StartGame()
 {
 	auto lastFrame = std::chrono::steady_clock::now();
 
-	void* window = GetRenderer().CreateWindow(640, 480);
-	GetInput().RegisterWindow(window);
-
+	GetRenderer().CreateWindow(640, 480, GetInput());
+	
 	while (!stopGame)
 	{
 		auto currentFrame = std::chrono::steady_clock::now();
@@ -46,7 +44,6 @@ void Engine::StopGame()
 
 void Engine::AddGameObject(std::unique_ptr<GameObject> gameobject)
 {
-	//TODO how are ids generated?
 	static int32_t gameObjectId = 1;
 	gameobjects_.insert(std::make_pair<>(gameObjectId++, std::move(gameobject)));
 }

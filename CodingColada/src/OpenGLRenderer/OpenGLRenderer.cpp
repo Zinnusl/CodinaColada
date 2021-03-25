@@ -1,5 +1,5 @@
 #include "OpenGLRenderer.h"
-
+#include "../IInput.h"
 
 #include "GLFW/glfw3.h"
 
@@ -37,9 +37,8 @@ void OpenGLRenderer::OnClick(Vector2 clickPosition)
 {
 }
 
-void* OpenGLRenderer::CreateWindow(int x, int y)
+void OpenGLRenderer::CreateWindow(int x, int y, IInput& input)
 {
 	glfwWindowHint(GLFW_RESIZABLE, true);
-	window_ = glfwCreateWindow(x, y, "GLFWWindow", nullptr, nullptr);
-	return window_;
+	input.RegisterWindow(glfwCreateWindow(x, y, "GLFWWindow", nullptr, nullptr));
 }
