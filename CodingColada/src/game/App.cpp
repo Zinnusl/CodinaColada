@@ -15,66 +15,9 @@
 #include "imgui.h"
 
 #include "Ball.h"
+#include "Paddle.h"
 #include "GameManager.h"
-
-
-class Paddle : public GameObject
-{
-	float speed = 0.001;
-public:
-	Paddle()
-	{
-	}
-	
-	Paddle(Vector2 position)
-		: GameObject(position)
-	{
-	}
-	
-	void OnUpdate(float deltaTime) override
-	{
-		previousPosition_ = currentPosition_;
-
-		#define 	GLFW_KEY_DOWN   264
-		#define 	GLFW_KEY_UP   265
-		const int maxMove = 700;
-		if (engine_->GetInput().GetKey(GLFW_KEY_DOWN))
-		{
-			float yPos = currentPosition_.GetY();
-			if (currentPosition_.GetY() > 0)
-			{
-				float newPos = currentPosition_.GetY() - speed * deltaTime;
-				if (newPos < 0)
-				{
-					newPos = 0;
-				}
-				currentPosition_.SetY(newPos);
-			}
-		}
-		if (engine_->GetInput().GetKey(GLFW_KEY_UP))
-		{
-			float yPos = currentPosition_.GetY();
-			if (currentPosition_.GetY() < maxMove)
-			{
-				float newPos = currentPosition_.GetY() + speed * deltaTime;
-				if (newPos > maxMove)
-				{
-					newPos = maxMove;
-				}
-				currentPosition_.SetY(newPos);
-			}
-		}
-	}
-
-	void OnDebugTreeNode() override
-	{
-		ImGui::Text("Paddle");
-	}
-};
-
-
-
-
+#include "Grid.h"
 
 App::App(std::ostream& logger, std::unique_ptr<Engine> engine)
 	: logger_(logger), engine_(std::move(engine))
@@ -88,6 +31,7 @@ void App::run()
 	engine_->GetInput().RegisterWindow(window);
 
 	auto gameManager = std::make_unique<GameManager>();
+	auto grid = std::make_unique<Grid>(8, 8);
 
 	Vector2 paddleSize = { 20, 200 };
 	auto paddle1 = std::make_unique<Paddle>(Vector2(40, 400));
@@ -104,6 +48,7 @@ void App::run()
 	ball->AddComponent(std::make_unique<RigidbodyComponent>(Vector2(20)));
 
 	engine_->AddGameObject(std::move(gameManager));
+	engine_->AddGameObject(std::move(grid));
 	engine_->AddGameObject(std::move(paddle1));
 	engine_->AddGameObject(std::move(paddle2));
 	engine_->AddGameObject(std::move(ball));

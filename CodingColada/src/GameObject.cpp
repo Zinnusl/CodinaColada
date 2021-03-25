@@ -18,6 +18,7 @@ GameObject::GameObject(Vector2 position)
 
 void GameObject::OnUpdate(float deltaTime)
 {
+	previousPosition_ = currentPosition_;
 	for (auto& component : components_)
 	{
 		component->OnUpdate(*engine_, deltaTime);

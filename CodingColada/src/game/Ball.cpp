@@ -9,7 +9,7 @@ Ball::Ball(Vector2 position, Vector2 velocity)
 
 void Ball::OnUpdate(float deltaTime)
 {
-	previousPosition_ = currentPosition_;
+	GameObject::OnUpdate(deltaTime);
 
 	static float runtime = 0;
 	runtime += deltaTime;

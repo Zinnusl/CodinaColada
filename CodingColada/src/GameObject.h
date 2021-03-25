@@ -11,8 +11,9 @@ class Engine;
 class RigidbodyComponent;
 class GameObject
 {
-protected:
 	Vector2 previousPosition_;
+
+protected:
 	Vector2 currentPosition_;
 	Vector2 rotation_;
 
