@@ -18,6 +18,7 @@
 #include "Paddle.h"
 #include "GameManager.h"
 #include "Grid.h"
+#include "HoverTile.h"
 
 App::App(std::ostream& logger, std::unique_ptr<Engine> engine)
 	: logger_(logger), engine_(std::move(engine))
@@ -33,6 +34,9 @@ void App::run()
 	auto gameManager = std::make_unique<GameManager>();
 	auto grid = std::make_unique<Grid>(64, 64, 8, 16);
 	grid->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(windowSize, Color(0, 0, 1, 0.1), &OpenGLRenderer::shaders_["grid"])));
+
+	auto hoverTile = std::make_unique<HoverTile>(Vector2(90,90));
+	hoverTile->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2(90, 90), Color(0, 0, 1, 0.1), &OpenGLRenderer::shaders_["hover"])));
 
 	Vector2 paddleSize = { 20, 200 };
 	auto paddle1 = std::make_unique<Paddle>(Vector2(40, 400));
@@ -50,6 +54,7 @@ void App::run()
 
 	engine_->AddGameObject(std::move(gameManager));
 	engine_->AddGameObject(std::move(grid));
+	engine_->AddGameObject(std::move(hoverTile));
 	engine_->AddGameObject(std::move(paddle1));
 	engine_->AddGameObject(std::move(paddle2));
 	engine_->AddGameObject(std::move(ball));

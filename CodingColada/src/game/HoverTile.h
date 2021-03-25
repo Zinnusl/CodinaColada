@@ -2,11 +2,14 @@
 
 #include "../GameObject.h"
 
-class Tile : public GameObject
+#include <cstdint>
+
+class HoverTile : public GameObject
 {
+	Vector2 size_;
 public:
-	Tile() = delete;
-	Tile(Vector2 position);
+	HoverTile() = delete;
+	HoverTile(Vector2 size);
 
 	void OnUpdate(float deltaTime) override;
 	void OnDebugTreeNode() override;

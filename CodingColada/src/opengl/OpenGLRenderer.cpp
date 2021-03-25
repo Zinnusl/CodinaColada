@@ -94,6 +94,10 @@ void* OpenGLRenderer::CreateWindow(int x, int y)
 	gridShader.SetMatrix4("projection", projection, true);
 	shaders_.emplace(std::make_pair("grid", gridShader));
 
+	OpenGLShader hoverShader = OpenGLShader::CompileFromFile("..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\src\\opengl\\shader\\hover.frag", nullptr);
+	hoverShader.SetMatrix4("projection", projection, true);
+	shaders_.emplace(std::make_pair("hover", hoverShader));
+
 	OpenGLTexture2D watermelonTexture = OpenGLTexture2D::LoadTextureFromFile("..\\..\\..\\..\\CodingColada\\src\\resources\\watermelon.png", true);
 	textures_.emplace(std::make_pair("watermelon", watermelonTexture));
 	
