@@ -11,7 +11,7 @@ GameObject::GameObject()
 }
 
 GameObject::GameObject(Vector2 position)
-	: currentPosition_(position)
+	: previousPosition_(position), currentPosition_(position)
 {
 	
 }
