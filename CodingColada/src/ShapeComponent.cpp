@@ -4,7 +4,7 @@
 
 
 ShapeComponent::ShapeComponent(std::unique_ptr<IShape> shape)
-	: tmpShape_(std::move(shape))
+	: shape_(std::move(shape))
 {
 }
 
@@ -12,12 +12,22 @@ void ShapeComponent::OnUpdate(Engine& engine, float deltaTime)
 {
 }
 
-void ShapeComponent::OnAdded(Engine& engine)
-{
-	engine.GetRenderer().AddShape(std::move(tmpShape_));
-}
-
 void ShapeComponent::OnRemove(Engine& engine)
 {
+	
+}
 
+void ShapeComponent::OnDraw(Engine& engine, float subframe)
+{
+	shape_->Draw(engine, *gameobject_, subframe);
+}
+
+GameObject& ShapeComponent::GetGameobject()
+{
+	return *gameobject_;
+}
+
+void ShapeComponent::OnAdded(Engine& engine, GameObject& gameobject)
+{
+	gameobject_ = &gameobject;
 }

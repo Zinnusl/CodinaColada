@@ -7,13 +7,6 @@
 #include "../IEngine.h"
 #include "../GameObject.h"
 
-class GameManager : public GameObject
-{
-public:
-	GameManager(IEngine& engine);
-	void OnUpdate(IEngine& engine, float deltaTime) override;
-};
-
 class App
 {
 protected:

@@ -1,19 +1,19 @@
 #pragma once
 
 #include "IComponent.h"
-#include "IShape.h"
+#include "ISprite.h"
 
-#include <memory>
-
-class ShapeComponent : public IComponent
+class SpriteComponent :public IComponent
 {
 protected:
 	//TODO this really shouldnt be a raw pointer
 	GameObject* gameobject_;
-	std::shared_ptr<IShape> shape_;
-	
+
+	std::shared_ptr<ISprite> sprite_;
+
+
 public:
-	ShapeComponent(std::unique_ptr<IShape> shape);
+	SpriteComponent(std::unique_ptr<ISprite> sprite);
 
 	void OnUpdate(Engine& engine, float deltaTime) override;
 	void OnAdded(Engine& engine, GameObject& gameobject) override;

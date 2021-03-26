@@ -8,6 +8,11 @@
 
 class Engine : public IEngine
 {
+public:
+	typedef int32_t idType;
+	const int8_t physicTickrate = 60;
+	const float physicsStepsPerSecond = 1.f / physicTickrate;
+
 protected:
 	bool stopGame = false;
 	IRenderer& renderer_;

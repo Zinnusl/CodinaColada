@@ -30,7 +30,7 @@ public:
 };
 
 //SDL demands this signature for main()
-int main(int argc, char* args[])
+int main(int argc, char* argv[])
 {
 	/*auto injector = di::make_injector<injected_and_bound>(		
 		di::bind<std::ostream>.to(std::cerr),
@@ -53,15 +53,7 @@ int main(int argc, char* args[])
 				di::bind<ICardHandle::ifactory_t>.to(CardHandle::factory_t{})
 				);
 				*/
-
-	//auto renderer = std::make_unique<OpenGLRenderer>();
-	//auto input = std::make_unique<OpenGLInput>();
-	//auto engine = std::make_unique<Engine>(std::move(renderer), std::move(input));
-	/*auto x = GameManager(*engine);
-	auto fact = std::make_unique<boost::di::extension::factory<GameManager>>();	
-	auto app = std::make_unique<App>(std::cout, *engine, *fact);
-	app->run();*/
-	
+	/*
 	auto injector = di::make_injector(
 	//auto injector = di::make_injector<injected_and_bound>(
 		di::bind<std::ostream>.to(std::cerr),
