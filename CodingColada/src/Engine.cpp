@@ -14,7 +14,7 @@ void Engine::StartGame()
 {
 	auto lastFrame = std::chrono::steady_clock::now();
 
-	GetRenderer().CreateWindow(640, 480, GetInput());
+	GetRenderer().CreateWindow(1240, 1024, GetInput());
 	
 	while (!stopGame)
 	{

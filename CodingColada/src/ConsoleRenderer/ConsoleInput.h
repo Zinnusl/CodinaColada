@@ -1,5 +1,8 @@
 #pragma once
 
+#include <vector>
+#include "../IInput.h"
+
 class ConsoleInput : public IInput
 {
 protected:

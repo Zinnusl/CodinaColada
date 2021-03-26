@@ -6,6 +6,7 @@ cmake_minimum_required (VERSION 3.8)
 file(GLOB_RECURSE SOURCES LIST_DIRECTORIES false ../CodingColada/src/*.h ../CodingColada/src/*.cpp)
 #list(REMOVE_ITEM SOURCES "../CodingColada/main.cpp")
 list(FILTER SOURCES EXCLUDE REGEX "main\.cpp")
+message("CodingColadaTests Sources:")
 message("${SOURCES}")
 
 file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false *.h *.cpp)
