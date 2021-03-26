@@ -104,6 +104,12 @@ void* OpenGLRenderer::CreateWindow(int x, int y)
 	OpenGLTexture2D hoverTileTexture = OpenGLTexture2D::LoadTextureFromFile("..\\..\\..\\..\\CodingColada\\src\\resources\\Tile_Hover.png", true);
 	textures_.emplace(std::make_pair("hovertile", hoverTileTexture));
 
+	OpenGLTexture2D canonTowerTexture = OpenGLTexture2D::LoadTextureFromFile("..\\..\\..\\..\\CodingColada\\src\\resources\\canon_tower.png", true);
+	textures_.emplace(std::make_pair("tower_canon", canonTowerTexture));
+
+	OpenGLTexture2D stoneTexture = OpenGLTexture2D::LoadTextureFromFile("..\\..\\..\\..\\CodingColada\\src\\resources\\stone.png", true);
+	textures_.emplace(std::make_pair("stone", stoneTexture));
+
 	OpenGLRectangleShape::InitRenderData();
 
 	return window_;

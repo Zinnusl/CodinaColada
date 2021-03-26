@@ -16,7 +16,7 @@ GameObject::GameObject(Vector2 position)
 	
 }
 
-void GameObject::OnUpdate(float deltaTime)
+void GameObject::OnPhysicsUpdate(float deltaTime)
 {
 	previousPosition_ = currentPosition_;
 	for (auto& component : components_)
@@ -54,6 +54,11 @@ Vector2 GameObject::GetPosition()
 Vector2 GameObject::GetDrawPosition(float t)
 {
 	return Vector2::lerp(previousPosition_, currentPosition_, t);
+}
+
+void GameObject::SetPosition(Vector2 position)
+{
+	currentPosition_ = position;
 }
 
 void GameObject::AddComponent(std::unique_ptr<IComponent> component)

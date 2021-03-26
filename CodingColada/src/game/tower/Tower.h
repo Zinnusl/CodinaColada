@@ -1,13 +1,13 @@
-#include "../GameObject.h"
+#include "../../GameObject.h"
 
-class Paddle : public GameObject
+class Tower : public GameObject
 {
 	float speed = 0.001;
 public:
-	Paddle();
-	
-	Paddle(Vector2 position);
-	
+	Tower() = delete;
+
+	Tower(Vector2 position);
+
 	void OnPhysicsUpdate(float deltaTime) override;
 	void OnDebugTreeNode() override;
 };

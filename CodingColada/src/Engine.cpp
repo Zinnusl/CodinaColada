@@ -82,7 +82,7 @@ void Engine::StartGame()
 				//run physics simulation
 				for (const auto& gameobject : gameobjects_)
 				{
-					gameobject.second->OnUpdate(timeSinceLastPhysicsTick);
+					gameobject.second->OnPhysicsUpdate(timeSinceLastPhysicsTick);
 					//gameobject.second->OnUpdate(microSecondsPerTick);
 				}
 				timeSinceLastPhysicsTick = 0;

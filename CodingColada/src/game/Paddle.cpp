@@ -13,9 +13,9 @@ Paddle::Paddle(Vector2 position)
 {
 }
 
-void Paddle::OnUpdate(float deltaTime)
+void Paddle::OnPhysicsUpdate(float deltaTime)
 {
-	GameObject::OnUpdate(deltaTime);
+	GameObject::OnPhysicsUpdate(deltaTime);
 
 	#define 	GLFW_KEY_DOWN   264
 	#define 	GLFW_KEY_UP   265

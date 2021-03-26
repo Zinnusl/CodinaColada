@@ -2,15 +2,20 @@
 
 #include "../GameObject.h"
 
+
+
 #include <cstdint>
 
+class Grid;
 class HoverTile : public GameObject
 {
-	Vector2 size_;
+	Grid& grid_;
+
 public:
 	HoverTile() = delete;
-	HoverTile(Vector2 size);
+	HoverTile(Grid& grid);
 
-	void OnUpdate(float deltaTime) override;
+	void OnPhysicsUpdate(float deltaTime) override;
 	void OnDebugTreeNode() override;
+	void OnDraw(float subframe) override;
 };

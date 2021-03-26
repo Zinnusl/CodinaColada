@@ -9,6 +9,10 @@
 
 class Engine;
 class RigidbodyComponent;
+
+/**
+* When overriding any of the functions you need to call GameObject::OverridenFunction in your override!
+**/
 class GameObject
 {
 	Vector2 previousPosition_;
@@ -23,14 +27,22 @@ public:
 	GameObject();
 	GameObject(Vector2 position);
 	static Engine* engine_;
-	virtual void OnUpdate(float deltaTime);
+
+	//Runs on every physics step
+	//Don't capture input here
+	virtual void OnPhysicsUpdate(float deltaTime);
+
+	//Draws all IComponent components of the gameobject 
 	virtual void OnDraw(float subframe);
+
 	virtual void OnCollision(RigidbodyComponent& other);
 	virtual void OnDebugTreeNode();
 	
 	Vector2 GetPreviousPosition();
 	Vector2 GetPosition();
 	Vector2 GetDrawPosition(float t);
+
+	void SetPosition(Vector2 position);
 
 	void AddComponent(std::unique_ptr <IComponent> component);
 	void RemoveComponent(IComponent& component);

@@ -32,30 +32,25 @@ void App::run()
 	engine_->GetInput().RegisterWindow(window);
 
 	auto gameManager = std::make_unique<GameManager>();
-	auto grid = std::make_unique<Grid>(64, 64, 8, 16);
+	auto grid = std::make_unique<Grid>(64);
 	grid->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(windowSize, Color(0, 0, 1, 0.1), &OpenGLRenderer::shaders_["grid"])));
-
-	auto hoverTile = std::make_unique<HoverTile>(Vector2(90,90));
-	hoverTile->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2(90, 90), Color(0, 0, 1, 0.1), &OpenGLRenderer::shaders_["hover"])));
-	hoverTile->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(90, 90), OpenGLRenderer::shaders_["sprite"], OpenGLRenderer::textures_["hovertile"])));
 
 	Vector2 paddleSize = { 20, 200 };
 	auto paddle1 = std::make_unique<Paddle>(Vector2(40, 400));
 	paddle1->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(paddleSize, Color(0, 0, 1, 1))));
-	paddle1->AddComponent(std::make_unique<RigidbodyComponent>(std::make_unique<OpenGLRectangleShape>(paddleSize, Color(0, 1, 0, 0.2))));
+	paddle1->AddComponent(std::make_unique<RigidbodyComponent>(paddleSize));
 
 	auto paddle2 = std::make_unique<Paddle>(Vector2(windowSize.GetX() - 60, 400));
 	paddle2->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(paddleSize, Color(1, 0, 0, 1))));
-	paddle2->AddComponent(std::make_unique<RigidbodyComponent>(std::make_unique<OpenGLRectangleShape>(paddleSize, Color(0, 1, 0, 0.2))));
+	paddle2->AddComponent(std::make_unique<RigidbodyComponent>(paddleSize));
 
 	auto ball = std::make_unique<Ball>(Vector2(800, 450));
 	//ball->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2(20), Color(0, 1, 0, 1))));
 	ball->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(64,64), OpenGLRenderer::shaders_["sprite"], OpenGLRenderer::textures_["watermelon"])));
-	ball->AddComponent(std::make_unique<RigidbodyComponent>(std::make_unique<OpenGLRectangleShape>(Vector2(64), Color(0, 1, 0, 0.2))));
+	ball->AddComponent(std::make_unique<RigidbodyComponent>(Vector2(64)));
 
 	engine_->AddGameObject(std::move(gameManager));
 	engine_->AddGameObject(std::move(grid));
-	engine_->AddGameObject(std::move(hoverTile));
 	engine_->AddGameObject(std::move(paddle1));
 	engine_->AddGameObject(std::move(paddle2));
 	engine_->AddGameObject(std::move(ball));

@@ -10,9 +10,9 @@ Ball::Ball(Vector2 position, Vector2 velocity)
 {
 }
 
-void Ball::OnUpdate(float deltaTime)
+void Ball::OnPhysicsUpdate(float deltaTime)
 {
-	GameObject::OnUpdate(deltaTime);
+	GameObject::OnPhysicsUpdate(deltaTime);
 
 	static float runtime = 0;
 	runtime += deltaTime;
