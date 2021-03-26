@@ -4,8 +4,9 @@
 
 #include "Vector2.h"
 
-class Engine;
+class IEngine;
 class GameObject;
+
 class IShape
 {
 public:
@@ -13,5 +14,5 @@ public:
 	virtual ~IShape() {};
 	virtual void OnClick(Vector2 clickPosition) = 0;
 	virtual void RegisterClickHandler(handlerCallbackType callback) = 0;
-	virtual void Draw(Engine& engine, GameObject& gameobject, float subframe) = 0;
+	virtual void Draw(IEngine& engine, GameObject& gameobject, float subframe) = 0;
 };

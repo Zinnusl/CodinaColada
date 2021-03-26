@@ -52,8 +52,8 @@ int main(int argc, char* argv[])
 				di::bind<IStream::ifactory_t>.to(Stream::factory_t{}),
 				di::bind<ICardHandle::ifactory_t>.to(CardHandle::factory_t{})
 				);
-				*/
-	/*
+	*/
+
 	auto injector = di::make_injector(
 	//auto injector = di::make_injector<injected_and_bound>(
 		di::bind<std::ostream>.to(std::cerr),
@@ -62,10 +62,7 @@ int main(int argc, char* argv[])
 		//di::bind<IInput>().in(di::singleton).to<OpenGLInput>(),
 		di::bind<IRenderer>().in(di::singleton).to<ConsoleRenderer>(),
 		di::bind<IInput>().in(di::singleton).to<ConsoleInput>(),
-		di::bind<IEngine>().in(di::singleton).to<Engine>(),
-		di::bind<boost::di::extension::ifactory<GameManager>>.to([&](auto const& injector, auto const& dependency) {
-			return boost::di::extension::factory<GameManager>{}(injector, dependency);
-		})
+		di::bind<IEngine>().in(di::singleton).to<Engine>()
 	);
 
 	auto app = injector.create<std::unique_ptr<App>>();

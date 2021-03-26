@@ -33,7 +33,7 @@ void OpenGLSprite::initRenderData()
     glBindVertexArray(0);
 }
 
-void OpenGLSprite::Draw(Engine& engine, GameObject& gameobject, float subframe)
+void OpenGLSprite::Draw(IEngine& engine, GameObject& gameobject, float subframe)
 {
     //TODO conversion between engine Vector2 and glm::vector annoying. Solution?
     //TODO pass values from sprite? Gameobject?
@@ -42,7 +42,6 @@ void OpenGLSprite::Draw(Engine& engine, GameObject& gameobject, float subframe)
     glm::vec4 color(1, 1, 1, 1);
     float rotate = 180;
     
-
     // prepare transformations
     this->shader_.Use();
     glm::mat4 model = glm::mat4(1.0f);

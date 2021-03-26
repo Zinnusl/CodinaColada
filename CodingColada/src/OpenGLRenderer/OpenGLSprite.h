@@ -22,5 +22,5 @@ private:
 
     void initRenderData();
 
-    void Draw(Engine& engine, GameObject& gameobject, float subframe) override;
+    void Draw(IEngine& engine, GameObject& gameobject, float subframe) override;
 };

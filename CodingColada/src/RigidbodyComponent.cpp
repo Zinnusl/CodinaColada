@@ -3,25 +3,25 @@
 
 
 RigidbodyComponent::RigidbodyComponent(Vector2 size)
-	: offset_(Vector2(0)), size_(size)
+	: offset_(Vector2(0)), size_(size), gameobject_(nullptr)
 {
 }
 
-void RigidbodyComponent::OnUpdate(Engine& engine, float deltaTime)
+void RigidbodyComponent::OnUpdate(IEngine& engine, float deltaTime)
 {
  
 }
 
-void RigidbodyComponent::OnAdded(Engine& engine, GameObject& gameobject)
+void RigidbodyComponent::OnAdded(IEngine& engine, GameObject& gameobject)
 {
     gameobject_ = &gameobject;
 }
 
-void RigidbodyComponent::OnRemove(Engine& engine)
+void RigidbodyComponent::OnRemove(IEngine& engine)
 {
 }
 
-void RigidbodyComponent::OnDraw(Engine& engine, float subframe)
+void RigidbodyComponent::OnDraw(IEngine& engine, float subframe)
 {
 }
 
@@ -30,7 +30,7 @@ GameObject& RigidbodyComponent::GetGameobject()
 	return *gameobject_;
 }
 
-bool RigidbodyComponent::CheckCollision(RigidbodyComponent& other)
+bool RigidbodyComponent::CollidesWith(RigidbodyComponent& other)
 {
     // collision x-axis?
     bool collisionX = gameobject_->GetPosition().GetX() + size_.GetX() >= other.gameobject_->GetPosition().GetX() &&

@@ -8,20 +8,20 @@ SpriteComponent::SpriteComponent(std::unique_ptr<ISprite> sprite)
 {
 }
 
-void SpriteComponent::OnUpdate(Engine& engine, float deltaTime)
+void SpriteComponent::OnUpdate(IEngine& engine, float deltaTime)
 {
 }
 
-void SpriteComponent::OnAdded(Engine& engine, GameObject& gameobject)
+void SpriteComponent::OnAdded(IEngine& engine, GameObject& gameobject)
 {
 	gameobject_ = &gameobject;
 }
 
-void SpriteComponent::OnRemove(Engine& engine)
+void SpriteComponent::OnRemove(IEngine& engine)
 {
 }
 
-void SpriteComponent::OnDraw(Engine& engine, float subframe)
+void SpriteComponent::OnDraw(IEngine& engine, float subframe)
 {
 	sprite_->Draw(engine, *gameobject_, subframe);
 }

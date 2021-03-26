@@ -60,7 +60,7 @@ OpenGLRectangleShape::OpenGLRectangleShape(Vector2 size, Color color)
 	glBindVertexArray(0);
 }
 
-void OpenGLRectangleShape::Draw(Engine& engine, GameObject& gameobject, float subframe)
+void OpenGLRectangleShape::Draw(IEngine& engine, GameObject& gameobject, float subframe)
 {
 	//wireframe mode
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -76,7 +76,7 @@ void OpenGLRectangleShape::Draw(Engine& engine, GameObject& gameobject, float su
 	defaultShader.SetVector4f("color", glm::vec4(color_.r_, color_.g_, color_.b_, color_.a_));
 	defaultShader.SetMatrix4("model", model);
 
-	if (GameObject::engine_->GetInput().GetKey(49))
+	if (engine.GetInput().GetKey(49))
 	{
 		//trippy shader
 		auto defaultShader = OpenGLRenderer::shaders_[std::string("dragon")];
@@ -85,23 +85,23 @@ void OpenGLRectangleShape::Draw(Engine& engine, GameObject& gameobject, float su
 		defaultShader.SetVector2f("iResolution", glm::vec2(1600, 900));
 		defaultShader.Use();
 	}
-	else if (GameObject::engine_->GetInput().GetKey(50))
+	else if (engine.GetInput().GetKey(50))
 	{
 		auto defaultShader = OpenGLRenderer::shaders_[std::string("water")];
 		defaultShader.SetMatrix4("model", model);
 		defaultShader.SetFloat("iTime", glfwGetTime());
 		defaultShader.SetVector2f("iResolution", glm::vec2(1600, 900));
-		Vector2 mousePosition = GameObject::engine_->GetInput().GetMousePosition();
+		Vector2 mousePosition = engine.GetInput().GetMousePosition();
 		defaultShader.SetVector2f("iMouse", glm::vec2(mousePosition.GetX(), mousePosition.GetY()));
 		defaultShader.Use();
 	}
-	else if (GameObject::engine_->GetInput().GetKey(51))
+	else if (engine.GetInput().GetKey(51))
 	{
 		auto defaultShader = OpenGLRenderer::shaders_[std::string("glowcircle")];
 		defaultShader.SetMatrix4("model", model);
 		defaultShader.SetFloat("iTime", glfwGetTime());
 		defaultShader.SetVector2f("iResolution", glm::vec2(1600, 900));
-		Vector2 mousePosition = GameObject::engine_->GetInput().GetMousePosition();
+		Vector2 mousePosition = engine.GetInput().GetMousePosition();
 		defaultShader.SetVector2f("iMouse", glm::vec2(mousePosition.GetX(), mousePosition.GetY()));
 		defaultShader.Use();
 	}

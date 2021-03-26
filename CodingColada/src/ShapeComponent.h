@@ -15,9 +15,9 @@ protected:
 public:
 	ShapeComponent(std::unique_ptr<IShape> shape);
 
-	void OnUpdate(Engine& engine, float deltaTime) override;
-	void OnAdded(Engine& engine, GameObject& gameobject) override;
-	void OnRemove(Engine& engine) override;
-	void OnDraw(Engine& engine, float subframe) override;
+	void OnUpdate(IEngine& engine, float deltaTime) override;
+	void OnAdded(IEngine& engine, GameObject& gameobject) override;
+	void OnRemove(IEngine& engine) override;
+	void OnDraw(IEngine& engine, float subframe) override;
 	GameObject& GetGameobject() override;
 };

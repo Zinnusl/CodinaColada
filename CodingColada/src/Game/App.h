@@ -12,11 +12,9 @@ class App
 protected:
 	std::ostream& logger_;
 	IEngine& engine_;
-	boost::di::extension::ifactory<GameManager>& f_gm_;
 	
 public:
-
-	App(std::ostream& logger, IEngine& engine, boost::di::extension::ifactory<GameManager>& f_gm);
+	App(std::ostream& logger, IEngine& engine);
 
 	void run();
 };

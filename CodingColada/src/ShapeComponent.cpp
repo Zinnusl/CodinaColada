@@ -8,16 +8,16 @@ ShapeComponent::ShapeComponent(std::unique_ptr<IShape> shape)
 {
 }
 
-void ShapeComponent::OnUpdate(Engine& engine, float deltaTime)
+void ShapeComponent::OnUpdate(IEngine& engine, float deltaTime)
 {
 }
 
-void ShapeComponent::OnRemove(Engine& engine)
+void ShapeComponent::OnRemove(IEngine& engine)
 {
 	
 }
 
-void ShapeComponent::OnDraw(Engine& engine, float subframe)
+void ShapeComponent::OnDraw(IEngine& engine, float subframe)
 {
 	shape_->Draw(engine, *gameobject_, subframe);
 }
@@ -27,7 +27,7 @@ GameObject& ShapeComponent::GetGameobject()
 	return *gameobject_;
 }
 
-void ShapeComponent::OnAdded(Engine& engine, GameObject& gameobject)
+void ShapeComponent::OnAdded(IEngine& engine, GameObject& gameobject)
 {
 	gameobject_ = &gameobject;
 }

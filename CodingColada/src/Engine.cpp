@@ -30,41 +30,15 @@ void Engine::StartGame()
 
 	while (!stopGame)
 	{
-		//Handle input
-		//needs to be outside to allow to pause game
-		input_->ProcessInput();
+		// Needs to be outside to allow to pause game
+		input_.ProcessInput();
+
 		currentFrame = std::chrono::steady_clock::now();
 		auto deltaTime = std::chrono::duration_cast<std::chrono::microseconds>(currentFrame - lastFrame).count();
 
 		if (!pauseGame)
 		{
 			timeSinceLastPhysicsTick += deltaTime;
-
-			//Check for collisions. This should be part of physics simulation. It is also very buggy and O(n^2)
-			for (const auto& gameobject : gameobjects_)
-			{
-				RigidbodyComponent* rb = gameobject.second->GetFirstComponentOfType<RigidbodyComponent>();
-				if (!rb)
-				{
-					continue;
-				}
-				for (const auto& gameobject : gameobjects_)
-				{
-					auto otherRb = gameobject.second->GetFirstComponentOfType<RigidbodyComponent>();
-					if (!otherRb)
-					{
-						continue;
-					}
-					if (rb != otherRb)
-					{
-						bool isCollided = rb->CheckCollision(*otherRb);
-						if (isCollided)
-						{
-							otherRb->GetGameobject().OnCollision(*rb);
-						}
-					}
-				}
-			}
 
 			//Since the physics simulation is not tied to the framerate, we need to interpolate between the old and the new positions.
 			//The t value for interpolation is the subframe.
@@ -91,7 +65,7 @@ void Engine::StartGame()
 		}
 		//printf("subframe %f\n", subframe);
 		//Draw 
-		renderer_->BeginFrame();
+		renderer_.BeginFrame();
 		for (const auto& gameobject : gameobjects_)
 		{
 			//gameobject.second->OnDraw(0);
@@ -117,10 +91,8 @@ void Engine::StartGame()
 			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 			ImGui::End();
 		}
-		renderer_->EndFrame();
+		renderer_.EndFrame();
 
-		//draw
-		renderer_.Draw();
 		lastFrame = currentFrame;
 	}
 }
