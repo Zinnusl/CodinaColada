@@ -3,6 +3,8 @@
 #include "HoverTile.h"
 
 #include "../Engine.h"
+#include "../RectangleShape.h"
+#include "../ShapeComponent.h"
 #include "tower/Tower.h"
 #include "../SpriteComponent.h"
 #include "../RigidbodyComponent.h"
@@ -45,19 +47,4 @@ void HoverTile::OnDraw(float subframe)
 
 	mousePos.SetX(mousePos.GetX() - fmod(mousePos.GetX(), grid_.GetCellSize()));
 	currentPosition_ = mousePos;
-
-	if (GameObject::engine_->GetInput().GetMouseDown(0))
-	{
-		auto tower = std::make_unique<Tower>(currentPosition_);
-		tower->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(64, 64), OpenGLRenderer::shaders_["sprite"], OpenGLRenderer::textures_["tower_canon"])));
-		tower->AddComponent(std::make_unique<RigidbodyComponent>(Vector2(64)));
-		engine_->AddGameObject(std::move(tower));
-	}
-	if (GameObject::engine_->GetInput().GetMouseDown(1))
-	{
-		auto stone = std::make_unique<Tower>(currentPosition_);
-		stone->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(64, 64), OpenGLRenderer::shaders_["sprite"], OpenGLRenderer::textures_["stone"])));
-		stone->AddComponent(std::make_unique<RigidbodyComponent>(Vector2(64)));
-		engine_->AddGameObject(std::move(stone));
-	}
 }

@@ -8,6 +8,11 @@ SpriteComponent::SpriteComponent(std::unique_ptr<ISprite> sprite)
 {
 }
 
+std::shared_ptr<ISprite> SpriteComponent::GetSprite()
+{
+	return sprite_;
+}
+
 void SpriteComponent::OnUpdate(Engine& engine, float deltaTime)
 {
 }

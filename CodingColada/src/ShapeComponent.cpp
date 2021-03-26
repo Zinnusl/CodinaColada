@@ -8,6 +8,11 @@ ShapeComponent::ShapeComponent(std::unique_ptr<IShape> shape)
 {
 }
 
+std::shared_ptr<IShape> ShapeComponent::GetShape()
+{
+	return shape_;
+}
+
 void ShapeComponent::OnUpdate(Engine& engine, float deltaTime)
 {
 }

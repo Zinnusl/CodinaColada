@@ -15,9 +15,12 @@ protected:
 public:
 	SpriteComponent(std::unique_ptr<ISprite> sprite);
 
+	std::shared_ptr<ISprite> GetSprite();
+
 	void OnUpdate(Engine& engine, float deltaTime) override;
 	void OnAdded(Engine& engine, GameObject& gameobject) override;
 	void OnRemove(Engine& engine) override;
 	void OnDraw(Engine& engine, float subframe) override;
+
 	GameObject& GetGameobject() override;
 };

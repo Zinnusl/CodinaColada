@@ -33,12 +33,12 @@ void OpenGLSprite::initRenderData()
     glBindVertexArray(0);
 }
 
+
 void OpenGLSprite::Draw(Engine& engine, GameObject& gameobject, float subframe)
 {
     //TODO conversion between engine Vector2 and glm::vector annoying. Solution?
     //TODO pass values from sprite? Gameobject?
     glm::vec2 position = glm::vec2(gameobject.GetDrawPosition(subframe).GetX(), gameobject.GetDrawPosition(subframe).GetY());
-    glm::vec4 color(1, 1, 1, 1);
     float rotate = 180;
     
 
@@ -55,7 +55,7 @@ void OpenGLSprite::Draw(Engine& engine, GameObject& gameobject, float subframe)
     model = glm::scale(model, glm::vec3(size_, 1.0f));
 
     this->shader_.SetMatrix4("model", model);
-    this->shader_.SetVector4f("spriteColor", color);
+    this->shader_.SetVector4f("spriteColor", glm::vec4(color_.r_, color_.g_, color_.b_, color_.a_));
 
     glActiveTexture(GL_TEXTURE0);
     texture_.Bind();
@@ -64,8 +64,18 @@ void OpenGLSprite::Draw(Engine& engine, GameObject& gameobject, float subframe)
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-OpenGLSprite::OpenGLSprite(glm::vec2 size, OpenGLShader& shader, OpenGLTexture2D& texture)
-    : shader_(shader), texture_(texture), size_(size)
+Color OpenGLSprite::GetColor()
+{
+    return color_;
+}
+
+void OpenGLSprite::SetColor(Color color)
+{
+    color_ = color;
+}
+
+OpenGLSprite::OpenGLSprite(glm::vec2 size, OpenGLShader& shader, OpenGLTexture2D& texture, Color color)
+    : shader_(shader), texture_(texture), size_(size), color_(color)
 {
     this->initRenderData();
 }

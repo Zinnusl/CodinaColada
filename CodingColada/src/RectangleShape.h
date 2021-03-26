@@ -18,5 +18,9 @@ public:
 	RectangleShape(Vector2 size, Color color);
 	void OnClick(Vector2 clickPosition) override;
 	void RegisterClickHandler(handlerCallbackType callback) override;
+	
 	Vector2 GetSize();
+	Color GetColor();
+
+	void SetColor(Color color);
 };

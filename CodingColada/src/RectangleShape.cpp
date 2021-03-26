@@ -22,3 +22,13 @@ Vector2 RectangleShape::GetSize()
 {
 	return size_;
 }
+
+Color RectangleShape::GetColor()
+{
+	return color_;
+}
+
+void RectangleShape::SetColor(Color color)
+{
+	color_ = color;
+}
