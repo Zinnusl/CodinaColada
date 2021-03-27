@@ -65,7 +65,7 @@ void* OpenGLRenderer::CreateWindow(int x, int y)
 	glViewport(0, 0, x, y);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	//glfwSwapInterval(0); //disable vsync
+	glfwSwapInterval(0); //disable vsync
 
 	//setup imgui
 	ImGui::CreateContext();

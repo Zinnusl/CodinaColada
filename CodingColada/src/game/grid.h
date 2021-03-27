@@ -8,6 +8,8 @@
 
 
 class HoverTile;
+class ShapeComponent;
+class SpriteComponent;
 class Grid : public GameObject
 {
 	struct Node
@@ -39,10 +41,13 @@ class Grid : public GameObject
 	std::vector<std::shared_ptr<GameObject>> buildings_;
 	std::vector<std::shared_ptr<GameObject>> pathVisualisation_;
 
+	int64_t timeToFindPath_ = 0;
 	Vector2 gridSize_ = Vector2(64,64);
 	Node* nodes_[64][64];
 	std::vector<Node*> path_;
 
+	ShapeComponent* shapeComponent_;
+	SpriteComponent* spriteComponent_;
 	std::vector<Node*> GetNeighbours(Node* node);
 	int GetDistance(Node* a, Node* b);
 	void RetracePath(Node* startNode, Node* endNode);
@@ -52,6 +57,7 @@ public:
 	Grid() = delete;
 	Grid(int32_t cellSize);
 
+	void OnStart() override;
 	void OnPhysicsUpdate(float deltaTime) override;
 	void OnDebugTreeNode() override;
 	void OnDraw(float subframe) override;

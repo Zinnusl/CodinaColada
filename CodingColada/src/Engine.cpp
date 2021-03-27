@@ -88,7 +88,6 @@ void Engine::StartGame()
 				timeSinceLastPhysicsTick = 0;
 			}
 
-			//TODO ghetto fix. Or is it?
 			if (subframe > 1)
 			{
 				subframe = subframe - 1.f;
@@ -141,6 +140,7 @@ void Engine::AddGameObject(std::unique_ptr<GameObject> gameobject)
 {
 	//TODO how are ids generated?
 	static int32_t gameObjectId = 1;
+	gameobject->OnStart();
 	gameobjects_.insert(std::make_pair<>(gameObjectId++, std::move(gameobject)));
 }
 

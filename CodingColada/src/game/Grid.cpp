@@ -16,6 +16,7 @@
 
 #include "imgui.h"
 
+#include <chrono>
 
 
 Grid::Grid(int32_t cellSize)
@@ -35,7 +36,7 @@ Grid::Grid(int32_t cellSize)
 
 	//TODO The grid is now responsible for calling the callbacks of the hovertile.. is this soemthing we want? Or does this go against the goal of the engine?
 	//Pro: We can avoid invoking callbacks that we know we wont need
-	//Contra: Could introduce buggs because we forget to handle callbacks. Especially when new callbacks are introduced.
+	//Contra: Could introduce buggs because we forget to handle callbacks. Especially when new callbacks are introduced. Also OnCollision won't work with override since the parent has to collide for the callback to run..
 	//buildings_.push_back(std::move(hoverTile));
 }
 
@@ -55,7 +56,7 @@ void Grid::OnPhysicsUpdate(float deltaTime)
 	static int64_t timeSinceLastPathCalculation = 0;
 	timeSinceLastPathCalculation += deltaTime;
 
-	if (timeSinceLastPathCalculation > 300000)
+	//if (timeSinceLastPathCalculation > 300000)
 	{
 		pathVisualisation_.clear();
 		FindPath(Vector2(100, 100), hoverTile_->GetPosition());
@@ -68,6 +69,7 @@ void Grid::OnDebugTreeNode()
 	GameObject::OnDebugTreeNode();
 	ImGui::Text("Grid");
 	ImGui::Text("PixelSize %d", cellSize_);
+	ImGui::Text("A* Pathtime %dms", timeToFindPath_);
 
 	ImGui::Text("PATH");
 	for (auto& node : path_)
@@ -75,7 +77,6 @@ void Grid::OnDebugTreeNode()
 		ImGui::Text("%d %d", node->gridX_, node->gridY_);
 	}
 
-	//TODO also nice about this taking responsiblity is that it can render stuff for its children
 	for (auto& building : buildings_)
 	{
 		building->OnDebugTreeNode();
@@ -98,21 +99,19 @@ void Grid::OnDraw(float subframe)
 		building->OnDraw(subframe);
 	}
 	hoverTile_->OnDraw(subframe);
-
-	ShapeComponent* shapeComponent = hoverTile_->GetFirstComponentOfType<ShapeComponent>();
-	SpriteComponent* spriteComponent = hoverTile_->GetFirstComponentOfType<SpriteComponent>();
+	
 	bool isCellFree = IsCellFree(hoverTile_->GetPosition());
 	if (isCellFree)
 	{
 		//TODO API: this is bad.. how can I change the color of a shape with logic on the parent gameobject??
-		((RectangleShape*)(shapeComponent->GetShape().get()))->SetColor(Color(0, 255, 0, 255));
-		spriteComponent->GetSprite().get()->SetColor(Color(255, 255, 255, 255));
+		((RectangleShape*)(shapeComponent_->GetShape().get()))->SetColor(Color(0, 255, 0, 255));
+		spriteComponent_->GetSprite().get()->SetColor(Color(255, 255, 255, 255));
 	}
 	else
 	{
 		//TODO API: this is bad.. how can I change the color of a shape with logic on the parent gameobject??
-		((RectangleShape*)(shapeComponent->GetShape().get()))->SetColor(Color(255, 0, 0, 255));
-		spriteComponent->GetSprite().get()->SetColor(Color(255, 0, 0, 255));
+		((RectangleShape*)(shapeComponent_->GetShape().get()))->SetColor(Color(255, 0, 0, 255));
+		spriteComponent_->GetSprite().get()->SetColor(Color(255, 0, 0, 255));
 	}
 	
 	if (GameObject::engine_->GetInput().GetMouseDown(0) && isCellFree)
@@ -153,6 +152,12 @@ int32_t Grid::GetCellSize()
 	return cellSize_;
 }
 
+void Grid::OnStart()
+{
+	shapeComponent_ = hoverTile_->GetFirstComponentOfType<ShapeComponent>();
+	spriteComponent_ = hoverTile_->GetFirstComponentOfType<SpriteComponent>();
+}
+
 bool Grid::IsCellFree(Vector2 position)
 {
 	bool free = true;
@@ -169,6 +174,8 @@ bool Grid::IsCellFree(Vector2 position)
 
 void Grid::FindPath(Vector2 start, Vector2 end)
 {
+	auto startTime = std::chrono::steady_clock::now();
+
 	Node* startNode = GetNodeFromPosition(start);
 	Node* targetNode = GetNodeFromPosition(end);
 
@@ -199,6 +206,8 @@ void Grid::FindPath(Vector2 start, Vector2 end)
 		if (currentNode == targetNode) 
 		{
 			RetracePath(startNode, targetNode);
+			auto endTime = std::chrono::steady_clock::now();
+			timeToFindPath_ = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
 			return;
 		}
 

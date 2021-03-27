@@ -16,6 +16,10 @@ GameObject::GameObject(Vector2 position)
 	
 }
 
+void GameObject::OnStart()
+{
+}
+
 void GameObject::OnPhysicsUpdate(float deltaTime)
 {
 	previousPosition_ = currentPosition_;
