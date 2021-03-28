@@ -53,15 +53,8 @@ void Grid::OnPhysicsUpdate(float deltaTime)
 		pathNode->OnPhysicsUpdate(deltaTime);
 	}
 
-	static int64_t timeSinceLastPathCalculation = 0;
-	timeSinceLastPathCalculation += deltaTime;
-
-	//if (timeSinceLastPathCalculation > 300000)
-	{
-		pathVisualisation_.clear();
-		FindPath(Vector2(100, 100), hoverTile_->GetPosition());
-		timeSinceLastPathCalculation = 0;
-	}
+	pathVisualisation_.clear();
+	FindPath(Vector2(100, 100), hoverTile_->GetPosition());
 }
 
 void Grid::OnDebugTreeNode()
@@ -91,7 +84,7 @@ void Grid::OnDraw(float subframe)
 	//draw path visualisation
 	for (auto& pathNode : pathVisualisation_)
 	{
-		pathNode->OnDraw(subframe);
+		//pathNode->OnDraw(subframe);
 	}
 
 	for (auto& building : buildings_)

@@ -24,5 +24,12 @@ target_link_libraries(CodingColada PRIVATE glm::glm)
 find_package(imgui CONFIG REQUIRED)
 target_link_libraries(CodingColada PRIVATE imgui::imgui) 
 
+find_package(asio CONFIG REQUIRED)
+target_link_libraries(CodingColada PRIVATE asio asio::asio)
+
+
 #enable usage of VS Profiler
 SET_TARGET_PROPERTIES(CodingColada PROPERTIES LINK_FLAGS "/PROFILE")
+
+#c++17
+set (CMAKE_CXX_STANDARD 17)

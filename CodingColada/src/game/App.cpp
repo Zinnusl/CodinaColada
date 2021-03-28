@@ -20,6 +20,9 @@
 #include "Grid.h"
 #include "HoverTile.h"
 
+//#include "network/CustomServer.h"
+#include "../networking/Message.h"
+
 App::App(std::ostream& logger, std::unique_ptr<Engine> engine)
 	: logger_(logger), engine_(std::move(engine))
 {
@@ -54,6 +57,13 @@ void App::run()
 	engine_->AddGameObject(std::move(paddle1));
 	engine_->AddGameObject(std::move(paddle2));
 	engine_->AddGameObject(std::move(ball));
+
+	/*CustomServer server(1337);
+	server.Start();
+	while (1)
+	{
+		server.Update(-1, true);
+	}*/
 
 	engine_->StartGame();
 }

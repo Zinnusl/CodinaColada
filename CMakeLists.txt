@@ -12,3 +12,4 @@ add_subdirectory ("CodingColada")
 # vcpkg install glad:x64-windows
 # vcpkg install glm:x64-windows
 # vcpkg install imgui:x64-windows
+# vcpkg install asio:x64-windows
