@@ -5,31 +5,43 @@ cmake_minimum_required (VERSION 3.8)
 
 project ("CodingColada")
 
-file(GLOB_RECURSE SOURCES LIST_DIRECTORIES true src/*.h src/*.cpp)
+file(GLOB_RECURSE ENGINE_SOURCES LIST_DIRECTORIES true engine/*.h engine/*.cpp)
+file(GLOB_RECURSE GAME_COMMON_SOURCES LIST_DIRECTORIES true game/common/*.h game/common/*.cpp)
+file(GLOB_RECURSE GAME_CLIENT_SOURCES LIST_DIRECTORIES true game/client/*.h game/client/*.cpp)
+file(GLOB_RECURSE GAME_SERVER_SOURCES LIST_DIRECTORIES true game/server/*.h game/server/*.cpp)
 
 # Add source to this project's executable.
-add_executable (CodingColada ${SOURCES})
+add_executable (Colada_Client ${ENGINE_SOURCES} ${GAME_COMMON_SOURCES} ${GAME_CLIENT_SOURCES})
+add_executable (Colada_Server ${ENGINE_SOURCES} ${GAME_COMMON_SOURCES} ${GAME_SERVER_SOURCES})
+
 
 # TODO: Add tests and install targets if needed.
 
 find_package(glfw3)
-target_link_libraries(CodingColada PRIVATE glfw)
+target_link_libraries(Colada_Client PRIVATE glfw)
+target_link_libraries(Colada_Server PRIVATE glfw)
 
 find_package(glad CONFIG REQUIRED)
-target_link_libraries(CodingColada PRIVATE glad::glad)
+target_link_libraries(Colada_Client PRIVATE glad::glad)
+target_link_libraries(Colada_Server PRIVATE glad::glad)
 
 find_package(glm CONFIG REQUIRED)
-target_link_libraries(CodingColada PRIVATE glm::glm)
+target_link_libraries(Colada_Client PRIVATE glm::glm)
+target_link_libraries(Colada_Server PRIVATE glm::glm)
 
 find_package(imgui CONFIG REQUIRED)
-target_link_libraries(CodingColada PRIVATE imgui::imgui) 
+target_link_libraries(Colada_Client PRIVATE imgui::imgui) 
+target_link_libraries(Colada_Server PRIVATE imgui::imgui) 
 
 find_package(asio CONFIG REQUIRED)
-target_link_libraries(CodingColada PRIVATE asio asio::asio)
+target_link_libraries(Colada_Client PRIVATE asio asio::asio)
+target_link_libraries(Colada_Server PRIVATE asio asio::asio)
 
 
 #enable usage of VS Profiler
-SET_TARGET_PROPERTIES(CodingColada PROPERTIES LINK_FLAGS "/PROFILE")
+SET_TARGET_PROPERTIES(Colada_Client PROPERTIES LINK_FLAGS "/PROFILE")
+SET_TARGET_PROPERTIES(Colada_Server PROPERTIES LINK_FLAGS "/PROFILE")
 
 #c++17
-set (CMAKE_CXX_STANDARD 17)
+target_compile_features(Colada_Client PRIVATE cxx_std_17)
+target_compile_features(Colada_Server PRIVATE cxx_std_17)
