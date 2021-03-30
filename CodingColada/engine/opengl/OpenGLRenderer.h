@@ -26,7 +26,7 @@ public:
 	static std::unordered_map<std::string, OpenGLShader> shaders_;
 	static std::unordered_map<std::string, OpenGLTexture2D> textures_;
 
-	void LoadShader(std::string name, std::string vertexShaderPath, std::string fragmentShaderPath);
+	void LoadShader(std::string name, std::string vertexShaderPath, std::string fragmentShaderPath, std::function<void(OpenGLShader&)> onUseCallback = {});
 	void LoadTexture(std::string name, std::string file, bool alpha = true);
 
 	virtual void* CreateWindow(int x, int y) override;

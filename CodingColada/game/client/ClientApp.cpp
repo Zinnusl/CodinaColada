@@ -39,7 +39,15 @@ int main()
 	renderer->LoadTexture("hovertile", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\Tile_Hover.png");
 	renderer->LoadTexture("tower_canon", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\canon_tower.png");
 
-	renderer->LoadShader("grid", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\shaders\\grid.frag");
+	renderer->LoadShader("grid",	"..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert",
+									"..\\..\\..\\..\\CodingColada\\game\\common\\resources\\shaders\\grid.frag", 
+		[](OpenGLShader& shader) {
+		if (GameObject::engine_->GetInput().GetScrollWheel() * 10)
+		{
+			static int startSize = 64;
+			shader.SetInteger("cellPixelSize", startSize--);
+		}
+	});
 	renderer->LoadShader("hover", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\shaders\\hover.frag");
 
 	auto gameManager = std::make_unique<GameManager>();

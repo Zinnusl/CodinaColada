@@ -37,9 +37,9 @@ OpenGLRenderer::~OpenGLRenderer()
 	glfwTerminate();
 }
 
-void OpenGLRenderer::LoadShader(std::string name, std::string vertexShaderPath, std::string fragmentShaderPath)
+void OpenGLRenderer::LoadShader(std::string name, std::string vertexShaderPath, std::string fragmentShaderPath, std::function<void(OpenGLShader&)> onUseCallback)
 {
-	OpenGLShader shader = OpenGLShader::CompileFromFile(vertexShaderPath.c_str(), fragmentShaderPath.c_str(), nullptr);
+	OpenGLShader shader = OpenGLShader::CompileFromFile(vertexShaderPath.c_str(), fragmentShaderPath.c_str(), nullptr, onUseCallback);
 	shader.SetMatrix4("projection", projection_, true);
 	shaders_.emplace(std::make_pair(name, shader));
 }

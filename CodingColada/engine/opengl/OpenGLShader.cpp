@@ -13,10 +13,14 @@
 OpenGLShader& OpenGLShader::Use()
 {
 	glUseProgram(this->ID);
+	if (OnUseCallback_)
+	{
+		OnUseCallback_(*this);
+	}
 	return *this;
 }
 
-OpenGLShader OpenGLShader::CompileFromFile(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile)
+OpenGLShader OpenGLShader::CompileFromFile(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::function<void(OpenGLShader&)> onUseCallback)
 {
 	// 1. retrieve the vertex/fragment source code from filePath
 	std::string vertexCode;
@@ -57,6 +61,7 @@ OpenGLShader OpenGLShader::CompileFromFile(const char* vShaderFile, const char* 
 	// 2. now create shader object from source code
 	OpenGLShader shader;
 	shader.Compile(vShaderCode, fShaderCode, gShaderFile != nullptr ? gShaderCode : nullptr);
+	shader.OnUseCallback_ = onUseCallback;
 	return shader;
 }
 

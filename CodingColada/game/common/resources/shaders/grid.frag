@@ -3,12 +3,11 @@
 uniform vec4 color;
 uniform vec2 screenresolution;
 uniform float time;
-
+uniform int cellPixelSize;
 
 
 void main() 
 {
-	int cellPixelSize = 64;
 	if (mod(gl_FragCoord.x, cellPixelSize) < 1.0 || mod(gl_FragCoord.y, cellPixelSize) < 1.0)
 	{
 		discard;
