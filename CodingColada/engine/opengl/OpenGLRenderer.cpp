@@ -20,7 +20,7 @@ std::unordered_map<std::string, OpenGLTexture2D> OpenGLRenderer::textures_;
 
 
 OpenGLRenderer::OpenGLRenderer()
-	: window_(nullptr), projection_(glm::mat4(1.0))
+	: window_(nullptr), projection_(glm::mat4(1.0)), cameraPosition_(glm::vec2(0.0f, 0.0f))
 {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -112,12 +112,20 @@ void OpenGLRenderer::BeginFrame()
 	int width;
 	int height;
 	glfwGetWindowSize(window_, &width, &height);
+
+	glm::mat4 camera(1.0f);
+	camera = glm::translate(camera, glm::vec3(cameraPosition_, 0.f));
 	
+	
+	//model = glm::translate(model, glm::vec3(gameobject.GetDrawPosition(subframe).GetX() + size_.GetX() / 2, gameobject.GetDrawPosition(subframe).GetY() + size_.GetY() / 2, 0.0f));
+	//model = glm::scale(model, glm::vec3(size_.GetX(), size_.GetY(), 1.0f));
+
 	for (auto& shader : shaders_)
 	{
 		shader.second.Use();
 		shader.second.SetFloat("time", glfwGetTime());
 		shader.second.SetVector2f("screenresolution", glm::vec2(width, height));
+		shader.second.SetMatrix4("camera", camera);
 	}
 
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -148,4 +156,14 @@ CodinaColadaWindow OpenGLRenderer::GetWindow()
 	int display_w, display_h;
 	glfwGetFramebufferSize(window_, &display_w, &display_h);
 	return CodinaColadaWindow(Vector2(display_w, display_h));
+}
+
+void OpenGLRenderer::SetCameraPosition(Vector2 position)
+{
+	cameraPosition_ = glm::vec2(position.GetX(), position.GetY());
+}
+
+Vector2 OpenGLRenderer::GetCameraPosition()
+{
+	return Vector2(cameraPosition_.x, cameraPosition_.y);
 }

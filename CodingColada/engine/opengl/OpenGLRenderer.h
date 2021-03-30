@@ -13,6 +13,7 @@ class GLFWwindow;
 class OpenGLRenderer : public IRenderer
 {
 	glm::mat4 projection_;
+	glm::vec2 cameraPosition_;
 
 protected:
 	GLFWwindow* window_;
@@ -37,4 +38,7 @@ public:
 
 	// Inherited via IRenderer
 	virtual CodinaColadaWindow GetWindow() override;
+
+	virtual void SetCameraPosition(Vector2 position) override;
+	virtual Vector2 GetCameraPosition() override;
 };

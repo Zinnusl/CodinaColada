@@ -16,6 +16,7 @@
 #include "../common/Ball.h"
 #include "../common/Paddle.h"
 #include "../common/GameManager.h"
+#include "../common/CameraManager.h"
 #include "../common/Grid.h"
 #include "../common/HoverTile.h"
 
@@ -42,6 +43,8 @@ int main()
 	renderer->LoadShader("hover", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\shaders\\hover.frag");
 
 	auto gameManager = std::make_unique<GameManager>();
+	auto cameraManager = std::make_unique<CameraManager>();
+
 	auto grid = std::make_unique<Grid>(64);
 	grid->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(windowSize, Color(0, 0, 1, 0.1), &OpenGLRenderer::shaders_["grid"])));
 
@@ -60,6 +63,7 @@ int main()
 	ball->AddComponent(std::make_unique<RigidbodyComponent>(Vector2(64)));
 
 	engine->AddGameObject(std::move(gameManager));
+	engine->AddGameObject(std::move(cameraManager));
 	engine->AddGameObject(std::move(grid));
 	engine->AddGameObject(std::move(paddle1));
 	engine->AddGameObject(std::move(paddle2));
