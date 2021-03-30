@@ -1,7 +1,7 @@
 #include "CameraManager.h"
 
 #include "../../engine/Engine.h"
-
+#include "imgui.h"
 
 CameraManager::CameraManager()
 {
@@ -34,8 +34,22 @@ void CameraManager::OnDraw(float deltaTime)
 		cameraPosition.SetY(cameraPosition.GetY() - 0.001f);
 	}
 	renderer.SetCameraPosition(cameraPosition);
+
+	int scrollWheel = input.GetScrollWheel();
+	float newZoom = renderer.GetZoom() + scrollWheel / 10.f;
+	if (newZoom < 0.01f)
+	{
+		newZoom = 0.01f;
+	}
+	if (newZoom > 10)
+	{
+		newZoom = 10;
+	}
+	renderer.SetZoom(newZoom);
 }
 
 void CameraManager::OnDebugTreeNode()
 {
+	IRenderer& renderer = engine_->GetRenderer();
+	ImGui::Text("Zoom %f", renderer.GetZoom());
 }

@@ -20,7 +20,7 @@ std::unordered_map<std::string, OpenGLTexture2D> OpenGLRenderer::textures_;
 
 
 OpenGLRenderer::OpenGLRenderer()
-	: window_(nullptr), projection_(glm::mat4(1.0)), cameraPosition_(glm::vec2(0.0f, 0.0f))
+	: window_(nullptr), projection_(glm::mat4(1.0)), cameraPosition_(glm::vec2(0.0f, 0.0f)), zoom_(1.f)
 {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -115,7 +115,7 @@ void OpenGLRenderer::BeginFrame()
 
 	glm::mat4 camera(1.0f);
 	camera = glm::translate(camera, glm::vec3(cameraPosition_, 0.f));
-	
+	camera = glm::scale(camera, glm::vec3(zoom_, zoom_, 1.0f));
 	
 	//model = glm::translate(model, glm::vec3(gameobject.GetDrawPosition(subframe).GetX() + size_.GetX() / 2, gameobject.GetDrawPosition(subframe).GetY() + size_.GetY() / 2, 0.0f));
 	//model = glm::scale(model, glm::vec3(size_.GetX(), size_.GetY(), 1.0f));
@@ -166,4 +166,14 @@ void OpenGLRenderer::SetCameraPosition(Vector2 position)
 Vector2 OpenGLRenderer::GetCameraPosition()
 {
 	return Vector2(cameraPosition_.x, cameraPosition_.y);
+}
+
+float OpenGLRenderer::GetZoom()
+{
+	return zoom_;
+}
+
+void OpenGLRenderer::SetZoom(float zoom)
+{
+	zoom_ = zoom;
 }

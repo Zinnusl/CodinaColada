@@ -14,6 +14,7 @@ class OpenGLRenderer : public IRenderer
 {
 	glm::mat4 projection_;
 	glm::vec2 cameraPosition_;
+	float zoom_;
 
 protected:
 	GLFWwindow* window_;
@@ -41,4 +42,7 @@ public:
 
 	virtual void SetCameraPosition(Vector2 position) override;
 	virtual Vector2 GetCameraPosition() override;
+
+	virtual float GetZoom() override;
+	virtual void SetZoom(float zoom) override;
 };

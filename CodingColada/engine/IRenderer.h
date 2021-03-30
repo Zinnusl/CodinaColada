@@ -17,6 +17,8 @@ public:
 
 	virtual void SetCameraPosition(Vector2 position) = 0;
 	virtual Vector2 GetCameraPosition() = 0;
+	virtual float GetZoom() = 0;
+	virtual void SetZoom(float zoom) = 0;
 
 	//TODO. IInput needs a way to get the window so it can register for the input events
 	virtual void* CreateWindow(int x, int y) = 0;

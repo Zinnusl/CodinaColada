@@ -6,6 +6,7 @@
 
 
 int8_t OpenGLInput::keys_[1027];
+double OpenGLInput::scrollWheel_ = 0;
 
 void OpenGLInput::key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
@@ -42,11 +43,17 @@ void OpenGLInput::mouse_button_callback(GLFWwindow* window, int button, int acti
 	}
 }
 
+void OpenGLInput::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	scrollWheel_ = yoffset;
+}
+
 void OpenGLInput::RegisterWindow(void* window)
 {
 	window_ = (GLFWwindow*)window;
 	glfwSetKeyCallback((GLFWwindow*)window, key_callback);
 	glfwSetMouseButtonCallback((GLFWwindow*)window, mouse_button_callback);
+	glfwSetScrollCallback((GLFWwindow*)window_, scroll_callback);
 }
 
 void OpenGLInput::ProcessInput()
@@ -55,6 +62,7 @@ void OpenGLInput::ProcessInput()
 	{
 		keys_[i] &= 1;
 	}
+	scrollWheel_ = 0;
 	glfwPollEvents();
 }
 
@@ -88,4 +96,9 @@ bool OpenGLInput::GetMouseDown(int key)
 bool OpenGLInput::GetMouse(int key)
 {
 	return keys_[1024 + key] & 3;
+}
+
+int OpenGLInput::GetScrollWheel()
+{
+	return scrollWheel_;
 }

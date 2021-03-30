@@ -17,6 +17,7 @@ public:
 	virtual bool GetMouseDown(int key) = 0;
 	virtual bool GetMouse(int key) = 0;
 	virtual Vector2 GetMousePosition() = 0;
+	virtual int GetScrollWheel() = 0;
 
 	//Andi input system
 	virtual void AddHandler(int key, handlerCallbackType callback) = 0;

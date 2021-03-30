@@ -9,7 +9,7 @@ uniform float time;
 void main() 
 {
 	int cellPixelSize = 64;
-	if (mod(gl_FragCoord.x, cellPixelSize) < 1.0 || mod(gl_FragCoord.y, cellPixelSize) < 1.0 )
+	if (mod(gl_FragCoord.x, cellPixelSize) < 1.0 || mod(gl_FragCoord.y, cellPixelSize) < 1.0)
 	{
 		discard;
 	}
