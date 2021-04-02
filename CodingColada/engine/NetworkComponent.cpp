@@ -21,6 +21,6 @@ void NetworkComponent::OnUpdate(Engine& engine, float deltaTime)
 {
 }
 
-void NetworkComponent::OnDraw(Engine& engine, float subframe)
+void NetworkComponent::OnDraw(Engine& engine, float subframe, float deltaTime)
 {
 }

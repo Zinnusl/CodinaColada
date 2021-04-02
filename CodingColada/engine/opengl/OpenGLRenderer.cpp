@@ -126,15 +126,16 @@ void OpenGLRenderer::BeginFrame()
 		shader.second.SetFloat("time", glfwGetTime());
 		shader.second.SetVector2f("screenresolution", glm::vec2(width, height));
 		shader.second.SetMatrix4("camera", camera);
+		shader.second.SetFloat("zoom", zoom_);
 	}
 
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void OpenGLRenderer::Draw(GameObject& gameobject, float subframe)
+void OpenGLRenderer::Draw(GameObject& gameobject, float subframe, float deltaTime)
 {
-	gameobject.OnDraw(subframe);
+	gameobject.OnDraw(subframe, deltaTime);
 }
 
 void OpenGLRenderer::EndFrame()
@@ -176,4 +177,10 @@ float OpenGLRenderer::GetZoom()
 void OpenGLRenderer::SetZoom(float zoom)
 {
 	zoom_ = zoom;
+}
+
+Vector2 OpenGLRenderer::WorldToScreen(Vector2 worldPosition)
+{
+	//TODO maybe the other way arround
+	return worldPosition - Vector2(cameraPosition_.x, cameraPosition_.y);
 }

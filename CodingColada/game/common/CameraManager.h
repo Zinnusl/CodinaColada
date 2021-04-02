@@ -6,7 +6,10 @@ class CameraManager : public GameObject
 {
 public:
 	CameraManager();
-	void OnDraw(float deltaTime) override;
 
+	Vector2 WorldToScreen(Vector2 worldPosition);
+
+
+	void OnDraw(float subframe, float deltaTime) override;
 	void OnDebugTreeNode() override;
 };

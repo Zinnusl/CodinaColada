@@ -34,7 +34,7 @@ void OpenGLSprite::initRenderData()
 }
 
 
-void OpenGLSprite::Draw(Engine& engine, GameObject& gameobject, float subframe)
+void OpenGLSprite::Draw(Engine& engine, GameObject& gameobject, float subframe, float deltaTime)
 {
     //TODO conversion between engine Vector2 and glm::vector annoying. Solution?
     //TODO pass values from sprite? Gameobject?

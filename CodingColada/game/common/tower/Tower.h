@@ -10,5 +10,5 @@ public:
 
 	void OnPhysicsUpdate(float deltaTime) override;
 	void OnDebugTreeNode() override;
-	void OnDraw(float subframe) override;
+	void OnDraw(float subframe, float deltaTime) override;
 };

@@ -29,11 +29,11 @@ void GameObject::OnPhysicsUpdate(float deltaTime)
 	}
 }
 
-void GameObject::OnDraw(float subframe)
+void GameObject::OnDraw(float subframe, float deltaTime)
 {
 	for (auto& component : components_)
 	{
-		component->OnDraw(*engine_, subframe);
+		component->OnDraw(*engine_, subframe, deltaTime);
 	}
 }
 

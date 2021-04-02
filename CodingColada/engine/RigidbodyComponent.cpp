@@ -39,6 +39,6 @@ bool RigidbodyComponent::CheckCollision(RigidbodyComponent& other)
     return collisionX && collisionY;
 }
 
-void RigidbodyComponent::OnDraw(Engine& engine, float subframe)
+void RigidbodyComponent::OnDraw(Engine& engine, float subframe, float deltaTime)
 {
 }

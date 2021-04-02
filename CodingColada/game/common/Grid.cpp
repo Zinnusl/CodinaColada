@@ -19,13 +19,13 @@
 #include <chrono>
 
 
-Grid::Grid(int32_t cellSize)
-	: cellSize_(cellSize), hoverTile_(std::make_unique<HoverTile>(*this))
+Grid::Grid(int x, int y, int32_t cellSizePixel)
+	: x_(x), y_(y), cellSize_(cellSizePixel), hoverTile_(std::make_unique<HoverTile>(*this))
 {
 
-	for (int x = 0; x < 64; x++)
+	for (int x = 0; x < x_; x++)
 	{
-		for (int y = 0; y < 64; y++)
+		for (int y = 0; y < y_; y++)
 		{
 			nodes_[x][y] = new Node(x, y);
 		}
@@ -63,6 +63,9 @@ void Grid::OnDebugTreeNode()
 	ImGui::Text("Grid");
 	ImGui::Text("PixelSize %d", cellSize_);
 	ImGui::Text("A* Pathtime %dms", timeToFindPath_);
+	ImGui::Text("camera position x: %f y: %f", engine_->GetRenderer().GetCameraPosition().GetX(), engine_->GetRenderer().GetCameraPosition().GetY());
+	ImGui::Text("screen mouse x: %f y: %f", engine_->GetInput().GetMousePosition().GetX(), engine_->GetInput().GetMousePosition().GetY());
+	ImGui::Text("world mouse x: %f y: %f", engine_->GetRenderer().WorldToScreen(engine_->GetInput().GetMousePosition()).GetX(), engine_->GetRenderer().WorldToScreen(engine_->GetInput().GetMousePosition()).GetY());
 
 	ImGui::Text("PATH");
 	for (auto& node : path_)
@@ -77,21 +80,21 @@ void Grid::OnDebugTreeNode()
 	hoverTile_->OnDebugTreeNode();
 }
 
-void Grid::OnDraw(float subframe)
+void Grid::OnDraw(float subframe, float deltaTime)
 {
-	GameObject::OnDraw(subframe);
+	GameObject::OnDraw(subframe, deltaTime);
 
 	//draw path visualisation
 	for (auto& pathNode : pathVisualisation_)
 	{
-		pathNode->OnDraw(subframe);
+		pathNode->OnDraw(subframe, deltaTime);
 	}
 
 	for (auto& building : buildings_)
 	{
-		building->OnDraw(subframe);
+		building->OnDraw(subframe, deltaTime);
 	}
-	hoverTile_->OnDraw(subframe);
+	hoverTile_->OnDraw(subframe, deltaTime);
 	
 	bool isCellFree = IsCellFree(hoverTile_->GetPosition());
 	if (isCellFree)

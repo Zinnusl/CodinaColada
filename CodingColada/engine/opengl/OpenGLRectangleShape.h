@@ -16,7 +16,7 @@ class OpenGLRectangleShape : public RectangleShape
 public:
 	OpenGLRectangleShape(Vector2 size, Color color);
 	OpenGLRectangleShape(Vector2 size, Color color, OpenGLShader* customShader);
-	void Draw(Engine& engine, GameObject& gameobject, float subframe) override;
+	void Draw(Engine& engine, GameObject& gameobject, float subframe, float deltaTime) override;
 
 	static void InitRenderData();
 };

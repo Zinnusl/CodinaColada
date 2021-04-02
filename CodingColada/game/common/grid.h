@@ -37,6 +37,8 @@ class Grid : public GameObject
 	};
 
 	int32_t cellSize_;
+	int x_;
+	int y_;
 	std::unique_ptr<HoverTile> hoverTile_;
 	std::vector<std::shared_ptr<GameObject>> buildings_;
 	std::vector<std::shared_ptr<GameObject>> pathVisualisation_;
@@ -55,12 +57,12 @@ class Grid : public GameObject
 
 public:
 	Grid() = delete;
-	Grid(int32_t cellSize);
+	Grid(int x, int y, int32_t cellSizePixel);
 
 	void OnStart() override;
 	void OnPhysicsUpdate(float deltaTime) override;
 	void OnDebugTreeNode() override;
-	void OnDraw(float subframe) override;
+	void OnDraw(float subframe, float deltaTime) override;
 	void OnCollision(RigidbodyComponent& other) override;
 
 	int32_t GetCellSize();

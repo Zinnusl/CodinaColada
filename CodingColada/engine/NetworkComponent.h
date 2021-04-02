@@ -21,5 +21,5 @@ public:
 	virtual void OnAdded(Engine& engine, GameObject& gameobject) override;
 	virtual void OnRemove(Engine& engine) override;
 	virtual void OnUpdate(Engine& engine, float deltaTime) override;
-	virtual void OnDraw(Engine& engine, float subframe) override;
+	virtual void OnDraw(Engine& engine, float subframe, float deltaTime) override;
 };

@@ -33,9 +33,9 @@ void HoverTile::OnDebugTreeNode()
 	ImGui::Text("HoverTile Position %f %f", currentPosition_.GetX(), currentPosition_.GetY());
 }
 
-void HoverTile::OnDraw(float subframe)
+void HoverTile::OnDraw(float subframe, float deltaTime)
 {
-	GameObject::OnDraw(subframe);
+	GameObject::OnDraw(subframe, deltaTime);
 
 	//TODO an object like this should probably not be smooth moved (this movement is dependend on physic ticks.. really dont want this here)
 	Vector2 mousePos = engine_->GetInput().GetMousePosition();

@@ -25,7 +25,7 @@ OpenGLRectangleShape::OpenGLRectangleShape(Vector2 size, Color color, OpenGLShad
 {
 }
 
-void OpenGLRectangleShape::Draw(Engine& engine, GameObject& gameobject, float subframe)
+void OpenGLRectangleShape::Draw(Engine& engine, GameObject& gameobject, float subframe, float deltaTime)
 {
 	//wireframe mode
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

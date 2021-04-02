@@ -7,7 +7,13 @@ CameraManager::CameraManager()
 {
 }
 
-void CameraManager::OnDraw(float deltaTime)
+Vector2 CameraManager::WorldToScreen(Vector2 worldPosition)
+{
+	//TODO calculate screenposition
+	return worldPosition;
+}
+
+void CameraManager::OnDraw(float subframe, float deltaTime)
 {
 	#define 	GLFW_KEY_RIGHT   262
 	#define 	GLFW_KEY_LEFT   263
@@ -51,5 +57,6 @@ void CameraManager::OnDraw(float deltaTime)
 void CameraManager::OnDebugTreeNode()
 {
 	IRenderer& renderer = engine_->GetRenderer();
+	ImGui::Text("Camera (%f, %f)", renderer.GetCameraPosition().GetX(), renderer.GetCameraPosition().GetY());
 	ImGui::Text("Zoom %f", renderer.GetZoom());
 }

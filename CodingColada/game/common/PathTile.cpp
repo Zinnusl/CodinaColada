@@ -8,7 +8,7 @@ PathTile::PathTile(Vector2 position)
 
 }
 
-void PathTile::OnDraw(float subframe)
+void PathTile::OnDraw(float subframe, float deltaTime)
 {
-	GameObject::OnDraw(subframe);
+	GameObject::OnDraw(subframe, deltaTime);
 }

@@ -27,5 +27,5 @@ private:
 
     Color GetColor();
     void SetColor(Color color);
-    void Draw(Engine& engine, GameObject& gameobject, float subframe) override;
+    void Draw(Engine& engine, GameObject& gameobject, float subframe, float deltaTime) override;
 };

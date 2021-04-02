@@ -34,7 +34,7 @@ public:
 
 	// Inherited via IRenderer
 	void BeginFrame() override;
-	void Draw(GameObject& gameobject, float subframe) override;
+	void Draw(GameObject& gameobject, float subframe, float deltaTime) override;
 	void EndFrame() override;
 
 	// Inherited via IRenderer
@@ -45,4 +45,6 @@ public:
 
 	virtual float GetZoom() override;
 	virtual void SetZoom(float zoom) override;
+
+	virtual Vector2 WorldToScreen(Vector2 worldPosition) override;
 };

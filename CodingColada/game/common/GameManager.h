@@ -6,7 +6,7 @@ class GameManager : public GameObject
 {
 public:
 	GameManager();
-	void OnDraw(float deltaTime) override;
+	void OnDraw(float subframe, float deltaTime) override;
 
 	void OnDebugTreeNode() override;
 };

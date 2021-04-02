@@ -24,7 +24,7 @@ void Tower::OnDebugTreeNode()
 	ImGui::Text("Im a building in the Grid!");
 }
 
-void Tower::OnDraw(float subframe)
+void Tower::OnDraw(float subframe, float deltaTime)
 {
-	GameObject::OnDraw(subframe);
+	GameObject::OnDraw(subframe, deltaTime);
 }

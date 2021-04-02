@@ -63,7 +63,7 @@ public:
 	virtual void OnPhysicsUpdate(float deltaTime);
 
 	//Draws all IComponent components of the gameobject 
-	virtual void OnDraw(float subframe);
+	virtual void OnDraw(float subframe, float deltaTime);
 
 	virtual void OnCollision(RigidbodyComponent& other);
 	virtual void OnDebugTreeNode();

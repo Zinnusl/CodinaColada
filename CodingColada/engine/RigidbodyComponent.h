@@ -25,5 +25,5 @@ public:
 	bool CheckCollision(RigidbodyComponent& other);
 
 	// Inherited via IComponent
-	virtual void OnDraw(Engine& engine, float subframe) override;
+	virtual void OnDraw(Engine& engine, float subframe, float deltaTime) override;
 };

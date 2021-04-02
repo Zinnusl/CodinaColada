@@ -7,9 +7,9 @@ GameManager::GameManager()
 {
 }
 
-void GameManager::OnDraw(float deltaTime)
+void GameManager::OnDraw(float subframe, float deltaTime)
 {
-	GameObject::OnDraw(deltaTime);
+	GameObject::OnDraw(subframe, deltaTime);
 
 	int GLFW_KEY_ESCAPE = 256;
 	int GLFW_KEY_F5 = 294;

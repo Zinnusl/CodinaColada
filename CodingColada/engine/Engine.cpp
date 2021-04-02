@@ -99,7 +99,7 @@ void Engine::StartGame()
 		for (const auto& gameobject : gameobjects_)
 		{
 			//gameobject.second->OnDraw(0);
-			gameobject.second->OnDraw(subframe);
+			gameobject.second->OnDraw(subframe, deltaTime);
 			//gameobject.second->OnDraw(1);
 		}
 		{

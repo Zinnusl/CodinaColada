@@ -10,5 +10,5 @@ public:
 	PathTile() = delete;
 	PathTile(Vector2 position);
 
-	void OnDraw(float subframe) override;
+	void OnDraw(float subframe, float deltaTime) override;
 };

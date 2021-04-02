@@ -26,9 +26,9 @@ void SpriteComponent::OnRemove(Engine& engine)
 {
 }
 
-void SpriteComponent::OnDraw(Engine& engine, float subframe)
+void SpriteComponent::OnDraw(Engine& engine, float subframe, float deltaTime)
 {
-	sprite_->Draw(engine, *gameobject_, subframe);
+	sprite_->Draw(engine, *gameobject_, subframe, deltaTime);
 }
 
 GameObject& SpriteComponent::GetGameobject()
