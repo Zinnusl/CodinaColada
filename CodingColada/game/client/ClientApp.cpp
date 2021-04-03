@@ -57,8 +57,8 @@ int main()
 	auto gameManager = std::make_unique<GameManager>();
 	auto cameraManager = std::make_unique<CameraManager>();
 
-	auto grid = std::make_unique<Grid>(32, 32, 64);
-	grid->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ 32*64, 32 * 64 }, Color(0, 0, 1, 0.1), &OpenGLRenderer::shaders_["grid"])));
+	auto grid = std::make_unique<Grid>(64, 32, 64);
+	grid->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ 64*64, 32 * 64 }, Color(0, 0, 1, 0.1), &OpenGLRenderer::shaders_["grid"])));
 
 	Vector2 paddleSize = { 20, 200 };
 	auto paddle1 = std::make_unique<Paddle>(Vector2(40, 400));

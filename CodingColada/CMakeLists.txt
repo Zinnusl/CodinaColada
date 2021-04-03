@@ -10,10 +10,10 @@ file(GLOB_RECURSE GAME_COMMON_SOURCES LIST_DIRECTORIES true game/common/*.h game
 file(GLOB_RECURSE GAME_CLIENT_SOURCES LIST_DIRECTORIES true game/client/*.h game/client/*.cpp)
 file(GLOB_RECURSE GAME_SERVER_SOURCES LIST_DIRECTORIES true game/server/*.h game/server/*.cpp)
 
+
 # Add source to this project's executable.
 add_executable (Colada_Client ${ENGINE_SOURCES} ${GAME_COMMON_SOURCES} ${GAME_CLIENT_SOURCES})
 add_executable (Colada_Server ${ENGINE_SOURCES} ${GAME_COMMON_SOURCES} ${GAME_SERVER_SOURCES})
-
 
 # TODO: Add tests and install targets if needed.
 

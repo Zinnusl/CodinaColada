@@ -18,7 +18,6 @@ protected:
 	std::shared_ptr<IRenderer> renderer_;
 	std::unique_ptr<IInput> input_;
 
-	
 	std::unordered_map<idType, std::unique_ptr<GameObject>> gameobjects_;
 
 public:
@@ -34,4 +33,20 @@ public:
 
 	IRenderer& GetRenderer() const;
 	IInput& GetInput() const;
+
+	//templates have to be defined in header
+	template<class T>
+	T* GetFirstGameObjectOfType()
+	{
+		auto it = std::find_if(gameobjects_.begin(), gameobjects_.end(), [](auto& comp) {
+			return dynamic_cast<T*>(comp.second.get());
+		});
+		if (it != gameobjects_.end()) {
+			return static_cast<T*>(it->second.get());
+		}
+		else {
+			return nullptr;
+		}
+	}
+
 };

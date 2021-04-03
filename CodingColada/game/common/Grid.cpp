@@ -13,6 +13,7 @@
 #include "HoverTile.h"
 #include "PathTile.h"
 #include "tower/Tower.h"
+#include "Ball.h"
 
 #include "imgui.h"
 
@@ -22,7 +23,6 @@
 Grid::Grid(int x, int y, int32_t cellSizePixel)
 	: x_(x), y_(y), cellSize_(cellSizePixel), hoverTile_(std::make_unique<HoverTile>(*this))
 {
-
 	for (int x = 0; x < x_; x++)
 	{
 		for (int y = 0; y < y_; y++)
@@ -54,7 +54,7 @@ void Grid::OnPhysicsUpdate(float deltaTime)
 	}
 
 	pathVisualisation_.clear();
-	FindPath(Vector2(100, 100), hoverTile_->GetPosition());
+	FindPath(engine_->GetFirstGameObjectOfType<Ball>()->GetPosition(), hoverTile_->GetPosition());
 }
 
 void Grid::OnDebugTreeNode()
