@@ -7,11 +7,6 @@ CameraManager::CameraManager()
 {
 }
 
-Vector2 CameraManager::WorldToScreen(Vector2 worldPosition)
-{
-	//TODO calculate screenposition
-	return worldPosition;
-}
 
 void CameraManager::OnDraw(float subframe, float deltaTime)
 {
@@ -23,21 +18,21 @@ void CameraManager::OnDraw(float subframe, float deltaTime)
 	IInput& input = engine_->GetInput();
 	IRenderer& renderer = engine_->GetRenderer();
 	Vector2 cameraPosition = renderer.GetCameraPosition();
-	if (input.GetKey(GLFW_KEY_RIGHT))
+	if (input.GetKeyDown(GLFW_KEY_RIGHT))
 	{
-		cameraPosition.SetX(cameraPosition.GetX() + 0.001f);
+		cameraPosition.SetX(cameraPosition.GetX() + 10);
 	}
-	if (input.GetKey(GLFW_KEY_LEFT))
+	if (input.GetKeyDown(GLFW_KEY_LEFT))
 	{
-		cameraPosition.SetX(cameraPosition.GetX() - 0.001f);
+		cameraPosition.SetX(cameraPosition.GetX() - 10);
 	}
-	if (input.GetKey(GLFW_KEY_UP))
+	if (input.GetKeyDown(GLFW_KEY_UP))
 	{
-		cameraPosition.SetY(cameraPosition.GetY() + 0.001f);
+		cameraPosition.SetY(cameraPosition.GetY() + 10);
 	}
-	if (input.GetKey(GLFW_KEY_DOWN))
+	if (input.GetKeyDown(GLFW_KEY_DOWN))
 	{
-		cameraPosition.SetY(cameraPosition.GetY() - 0.001f);
+		cameraPosition.SetY(cameraPosition.GetY() - 10);
 	}
 	renderer.SetCameraPosition(cameraPosition);
 

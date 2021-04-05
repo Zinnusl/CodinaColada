@@ -23,28 +23,29 @@ void Ball::OnPhysicsUpdate(float deltaTime)
 		newPos.SetY(0);
 		velocity_.SetY(-velocity_.GetY());
 	}
-	if (newPos.GetY() >= engine_->GetRenderer().GetWindow().GetResolution().GetY()) //size nicht vergessen
+	/*if (newPos.GetY() >= engine_->GetRenderer().GetWindow().GetResolution().GetY()) //size nicht vergessen
 	{
 		newPos.SetY(engine_->GetRenderer().GetWindow().GetResolution().GetY());
 		velocity_.SetY(-velocity_.GetY());
-	}
+	}*/
 
 	if (newPos.GetX() <= 0)
 	{
 		newPos.SetX(0);
 		velocity_.SetX(-velocity_.GetX());
 	}
-	if (newPos.GetX() >= engine_->GetRenderer().GetWindow().GetResolution().GetX()) //size nicht vergessen
+	/*if (newPos.GetX() >= engine_->GetRenderer().GetWindow().GetResolution().GetX()) //size nicht vergessen
 	{
 		newPos.SetX(engine_->GetRenderer().GetWindow().GetResolution().GetX());
 		velocity_.SetX(-velocity_.GetX());
-	}
+	}*/
 	currentPosition_ = newPos;
 }
 
 void Ball::OnDebugTreeNode()
 {
 	ImGui::Text("Ball");
+	ImGui::Text("Position %f %f", currentPosition_.GetX(), currentPosition_.GetY());
 	ImGui::Text("Velocity %f %f", velocity_.GetX(), velocity_.GetY());
 }
 

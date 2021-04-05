@@ -20,8 +20,9 @@
 #include <chrono>
 
 
-Grid::Grid(int x, int y, int32_t cellSizePixel)
-	: x_(x), y_(y), cellSize_(cellSizePixel), hoverTile_(std::make_unique<HoverTile>(*this))
+
+Grid::Grid(int x, int y, int32_t cellSize, Vector2 position)
+	: x_(x), y_(y), cellSize_(cellSize), hoverTile_(std::make_unique<HoverTile>(*this)), GameObject(position)
 {
 	for (int x = 0; x < x_; x++)
 	{
@@ -30,9 +31,9 @@ Grid::Grid(int x, int y, int32_t cellSizePixel)
 			nodes_[x][y] = new Node(x, y);
 		}
 	}
-	Vector2 hoverTileSize = Vector2(64, 64);
+	Vector2 hoverTileSize = Vector2(cellSize, cellSize);
 	hoverTile_->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(hoverTileSize, Color(0, 0, 1, 0.1), &OpenGLRenderer::shaders_["hover"])));
-	hoverTile_->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(64, 64), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["hovertile"])));
+	hoverTile_->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(cellSize, cellSize), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["hovertile"])));
 
 	//TODO The grid is now responsible for calling the callbacks of the hovertile.. is this soemthing we want? Or does this go against the goal of the engine?
 	//Pro: We can avoid invoking callbacks that we know we wont need
@@ -54,18 +55,22 @@ void Grid::OnPhysicsUpdate(float deltaTime)
 	}
 
 	pathVisualisation_.clear();
-	FindPath(engine_->GetFirstGameObjectOfType<Ball>()->GetPosition(), hoverTile_->GetPosition());
+	//FindPath(Vector2(200, 200), hoverTile_->GetPosition());
 }
 
 void Grid::OnDebugTreeNode()
 {
 	GameObject::OnDebugTreeNode();
 	ImGui::Text("Grid");
-	ImGui::Text("PixelSize %d", cellSize_);
+	ImGui::Text("PixelSize %f", cellSize_ * engine_->GetRenderer().GetZoom());
 	ImGui::Text("A* Pathtime %dms", timeToFindPath_);
 	ImGui::Text("camera position x: %f y: %f", engine_->GetRenderer().GetCameraPosition().GetX(), engine_->GetRenderer().GetCameraPosition().GetY());
 	ImGui::Text("screen mouse x: %f y: %f", engine_->GetInput().GetMousePosition().GetX(), engine_->GetInput().GetMousePosition().GetY());
-	ImGui::Text("world mouse x: %f y: %f", engine_->GetRenderer().WorldToScreen(engine_->GetInput().GetMousePosition()).GetX(), engine_->GetRenderer().WorldToScreen(engine_->GetInput().GetMousePosition()).GetY());
+
+	auto x = engine_->GetRenderer().ScreenToWorld(engine_->GetInput().GetMousePosition()).GetX();
+	auto y = engine_->GetRenderer().ScreenToWorld(engine_->GetInput().GetMousePosition()).GetY();
+	ImGui::Text("ScreenToWorld mouse x: %f y: %f", x, y);
+	ImGui::Text("WorldToScreen mouse x: %f y: %f", engine_->GetRenderer().WorldToScreen(x).GetX(), engine_->GetRenderer().WorldToScreen(y).GetY());
 
 	ImGui::Text("PATH");
 	for (auto& node : path_)
@@ -113,14 +118,14 @@ void Grid::OnDraw(float subframe, float deltaTime)
 	if (GameObject::engine_->GetInput().GetMouseDown(0) && isCellFree)
 	{
 		auto tower = std::make_shared<Tower>(hoverTile_->GetPosition());
-		tower->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(64, 64), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["tower_canon"])));
+		tower->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(cellSize_, cellSize_), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["tower_canon"])));
 		tower->AddComponent(std::make_unique<RigidbodyComponent>(Vector2(64)));
 		buildings_.push_back(std::move(tower));
 	}
 	if (GameObject::engine_->GetInput().GetMouse(1) && isCellFree)
 	{
 		auto stone = std::make_unique<Tower>(hoverTile_->GetPosition());
-		stone->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(64, 64), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["stone"])));
+		stone->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(cellSize_, cellSize_), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["stone"])));
 		stone->AddComponent(std::make_unique<RigidbodyComponent>(Vector2(64)));
 		buildings_.push_back(std::move(stone));
 		auto hoveredNode = GetNodeFromPosition(hoverTile_->GetPosition());
@@ -289,8 +294,8 @@ void Grid::RetracePath(Node* startNode, Node* endNode)
 
 	for (auto& node : path_)
 	{
-		Vector2 pathTileSize = Vector2(64, 64);
-		std::unique_ptr<PathTile> pathTile = std::make_unique<PathTile>(Vector2(node->gridX_ * 64, node->gridY_ * 64));
+		Vector2 pathTileSize = Vector2(cellSize_, cellSize_);
+		std::unique_ptr<PathTile> pathTile = std::make_unique<PathTile>(Vector2(node->gridX_ * cellSize_, node->gridY_ * cellSize_));
 		pathTile->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(pathTileSize, Color(0, 0, 1, 1))));
 		pathVisualisation_.push_back(std::move(pathTile));
 	}
@@ -298,9 +303,9 @@ void Grid::RetracePath(Node* startNode, Node* endNode)
 
 Grid::Node* Grid::GetNodeFromPosition(Vector2 position)
 {
-	if (position.GetX() < 0 || position.GetY() < 0  || position.GetX() > 64*64 || position.GetY() > 64 * 64)
+	if (position.GetX() < 0 || position.GetY() < 0  || position.GetX() > cellSize_ * cellSize_ || position.GetY() > cellSize_ * cellSize_)
 	{
 		return nullptr;
 	}
-	return nodes_[(int)position.GetX() / 64][(int)position.GetY() / 64];
+	return nodes_[(int)position.GetX() / cellSize_][(int)position.GetY() / cellSize_];
 }

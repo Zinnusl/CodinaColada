@@ -49,16 +49,16 @@ void OpenGLRenderer::LoadTexture(std::string name, std::string file, bool alpha)
 	textures_.emplace(std::make_pair(name, OpenGLTexture2D::LoadTextureFromFile(file.c_str(), alpha)));
 }
 
-void* OpenGLRenderer::CreateWindow(int x, int y)
+void* OpenGLRenderer::CreateWindow(int xResolution, int yResolution)
 {
 	glfwWindowHint(GLFW_RESIZABLE, true);
 
 	int xPos, yPos, width, height;
 	auto primaryMonitor = glfwGetPrimaryMonitor();
 	glfwGetMonitorWorkarea(primaryMonitor, &xPos, &yPos, &width, &height);
-	//window_ = glfwCreateWindow(x, y, "GLFWWindow", nullptr, nullptr);
+	window_ = glfwCreateWindow(xResolution, yResolution, "GLFWWindow", nullptr, nullptr);
 	//window_ = glfwCreateWindow(width, height, "GLFWWindow", glfwGetPrimaryMonitor(), nullptr);
-	window_ = glfwCreateWindow(width, height, "GLFWWindow", primaryMonitor, nullptr);
+	//window_ = glfwCreateWindow(width, height, "GLFWWindow", primaryMonitor, nullptr);
 
 	//window_ = glfwCreateWindow(width, height, "GLFWWindow", glfwGetPrimaryMonitor(), nullptr);
 	//glfwSetWindowMonitor(window_, nullptr, 0, 0, width, height, GLFW_DONT_CARE);
@@ -70,7 +70,7 @@ void* OpenGLRenderer::CreateWindow(int x, int y)
 		printf("FATAL ERROR: Failed to initialize GLAD\n");
 	}
 
-	glViewport(0, 0, x, y);
+	glViewport(0, 0, xResolution, yResolution);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glfwSwapInterval(0); //disable vsync
@@ -86,8 +86,8 @@ void* OpenGLRenderer::CreateWindow(int x, int y)
 	const char* glsl_version = "#version 130";
 	ImGui_ImplOpenGL3_Init(glsl_version);
 
-	//TODO iterate shaders and set projection
-	projection_ = glm::ortho(0.0f, static_cast<float>(x), 0.0f, static_cast<float>(y), -1.f, 1.f);
+	//The projection is used to normalize coordinates to the [-1, 1] range that OpenGL uses. This means that at any 16:9 ratio square will look like a square
+	projection_ = glm::ortho(0.0f, static_cast<float>(1600), 0.0f, static_cast<float>(900), -1.f, 1.f);
 
 	OpenGLShader defaultShader = OpenGLShader::CompileFromFile("..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.frag", nullptr);
 	defaultShader.SetMatrix4("projection", projection_, true);
@@ -114,6 +114,8 @@ void OpenGLRenderer::BeginFrame()
 	glfwGetWindowSize(window_, &width, &height);
 
 	glm::mat4 camera(1.0f);
+
+	//TODO Problem. We actually want to move the camera in world space. It seems the movement here is in [-1, 1] space. INVESTIGATE.
 	camera = glm::translate(camera, glm::vec3(cameraPosition_, 0.f));
 	camera = glm::scale(camera, glm::vec3(zoom_, zoom_, 1.0f));
 	
@@ -181,6 +183,10 @@ void OpenGLRenderer::SetZoom(float zoom)
 
 Vector2 OpenGLRenderer::WorldToScreen(Vector2 worldPosition)
 {
-	//TODO maybe the other way arround
 	return worldPosition - Vector2(cameraPosition_.x, cameraPosition_.y);
+}
+
+Vector2 OpenGLRenderer::ScreenToWorld(Vector2 screenPosition)
+{
+	return screenPosition + Vector2(cameraPosition_.x, cameraPosition_.y);
 }

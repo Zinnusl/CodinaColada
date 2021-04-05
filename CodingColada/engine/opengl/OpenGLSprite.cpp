@@ -44,15 +44,24 @@ void OpenGLSprite::Draw(Engine& engine, GameObject& gameobject, float subframe, 
 
     // prepare transformations
     this->shader_.Use();
+    /*
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(position, 0.0f));
-
     model = glm::translate(model, glm::vec3(0.5f * size_.x, 0.5f * size_.y, 0.0f));
     model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 0.0f, 1.0f));
     model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 1.0f, 0.0f));
     model = glm::translate(model, glm::vec3(-0.5f * size_.x, -0.5f * size_.y, 0.0f));
-
     model = glm::scale(model, glm::vec3(size_, 1.0f));
+    */
+
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(gameobject.GetDrawPosition(subframe).GetX() + size_.x / 2,
+        gameobject.GetDrawPosition(subframe).GetY() + size_.y / 2, 0.0f));
+
+    model = glm::translate(model, glm::vec3(0.5f * size_.x, 0.5f * size_.y, 0.0f));
+    //model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::translate(model, glm::vec3(-0.5f * size_.x, -0.5f * size_.y, 0.0f));
+    model = glm::scale(model, glm::vec3(size_.x, size_.y, 1.0f));
 
     this->shader_.SetMatrix4("model", model);
     this->shader_.SetVector4f("spriteColor", glm::vec4(color_.r_, color_.g_, color_.b_, color_.a_));

@@ -47,7 +47,7 @@ void ServerApp::run()
 	engine_->GetInput().RegisterWindow(window);
 
 	auto gameManager = std::make_unique<GameManager>();
-	auto grid = std::make_unique<Grid>(64);
+	auto grid = std::make_unique<GameObject>(Vector2(0,0));
 	grid->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(windowSize, Color(0, 0, 1, 0.1), &OpenGLRenderer::shaders_["grid"])));
 
 	Vector2 paddleSize = { 20, 200 };

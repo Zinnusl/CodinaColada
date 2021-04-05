@@ -38,13 +38,20 @@ void HoverTile::OnDraw(float subframe, float deltaTime)
 	GameObject::OnDraw(subframe, deltaTime);
 
 	//TODO an object like this should probably not be smooth moved (this movement is dependend on physic ticks.. really dont want this here)
-	Vector2 mousePos = engine_->GetInput().GetMousePosition();
+	Vector2 mousePos = engine_->GetRenderer().ScreenToWorld(engine_->GetInput().GetMousePosition());
+
 	//TODO really shouldnt need to substract screen resolution.. check coordinate systems
+	
 	float halfScreenHeight = engine_->GetRenderer().GetWindow().GetResolution().GetY() / 2;
 	float delta = mousePos.GetY() - halfScreenHeight;
 	float newPosY = mousePos.GetY() - delta * 2;
 	mousePos.SetY(newPosY - fmod(newPosY, grid_.GetCellSize()));
-
 	mousePos.SetX(mousePos.GetX() - fmod(mousePos.GetX(), grid_.GetCellSize()));
+	
+	/*
+	Vector2 mouseWorld = engine_->GetRenderer().ScreenToWorld(mousePos);
+	mouseWorld.SetX(mouseWorld.GetX() - fmod(mouseWorld.GetX(), grid_.GetCellSize()));
+	mouseWorld.SetY(mouseWorld.GetY() - fmod(mouseWorld.GetY(), grid_.GetCellSize()));
+	*/
 	currentPosition_ = mousePos;
 }

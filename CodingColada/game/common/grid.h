@@ -57,7 +57,7 @@ class Grid : public GameObject
 
 public:
 	Grid() = delete;
-	Grid(int x, int y, int32_t cellSizePixel);
+	Grid(int x, int y, int32_t cellSize, Vector2 position = {0, 0});
 
 	void OnStart() override;
 	void OnPhysicsUpdate(float deltaTime) override;
