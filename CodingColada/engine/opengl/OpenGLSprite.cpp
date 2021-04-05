@@ -59,7 +59,11 @@ void OpenGLSprite::Draw(Engine& engine, GameObject& gameobject, float subframe, 
         gameobject.GetDrawPosition(subframe).GetY() + size_.y / 2, 0.0f));
 
     model = glm::translate(model, glm::vec3(0.5f * size_.x, 0.5f * size_.y, 0.0f));
-    //model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 0.0f, 1.0f));
+
+    //TODO we have to rotate twice to dispaly the sprite correctly.. why?
+    model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 1.0f, 0.0f));
+
     model = glm::translate(model, glm::vec3(-0.5f * size_.x, -0.5f * size_.y, 0.0f));
     model = glm::scale(model, glm::vec3(size_.x, size_.y, 1.0f));
 

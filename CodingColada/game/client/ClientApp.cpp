@@ -53,21 +53,21 @@ int main()
 		[&](OpenGLShader& shader) {
 		//Draw a grid with a cellsize of 10 game units
 		int test = engine->GetRenderer().WorldToScreen(Vector2(10, 0)).GetX() - engine->GetRenderer().WorldToScreen(Vector2(0, 0)).GetX();
-		shader.SetInteger("cellPixelSize", test);
+		printf("TEST %d\n", test);
+		shader.SetInteger("cellPixelSize", test-2);
 	});
 	renderer->LoadShader("hover", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\shaders\\hover.frag");
 
 	auto gameManager = std::make_unique<GameManager>();
 
 	auto testCube = std::make_unique<GameObject>(Vector2{ 0, 0 });
-	testCube->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ 100,100 }, Color(0, 0, 1, 1))));
+	testCube->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ 10,10 }, Color(0, 0, 1, 1))));
 
-
-	auto testCube1 = std::make_unique<GameObject>(Vector2{ 10,10 });
+	auto testCube1 = std::make_unique<GameObject>(Vector2{ 30,0 });
 	testCube1->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ 10,10 }, Color(0, 0, 1, 1))));
 
-	auto testCube2 = std::make_unique<GameObject>(Vector2{ 20,20 });
-	testCube2->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ 10,10 }, Color(0, 0, 1, 1))));
+	auto testCube2 = std::make_unique<GameObject>(Vector2{ 10,10 });
+	testCube2->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ 20,20 }, Color(0, 0, 1, 1))));
 
 	auto testSprite60x60 = std::make_unique<GameObject>(Vector2{ 30,30 });
 	testSprite60x60->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(10, 10), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["test_sprite_60x60"])));
@@ -80,8 +80,8 @@ int main()
 	//auto build_grid = std::make_unique<Grid>(8, 8, 64, Vector2{ 100,100 });
 	//build_grid->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ 8*64, 8*64 }, Color(1, 0, 0, 0.1))));
 
-	auto engine_debug_grid = std::make_unique<GameObject>(Vector2(0, 0));
-	engine_debug_grid->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ 2000000, 2000000}, Color(0, 1, 0, 0.08), &OpenGLRenderer::shaders_["grid"])));
+	auto engine_debug_grid = std::make_unique<GameObject>(Vector2(-1000000, -1000000));
+	engine_debug_grid->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{2000000, 2000000}, Color(0, 1, 0, 0.08), &OpenGLRenderer::shaders_["grid"])));
 
 	Vector2 paddleSize = { 20, 200 };
 	auto paddle1 = std::make_unique<Paddle>(Vector2(40, 400));
@@ -121,17 +121,18 @@ int main()
 	ball5->AddComponent(std::make_unique<AnimatedSpriteComponent>(melonAnimation, 100000.0f));
 
 
+	engine->AddGameObject(std::move(engine_debug_grid));
 	engine->AddGameObject(std::move(gameManager));
 	engine->AddGameObject(std::move(cameraManager));
-	engine->AddGameObject(std::move(engine_debug_grid));
+
 	//engine->AddGameObject(std::move(build_grid));
 	engine->AddGameObject(std::move(paddle1));
 	engine->AddGameObject(std::move(paddle2));
 	engine->AddGameObject(std::move(ball));
 
 	engine->AddGameObject(std::move(testCube));
-	//engine->AddGameObject(std::move(testCube1));
-	//engine->AddGameObject(std::move(testCube2));
+	engine->AddGameObject(std::move(testCube1));
+	engine->AddGameObject(std::move(testCube2));
 	
 	//engine->AddGameObject(std::move(testSprite60x60));
 	//engine->AddGameObject(std::move(testSprite60x60_2));
@@ -141,7 +142,6 @@ int main()
 	engine->AddGameObject(std::move(ball3));
 	engine->AddGameObject(std::move(ball4));
 	engine->AddGameObject(std::move(ball5));
-	
 
 	engine->StartGame();
 

@@ -6,15 +6,10 @@ uniform float time;
 uniform int cellPixelSize;
 uniform float zoom;
 
-
 void main() 
 {
-	if (mod(gl_FragCoord.x, cellPixelSize * zoom) < 1.0 || mod(gl_FragCoord.y, cellPixelSize * zoom) < 1.0)
+   	if (mod(gl_FragCoord.x +1.f, cellPixelSize * zoom) <= 2.0 || mod(gl_FragCoord.y +1.f, cellPixelSize * zoom) <= 2.0)
 	{
 		gl_FragColor = color;
-	}
-	else 
-	{
-		discard;
 	}
 }
