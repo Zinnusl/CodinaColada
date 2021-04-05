@@ -116,8 +116,9 @@ void OpenGLRenderer::BeginFrame()
 	glm::mat4 camera(1.0f);
 
 	//TODO Problem. We actually want to move the camera in world space. It seems the movement here is in [-1, 1] space. INVESTIGATE.
-	camera = glm::translate(camera, glm::vec3(cameraPosition_, 0.f));
 	camera = glm::scale(camera, glm::vec3(zoom_, zoom_, 1.0f));
+	camera = glm::translate(camera, glm::vec3(cameraPosition_, 0.f));
+	
 	
 	//model = glm::translate(model, glm::vec3(gameobject.GetDrawPosition(subframe).GetX() + size_.GetX() / 2, gameobject.GetDrawPosition(subframe).GetY() + size_.GetY() / 2, 0.0f));
 	//model = glm::scale(model, glm::vec3(size_.GetX(), size_.GetY(), 1.0f));

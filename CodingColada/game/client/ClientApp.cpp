@@ -48,7 +48,7 @@ int main()
 	renderer->LoadTexture("hovertile", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\Tile_Hover.png");
 	renderer->LoadTexture("tower_canon", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\canon_tower.png");
 
-	renderer->LoadShader("grid",	"..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert",
+	renderer->LoadShader("grid",	"..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\grid.vert",
 									"..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\grid.frag", 
 		[&](OpenGLShader& shader) {
 		//Draw a grid with a cellsize of 10 game units
