@@ -17,7 +17,6 @@ unsigned int OpenGLRectangleShape::VAO;
 OpenGLRectangleShape::OpenGLRectangleShape(Vector2 size, Color color)
 	: RectangleShape(size, color), customShader_(nullptr)
 {
-
 }
 
 OpenGLRectangleShape::OpenGLRectangleShape(Vector2 size, Color color, OpenGLShader* customShader)
@@ -27,15 +26,6 @@ OpenGLRectangleShape::OpenGLRectangleShape(Vector2 size, Color color, OpenGLShad
 
 void OpenGLRectangleShape::Draw(Engine& engine, GameObject& gameobject, float subframe, float deltaTime)
 {
-	//wireframe mode
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-	/*
-	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::scale(model, glm::vec3(size_.GetX(), size_.GetY(), 1.0f));
-	model = glm::translate(model, glm::vec3(gameobject.GetDrawPosition(subframe).GetX(), gameobject.GetDrawPosition(subframe).GetY(), 0.0f));
-	*/
-
 	glm::mat4 model = glm::mat4(1.0f);
 	model = glm::translate(model, glm::vec3(gameobject.GetDrawPosition(subframe).GetX() + size_.GetX() / 2,
 		gameobject.GetDrawPosition(subframe).GetY() + size_.GetY() / 2, 0.0f));
@@ -45,6 +35,8 @@ void OpenGLRectangleShape::Draw(Engine& engine, GameObject& gameobject, float su
 	model = glm::translate(model, glm::vec3(-0.5f * size_.GetX(), -0.5f * size_.GetY(), 0.0f));
 	model = glm::scale(model, glm::vec3(size_.GetX(), size_.GetY(), 1.0f));
 
+	//TODO we throw away like 300fps with these 2 lines. Due to changing the shader for every object. Solving this requires redisign. 
+	//We have to do batch rendering (first draw all using shader "rectangle", then all using "sprite" etc.)
 	if (customShader_)
 	{
 		customShader_->Use();
@@ -59,19 +51,12 @@ void OpenGLRectangleShape::Draw(Engine& engine, GameObject& gameobject, float su
 		defaultShader.SetVector4f("color", glm::vec4(color_.r_, color_.g_, color_.b_, color_.a_));
 		defaultShader.SetMatrix4("model", model);
 	}
-	//TODO we throw away like 300fps with these 2 lines. lmao. solving this requires redisgn. We have to do batch rendering (first draw all using shader "rectangle", then all using "sprite" etc.)
-
-
-	glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-	//glDrawArrays(GL_TRIANGLES, 0, 4);
-	//glDrawArrays(GL_LINES, 0, 4);
-	//glDrawElements(GL_LINES, 6, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
 void OpenGLRectangleShape::InitRenderData()
-{	// set up vertex data (and buffer(s)) and configure vertex attributes
-	// ------------------------------------------------------------------
+{	
 	float vertices[] = {
 		 -0.5f,  0.5f,  // top left  
 		  0.5f,  0.5f,  // top right  

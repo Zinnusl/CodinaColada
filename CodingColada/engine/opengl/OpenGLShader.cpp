@@ -9,7 +9,6 @@
 #include <fstream>
 
 
-
 OpenGLShader& OpenGLShader::Use()
 {
 	glUseProgram(this->ID);

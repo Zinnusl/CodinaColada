@@ -20,7 +20,7 @@ void Paddle::OnPhysicsUpdate(float deltaTime)
 	#define 	GLFW_KEY_DOWN   264
 	#define 	GLFW_KEY_UP   265
 
-	const int maxMove = engine_->GetRenderer().GetWindow().GetResolution().GetY() - 200;
+	const int maxMove = engine_->GetRenderer().GetResolution().GetY() - 200;
 	if (GameObject::engine_->GetInput().GetKey(GLFW_KEY_DOWN))
 	{
 		float yPos = currentPosition_.GetY();

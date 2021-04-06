@@ -10,8 +10,6 @@ protected:
 	GameObject* gameobject_;
 
 	std::shared_ptr<ISprite> sprite_;
-
-
 public:
 	SpriteComponent(std::unique_ptr<ISprite> sprite);
 

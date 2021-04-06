@@ -13,7 +13,7 @@ class RigidbodyComponent;
 /**
 * When overriding any of the functions you need to call GameObject::OverridenFunction in your override!
 **/
-class GameObject
+class GameObject : std::enable_shared_from_this<GameObject>
 {
 	Vector2 previousPosition_;
 

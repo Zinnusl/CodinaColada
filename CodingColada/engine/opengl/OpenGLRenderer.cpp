@@ -15,6 +15,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 
+
 std::unordered_map<std::string, OpenGLShader> OpenGLRenderer::shaders_;
 std::unordered_map<std::string, OpenGLTexture2D> OpenGLRenderer::textures_;
 
@@ -37,6 +38,7 @@ OpenGLRenderer::~OpenGLRenderer()
 	glfwTerminate();
 }
 
+//Loads a shader from .vert and .frag file
 void OpenGLRenderer::LoadShader(std::string name, std::string vertexShaderPath, std::string fragmentShaderPath, std::function<void(OpenGLShader&)> onUseCallback)
 {
 	OpenGLShader shader = OpenGLShader::CompileFromFile(vertexShaderPath.c_str(), fragmentShaderPath.c_str(), nullptr, onUseCallback);
@@ -57,11 +59,6 @@ void* OpenGLRenderer::CreateWindow(int xResolution, int yResolution)
 	auto primaryMonitor = glfwGetPrimaryMonitor();
 	glfwGetMonitorWorkarea(primaryMonitor, &xPos, &yPos, &width, &height);
 	window_ = glfwCreateWindow(xResolution, yResolution, "GLFWWindow", nullptr, nullptr);
-	//window_ = glfwCreateWindow(width, height, "GLFWWindow", glfwGetPrimaryMonitor(), nullptr);
-	//window_ = glfwCreateWindow(width, height, "GLFWWindow", primaryMonitor, nullptr);
-
-	//window_ = glfwCreateWindow(width, height, "GLFWWindow", glfwGetPrimaryMonitor(), nullptr);
-	//glfwSetWindowMonitor(window_, nullptr, 0, 0, width, height, GLFW_DONT_CARE);
 
 	glfwMakeContextCurrent(window_);
 
@@ -86,8 +83,12 @@ void* OpenGLRenderer::CreateWindow(int xResolution, int yResolution)
 	const char* glsl_version = "#version 130";
 	ImGui_ImplOpenGL3_Init(glsl_version);
 
+	ingameUnitOnOneScreen_ = glm::vec2(1920, 1080);
+	//TODO. The question here is: do I want the same things to be visible at any resolution? (probably). Therefore I woul need to hardcode the number.
+	// 	   Or do I want to higher resolution to see more:
+	//		projection_ = glm::ortho(0.0f, static_cast<float>(xResolution), 0.0f, static_cast<float>(yResolution), -1.f, 1.f);
 	//The projection is used to normalize coordinates to the [-1, 1] range that OpenGL uses. This means that at any 16:9 ratio square will look like a square
-	projection_ = glm::ortho(0.0f, static_cast<float>(1600), 0.0f, static_cast<float>(900), -1.f, 1.f);
+	projection_ = glm::ortho(0.0f, static_cast<float>(ingameUnitOnOneScreen_.x), 0.0f, static_cast<float>(ingameUnitOnOneScreen_.y), -1.f, 1.f);
 
 	OpenGLShader defaultShader = OpenGLShader::CompileFromFile("..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.frag", nullptr);
 	defaultShader.SetMatrix4("projection", projection_, true);
@@ -104,34 +105,30 @@ void* OpenGLRenderer::CreateWindow(int xResolution, int yResolution)
 
 void OpenGLRenderer::BeginFrame()
 {
-	// Start the Dear ImGui frame
+	//Start ImGui frame
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
-	int width;
-	int height;
-	glfwGetWindowSize(window_, &width, &height);
+	glfwGetWindowSize(window_, &width_, &height_);
 
 	glm::mat4 camera(1.0f);
 
 	//TODO Problem. We actually want to move the camera in world space. It seems the movement here is in [-1, 1] space. INVESTIGATE.
 	camera = glm::scale(camera, glm::vec3(zoom_, zoom_, 1.0f));
 	camera = glm::translate(camera, glm::vec3(cameraPosition_, 0.f));
-	
-	
-	//model = glm::translate(model, glm::vec3(gameobject.GetDrawPosition(subframe).GetX() + size_.GetX() / 2, gameobject.GetDrawPosition(subframe).GetY() + size_.GetY() / 2, 0.0f));
-	//model = glm::scale(model, glm::vec3(size_.GetX(), size_.GetY(), 1.0f));
 
+	auto time = glfwGetTime();
+
+	//Set common uniforms for all shaders
 	for (auto& shader : shaders_)
 	{
 		shader.second.Use();
-		shader.second.SetFloat("time", glfwGetTime());
-		shader.second.SetVector2f("screenresolution", glm::vec2(width, height));
+		shader.second.SetFloat("time", time);
+		shader.second.SetVector2f("screenresolution", glm::vec2(width_, height_));
 		shader.second.SetMatrix4("camera", camera);
 		shader.second.SetFloat("zoom", zoom_);
 	}
-
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
@@ -143,23 +140,17 @@ void OpenGLRenderer::Draw(GameObject& gameobject, float subframe, float deltaTim
 
 void OpenGLRenderer::EndFrame()
 {
-	//imgui Rendering
 	ImGui::Render();
-	int display_w, display_h;
-	glfwGetFramebufferSize(window_, &display_w, &display_h);
-	//glViewport(0, 0, display_w, display_h);
-	//glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
-	//glClear(GL_COLOR_BUFFER_BIT);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	glfwSwapBuffers(window_);
 }
 
-CodinaColadaWindow OpenGLRenderer::GetWindow()
+Vector2 OpenGLRenderer::GetResolution()
 {
 	int display_w, display_h;
 	glfwGetFramebufferSize(window_, &display_w, &display_h);
-	return CodinaColadaWindow(Vector2(display_w, display_h));
+	return Vector2(display_w, display_h);
 }
 
 void OpenGLRenderer::SetCameraPosition(Vector2 position)
@@ -184,10 +175,22 @@ void OpenGLRenderer::SetZoom(float zoom)
 
 Vector2 OpenGLRenderer::WorldToScreen(Vector2 worldPosition)
 {
+	//TODO result should be a pixel position
+
 	return worldPosition - Vector2(cameraPosition_.x, cameraPosition_.y);
 }
 
 Vector2 OpenGLRenderer::ScreenToWorld(Vector2 screenPosition)
 {
-	return screenPosition + Vector2(cameraPosition_.x, cameraPosition_.y);
+	Vector2 windowResolution = GetResolution();
+
+	//Calculate how many pixels one EngineUnit (EU) is
+	glm::vec2 scaling = glm::vec2(windowResolution.GetX() / ingameUnitOnOneScreen_.x , windowResolution.GetY() / ingameUnitOnOneScreen_.y);
+	
+	//Convert the screen position to world position
+	Vector2 worldPosition = Vector2(screenPosition.GetX() * scaling.x / zoom_, screenPosition.GetY() * scaling.y / zoom_);
+	
+	//Account for the posion of the camera
+	Vector2 worldPosDelta = worldPosition - Vector2(cameraPosition_.x, cameraPosition_.y);
+	return Vector2(worldPosDelta.GetX() , worldPosDelta.GetY());
 }

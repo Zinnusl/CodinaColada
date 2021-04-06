@@ -26,8 +26,6 @@ public:
 
 	// Inherited via IInput
 	virtual Vector2 GetMousePosition() override;
-
-	// Inherited via IInput
 	virtual bool GetMouseDown(int key) override;
 	virtual bool GetMouse(int key) override;
 	virtual int GetScrollWheel() override;

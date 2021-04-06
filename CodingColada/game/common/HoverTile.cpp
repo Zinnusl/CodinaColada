@@ -42,7 +42,7 @@ void HoverTile::OnDraw(float subframe, float deltaTime)
 
 	//TODO really shouldnt need to substract screen resolution.. check coordinate systems
 	
-	float halfScreenHeight = engine_->GetRenderer().GetWindow().GetResolution().GetY() / 2;
+	float halfScreenHeight = engine_->GetRenderer().GetResolution().GetY() / 2;
 	float delta = mousePos.GetY() - halfScreenHeight;
 	float newPosY = mousePos.GetY() - delta * 2;
 	mousePos.SetY(newPosY - fmod(newPosY, grid_.GetCellSize()));

@@ -11,7 +11,6 @@
 #include <string> 
 
 
-
 Engine::Engine(std::shared_ptr<IRenderer> renderer, std::unique_ptr<IInput> input)
 	: renderer_(std::move(renderer)), input_(std::move(input))
 {
@@ -23,7 +22,9 @@ void Engine::StartGame()
 	auto currentFrame = std::chrono::steady_clock::now();
 	auto lastFrame = std::chrono::steady_clock::now();
 
+	//subframes are interpolated between physic ticks
 	float subframe = 0;
+
 	//physics
 	int32_t ticksPerSecond = 64;
 	int32_t microSecondsPerTick = 0;
@@ -93,7 +94,7 @@ void Engine::StartGame()
 				subframe = subframe - 1.f;
 			}
 		}
-		//printf("subframe %f\n", subframe);
+
 		//Draw 
 		renderer_->BeginFrame();
 		for (const auto& gameobject : gameobjects_)
@@ -126,7 +127,6 @@ void Engine::StartGame()
 			ImGui::End();
 		}
 		renderer_->EndFrame();
-
 		lastFrame = currentFrame;
 	}
 }

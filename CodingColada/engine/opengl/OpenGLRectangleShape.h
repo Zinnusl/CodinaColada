@@ -10,8 +10,7 @@ class OpenGLRectangleShape : public RectangleShape
 {
 	static unsigned int VAO;
 
-	//TODO this should not be a raw pointer
-	OpenGLShader* customShader_;
+	std::shared_ptr<OpenGLShader> customShader_;
 
 public:
 	OpenGLRectangleShape(Vector2 size, Color color);

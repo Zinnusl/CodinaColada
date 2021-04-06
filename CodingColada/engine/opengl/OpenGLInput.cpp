@@ -85,7 +85,13 @@ Vector2 OpenGLInput::GetMousePosition()
 {
 	double xpos, ypos;
 	glfwGetCursorPos(window_, &xpos, &ypos);
-	return Vector2(xpos, ypos);
+
+	int width;
+	int height;
+	glfwGetWindowSize(window_, &width, &height);
+
+	//TODO it seems to mouse position is not capped to the window but relative to it.. therefore pos it can be negative
+	return Vector2(xpos, height-ypos);
 }
 
 bool OpenGLInput::GetMouseDown(int key)

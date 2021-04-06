@@ -20,6 +20,7 @@ void GameObject::OnStart()
 {
 }
 
+//Called on every Physics tick. This allows to run expensive calculations frequently but not every frame.
 void GameObject::OnPhysicsUpdate(float deltaTime)
 {
 	previousPosition_ = currentPosition_;

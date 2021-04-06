@@ -3,7 +3,7 @@
 uniform vec4 color;
 uniform vec2 screenresolution;
 uniform float time;
-uniform int cellPixelSize;
+uniform float cellPixelSize;
 uniform float zoom;
 
 void main() 

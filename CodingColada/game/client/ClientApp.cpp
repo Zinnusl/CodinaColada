@@ -28,8 +28,10 @@ int main()
 	std::unique_ptr<OpenGLInput> input = std::make_unique<OpenGLInput>();
 	std::unique_ptr<Engine> engine = std::make_unique<Engine>(renderer, std::move(input));
 
-	const Vector2 windowSize = { 1280, 720};
-	//const Vector2 windowSize = { 1920, 1080 };
+	//const Vector2 windowSize = { 1280, 720};
+	//const Vector2 windowSize = { 1600, 1000};
+	const Vector2 windowSize = { 1920, 1080 };
+	//const Vector2 windowSize = { 2000, 1000 };
 	//const Vector2 windowSize = { 2560, 1440 };
 	
 	void* window = engine->GetRenderer().CreateWindow(windowSize.GetX(), windowSize.GetY());
@@ -52,9 +54,10 @@ int main()
 									"..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\grid.frag", 
 		[&](OpenGLShader& shader) {
 		//Draw a grid with a cellsize of 10 game units
-		int test = engine->GetRenderer().WorldToScreen(Vector2(10, 0)).GetX() - engine->GetRenderer().WorldToScreen(Vector2(0, 0)).GetX();
-		printf("TEST %d\n", test);
-		shader.SetInteger("cellPixelSize", test-2);
+		float test = engine->GetRenderer().WorldToScreen(Vector2(10, 0)).GetX() - engine->GetRenderer().WorldToScreen(Vector2(0, 0)).GetX();
+		//printf("Test %f\n", test);
+		//shader.SetInteger("cellPixelSize", test-2);
+		shader.SetFloat("cellPixelSize", test);
 	});
 	renderer->LoadShader("hover", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\shaders\\hover.frag");
 
@@ -69,10 +72,10 @@ int main()
 	auto testCube2 = std::make_unique<GameObject>(Vector2{ 10,10 });
 	testCube2->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ 20,20 }, Color(0, 0, 1, 1))));
 
-	auto testSprite60x60 = std::make_unique<GameObject>(Vector2{ 30,30 });
+	auto testSprite60x60 = std::make_unique<GameObject>(Vector2{ 0,0 });
 	testSprite60x60->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(10, 10), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["test_sprite_60x60"])));
 
-	auto testSprite60x60_2 = std::make_unique<GameObject>(Vector2{ 40,40 });
+	auto testSprite60x60_2 = std::make_unique<GameObject>(Vector2{ 10,10 });
 	testSprite60x60_2->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(10, 10), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["test_sprite_60x60"])));
 
 	auto cameraManager = std::make_unique<CameraManager>();
@@ -97,10 +100,6 @@ int main()
 	//ball->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(64, 64), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["watermelon"])));
 	ball->AddComponent(std::make_unique<RigidbodyComponent>(Vector2(64)));
 
-	auto ball2 = std::make_unique<Ball>(Vector2(1000, 450), Vector2(0, 0));
-	auto ball3 = std::make_unique<Ball>(Vector2(2000, 450), Vector2(0, 0));
-	auto ball4 = std::make_unique<Ball>(Vector2(3000, 450), Vector2(0, 0));
-	auto ball5 = std::make_unique<Ball>(Vector2(4000, 450), Vector2(0, 0));
 
 	std::vector<std::shared_ptr<ISprite>> melonAnimation;
 	for (int i = 0; i < 10; i++) {
@@ -115,10 +114,6 @@ int main()
 	melonAnimation.push_back(std::make_unique<OpenGLSprite>(glm::vec2(64, 64), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["watermelon8"]));
 	
 	ball->AddComponent(std::make_unique<AnimatedSpriteComponent>(melonAnimation, 100000.0f));
-	ball2->AddComponent(std::make_unique<AnimatedSpriteComponent>(melonAnimation, 100000.0f));
-	ball3->AddComponent(std::make_unique<AnimatedSpriteComponent>(melonAnimation, 100000.0f));
-	ball4->AddComponent(std::make_unique<AnimatedSpriteComponent>(melonAnimation, 100000.0f));
-	ball5->AddComponent(std::make_unique<AnimatedSpriteComponent>(melonAnimation, 100000.0f));
 
 
 	engine->AddGameObject(std::move(engine_debug_grid));
@@ -134,14 +129,9 @@ int main()
 	engine->AddGameObject(std::move(testCube1));
 	engine->AddGameObject(std::move(testCube2));
 	
-	//engine->AddGameObject(std::move(testSprite60x60));
-	//engine->AddGameObject(std::move(testSprite60x60_2));
+	engine->AddGameObject(std::move(testSprite60x60));
+	engine->AddGameObject(std::move(testSprite60x60_2));
 
-	
-	engine->AddGameObject(std::move(ball2));
-	engine->AddGameObject(std::move(ball3));
-	engine->AddGameObject(std::move(ball4));
-	engine->AddGameObject(std::move(ball5));
 
 	engine->StartGame();
 
