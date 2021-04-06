@@ -1,7 +1,9 @@
 #pragma once
 
 #include <vector>
+
 #include "../IInput.h"
+#include "../Vector2.h"
 
 class ConsoleInput : public IInput
 {
@@ -23,8 +25,30 @@ public:
 	}
 	bool GetKey(int key) override
 	{
+		return false;	
+	}
+
+
+
+
+	bool GetMouseDown(int key)
+	{
 		return false;
 	}
+	bool GetMouse(int key)
+	{
+		return false;
+	}
+	Vector2 GetMousePosition()
+	{
+		return Vector2(0.f);
+	}
+
+
+
+
+
+
 	void AddHandler(int key, handlerCallbackType callback) override
 	{}
 };

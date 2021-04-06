@@ -3,12 +3,9 @@
 #include "OpenGLShader.h"
 #include "OpenGLTexture2D.h"
 
-#include "../ISprite.h"
+#include "../IShape.h"
 
-#include <string>
-
-
-class OpenGLSprite : public ISprite
+class OpenGLSprite : public IShape
 {
 public:
     OpenGLSprite() = delete;
@@ -21,6 +18,9 @@ private:
     unsigned int quadVAO_;
 
     void initRenderData();
-
+    void OnClick(Vector2 clickPosition) override
+    {}
+    void RegisterClickHandler(handlerCallbackType callback)
+    {}
     void Draw(IEngine& engine, GameObject& gameobject, float subframe) override;
 };

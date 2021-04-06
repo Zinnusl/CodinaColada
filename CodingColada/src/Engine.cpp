@@ -38,7 +38,7 @@ void Engine::StartGame()
 
 		if (!pauseGame)
 		{
-			timeSinceLastPhysicsTick += deltaTime;
+			timeSinceLastPhysicsTick += (int32_t)deltaTime;
 
 			//Since the physics simulation is not tied to the framerate, we need to interpolate between the old and the new positions.
 			//The t value for interpolation is the subframe.
@@ -51,7 +51,7 @@ void Engine::StartGame()
 				//run physics simulation
 				for (const auto& gameobject : gameobjects_)
 				{
-					gameobject.second->OnUpdate(timeSinceLastPhysicsTick);
+					gameobject.second->OnUpdate((float)timeSinceLastPhysicsTick);
 					//gameobject.second->OnUpdate(microSecondsPerTick);
 				}
 				timeSinceLastPhysicsTick = 0;

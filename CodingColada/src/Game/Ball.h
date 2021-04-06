@@ -2,22 +2,25 @@
 
 #include "../GameObject.h"
 
+namespace di = boost::di;
+
 class Ball : public GameObject
 {
 	Vector2 velocity_;
+
 public:
-	Ball(IEngine& engine, Vector2 position, Vector2 velocity = { 0.0005,0.0005 })
+	typedef di::extension::ifactory<Ball, Vector2, Vector2> ifactory_t;
+
+	Ball(IEngine& engine, Vector2 position, Vector2 velocity)
 		: GameObject(engine, position), velocity_(velocity)
 	{
 	}
 
 	void OnUpdate(float deltaTime) override
 	{
-		previousPosition_ = currentPosition_;
-
 		static float runtime = 0;
 		runtime += deltaTime;
-		Vector2 newPos = currentPosition_ + velocity_ * deltaTime;
+		Vector2 newPos = position_ + velocity_ * deltaTime;
 
 		if (newPos.GetY() <= 0)
 		{
@@ -46,7 +49,7 @@ public:
 			newPos.SetX(1600);
 			velocity_.SetX(-velocity_.GetX());
 		}
-		currentPosition_ = newPos;
+		position_ = newPos;
 	}
 
 	void OnCollision(RigidbodyComponent& other)

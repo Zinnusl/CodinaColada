@@ -14,10 +14,6 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 
-std::unordered_map<std::string, OpenGLShader> OpenGLRenderer::shaders_;
-std::unordered_map<std::string, OpenGLTexture2D> OpenGLRenderer::textures_;
-
-
 OpenGLRenderer::OpenGLRenderer()
 	: window_(nullptr)
 {
@@ -127,7 +123,7 @@ void OpenGLRenderer::BeginFrame()
 	for (auto& shader : shaders_)
 	{
 		shader.second.Use();
-		shader.second.SetFloat("time", glfwGetTime());
+		shader.second.SetFloat("time", (float)glfwGetTime());
 		shader.second.SetVector2f("screenresolution", glm::vec2(1600, 900));
 	}
 
@@ -135,9 +131,8 @@ void OpenGLRenderer::BeginFrame()
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void OpenGLRenderer::Draw(GameObject& gameobject, float subframe)
+void OpenGLRenderer::Draw()
 {
-	gameobject.OnDraw(subframe);
 }
 
 void OpenGLRenderer::EndFrame()

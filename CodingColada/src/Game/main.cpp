@@ -7,6 +7,8 @@
 
 #include "App.h"
 #include "../Engine.h"
+#include "Ball.h"
+#include "Paddle.h"
 
 #include "../ConsoleRenderer/ConsoleRenderer.h"
 #include "../ConsoleRenderer/ConsoleInput.h"
@@ -62,7 +64,12 @@ int main(int argc, char* argv[])
 		//di::bind<IInput>().in(di::singleton).to<OpenGLInput>(),
 		di::bind<IRenderer>().in(di::singleton).to<ConsoleRenderer>(),
 		di::bind<IInput>().in(di::singleton).to<ConsoleInput>(),
-		di::bind<IEngine>().in(di::singleton).to<Engine>()
+		di::bind<IEngine>().in(di::singleton).to<Engine>(),
+
+		//di::bind<Ball::ifactory_t>.to<di::extension::factory<Ball>>(),
+		//di::bind<Paddle::ifactory_t>.to<di::extension::factory<Paddle>>()
+		di::bind<Ball::ifactory_t>().to(di::extension::factory<Ball>{}),
+		di::bind<Paddle::ifactory_t>().to(di::extension::factory<Paddle>{})
 	);
 
 	auto app = injector.create<std::unique_ptr<App>>();

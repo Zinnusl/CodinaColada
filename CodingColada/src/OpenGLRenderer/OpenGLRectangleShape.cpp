@@ -71,7 +71,8 @@ void OpenGLRectangleShape::Draw(IEngine& engine, GameObject& gameobject, float s
 	model = glm::translate(model, glm::vec3(gameobject.GetDrawPosition(subframe).GetX() + offset_.GetX() + size_.GetX() / 2, gameobject.GetDrawPosition(subframe).GetY() + offset_.GetY() + size_.GetY() / 2, 0.0f));
 	model = glm::scale(model, glm::vec3(size_.GetX(), size_.GetY(), 1.0f));
 
-	auto defaultShader = OpenGLRenderer::shaders_[std::string("default")];
+	auto& renderer = dynamic_cast<OpenGLRenderer&>(engine.GetRenderer());
+	auto defaultShader = renderer.GetShader("default");
 	defaultShader.Use();
 	defaultShader.SetVector4f("color", glm::vec4(color_.r_, color_.g_, color_.b_, color_.a_));
 	defaultShader.SetMatrix4("model", model);
@@ -79,17 +80,17 @@ void OpenGLRectangleShape::Draw(IEngine& engine, GameObject& gameobject, float s
 	if (engine.GetInput().GetKey(49))
 	{
 		//trippy shader
-		auto defaultShader = OpenGLRenderer::shaders_[std::string("dragon")];
+		auto defaultShader = renderer.GetShader("dragon");
 		defaultShader.SetMatrix4("model", model);
-		defaultShader.SetFloat("iTime", glfwGetTime());
+		defaultShader.SetFloat("iTime", (float)glfwGetTime());
 		defaultShader.SetVector2f("iResolution", glm::vec2(1600, 900));
 		defaultShader.Use();
 	}
 	else if (engine.GetInput().GetKey(50))
 	{
-		auto defaultShader = OpenGLRenderer::shaders_[std::string("water")];
+		auto defaultShader = renderer.GetShader("water");
 		defaultShader.SetMatrix4("model", model);
-		defaultShader.SetFloat("iTime", glfwGetTime());
+		defaultShader.SetFloat("iTime", (float)glfwGetTime());
 		defaultShader.SetVector2f("iResolution", glm::vec2(1600, 900));
 		Vector2 mousePosition = engine.GetInput().GetMousePosition();
 		defaultShader.SetVector2f("iMouse", glm::vec2(mousePosition.GetX(), mousePosition.GetY()));
@@ -97,9 +98,9 @@ void OpenGLRectangleShape::Draw(IEngine& engine, GameObject& gameobject, float s
 	}
 	else if (engine.GetInput().GetKey(51))
 	{
-		auto defaultShader = OpenGLRenderer::shaders_[std::string("glowcircle")];
+		auto defaultShader = renderer.GetShader("glowcircle");
 		defaultShader.SetMatrix4("model", model);
-		defaultShader.SetFloat("iTime", glfwGetTime());
+		defaultShader.SetFloat("iTime", (float)glfwGetTime());
 		defaultShader.SetVector2f("iResolution", glm::vec2(1600, 900));
 		Vector2 mousePosition = engine.GetInput().GetMousePosition();
 		defaultShader.SetVector2f("iMouse", glm::vec2(mousePosition.GetX(), mousePosition.GetY()));

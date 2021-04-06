@@ -6,8 +6,7 @@
 
 class OpenGLTexture2D
 {
-
-public:
+protected:
     unsigned int id_;
 
     unsigned int width_;
@@ -22,12 +21,12 @@ public:
     unsigned int filter_min_; // filtering mode if texture pixels < screen pixels
     unsigned int filter_max_; // filtering mode if texture pixels > screen pixels
 
+public:    
     OpenGLTexture2D();
 
     void Generate(unsigned int width, unsigned int height, unsigned char* data);
 
     void Bind() const;
-
 
     // loads (and generates) a texture from file
     static OpenGLTexture2D LoadTextureFromFile(const char* file, bool alpha);

@@ -4,6 +4,7 @@
 
 #include "IComponent.h"
 #include "IEngine.h"
+#include "RigidbodyComponent.h"
 
 #include <vector>
 #include <memory>

@@ -17,12 +17,10 @@ protected:
 	bool stopGame = false;
 	IRenderer& renderer_;
 	IInput& input_;
-
-	
+		
 	std::unordered_map<idType, std::unique_ptr<GameObject>> gameobjects_;
 
 public:
-
 	Engine(IRenderer& renderer, IInput& input);
 	~Engine() {}
 

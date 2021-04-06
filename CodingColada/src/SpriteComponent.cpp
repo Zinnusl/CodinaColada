@@ -3,8 +3,8 @@
 #include "SpriteComponent.h"
 
 
-SpriteComponent::SpriteComponent(std::unique_ptr<ISprite> sprite)
-	: sprite_(std::move(sprite))
+SpriteComponent::SpriteComponent(std::unique_ptr<IShape> sprite)
+	: sprite_(std::move(sprite)), gameobject_(nullptr)
 {
 }
 

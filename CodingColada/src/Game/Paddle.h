@@ -6,10 +6,15 @@
 #define 	GLFW_KEY_DOWN   264
 #define 	GLFW_KEY_UP   265
 
+namespace di = boost::di;
+
 class Paddle : public GameObject
 {
-	float speed = 0.4;
+	float speed = 0.4f;
+
 public:
+	typedef di::extension::ifactory<Paddle, Vector2> ifactory_t;
+
 	Paddle(IEngine& engine, Vector2 position)
 		: GameObject(engine, position)
 	{
