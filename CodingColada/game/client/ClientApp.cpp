@@ -28,9 +28,10 @@ int main()
 	std::unique_ptr<OpenGLInput> input = std::make_unique<OpenGLInput>();
 	std::unique_ptr<Engine> engine = std::make_unique<Engine>(renderer, std::move(input));
 
+	const Vector2 windowSize = { 400, 720 };
 	//const Vector2 windowSize = { 1280, 720};
 	//const Vector2 windowSize = { 1600, 1000};
-	const Vector2 windowSize = { 1920, 1080 };
+	//const Vector2 windowSize = { 1920, 1080 };
 	//const Vector2 windowSize = { 2000, 1000 };
 	//const Vector2 windowSize = { 2560, 1440 };
 	
@@ -53,11 +54,9 @@ int main()
 	renderer->LoadShader("grid",	"..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\grid.vert",
 									"..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\grid.frag", 
 		[&](OpenGLShader& shader) {
-		//Draw a grid with a cellsize of 10 game units
-		float test = engine->GetRenderer().WorldToScreen(Vector2(10, 0)).GetX() - engine->GetRenderer().WorldToScreen(Vector2(0, 0)).GetX();
-		//printf("Test %f\n", test);
-		//shader.SetInteger("cellPixelSize", test-2);
-		shader.SetFloat("cellPixelSize", test);
+		//Draw a grid with a cellsize of 10 EU
+		shader.SetFloat("cellPixelSizeX", engine->GetRenderer().WorldToScreen(Vector2(10, 0)).GetX() - engine->GetRenderer().WorldToScreen(Vector2(0, 0)).GetX());
+		shader.SetFloat("cellPixelSizeY", engine->GetRenderer().WorldToScreen(Vector2(0, 10)).GetY() - engine->GetRenderer().WorldToScreen(Vector2(0, 0)).GetY());
 	});
 	renderer->LoadShader("hover", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\shaders\\hover.frag");
 
@@ -91,7 +90,7 @@ int main()
 	paddle1->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(paddleSize, Color(0, 0, 1, 1))));
 	paddle1->AddComponent(std::make_unique<RigidbodyComponent>(paddleSize));
 
-	auto paddle2 = std::make_unique<Paddle>(Vector2(1540, 400));
+	auto paddle2 = std::make_unique<Paddle>(Vector2(1860, 400));
 	paddle2->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(paddleSize, Color(1, 0, 0, 1))));
 	paddle2->AddComponent(std::make_unique<RigidbodyComponent>(paddleSize));
 

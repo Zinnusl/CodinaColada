@@ -127,7 +127,6 @@ void OpenGLRenderer::BeginFrame()
 		shader.second.SetFloat("time", time);
 		shader.second.SetVector2f("screenresolution", glm::vec2(width_, height_));
 		shader.second.SetMatrix4("camera", camera);
-		shader.second.SetFloat("zoom", zoom_);
 	}
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -175,17 +174,21 @@ void OpenGLRenderer::SetZoom(float zoom)
 
 Vector2 OpenGLRenderer::WorldToScreen(Vector2 worldPosition)
 {
-	//TODO result should be a pixel position
-
-	return worldPosition - Vector2(cameraPosition_.x, cameraPosition_.y);
+	Vector2 windowResolution = GetResolution();
+	Vector2 worldPosDelta = worldPosition + Vector2(cameraPosition_.x, cameraPosition_.y);
+	glm::vec2 scaling = glm::vec2(windowResolution.GetX() / ingameUnitOnOneScreen_.x, windowResolution.GetY()/ ingameUnitOnOneScreen_.y);
+	Vector2 screenPos = Vector2(worldPosDelta.GetX() * scaling.x * zoom_, worldPosDelta.GetY() * scaling.y * zoom_);
+	return screenPos;
 }
 
+//Takes a position on the screen and converts it to a world postion. One example would be to locate the mousePosition in the world
+//Chanes to this will have to be reflected in the vertex shader.
 Vector2 OpenGLRenderer::ScreenToWorld(Vector2 screenPosition)
 {
 	Vector2 windowResolution = GetResolution();
 
 	//Calculate how many pixels one EngineUnit (EU) is
-	glm::vec2 scaling = glm::vec2(windowResolution.GetX() / ingameUnitOnOneScreen_.x , windowResolution.GetY() / ingameUnitOnOneScreen_.y);
+	glm::vec2 scaling = glm::vec2(ingameUnitOnOneScreen_.x / windowResolution.GetX(), ingameUnitOnOneScreen_.y / windowResolution.GetY());
 	
 	//Convert the screen position to world position
 	Vector2 worldPosition = Vector2(screenPosition.GetX() * scaling.x / zoom_, screenPosition.GetY() * scaling.y / zoom_);
