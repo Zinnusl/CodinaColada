@@ -29,15 +29,15 @@ int main()
 	std::unique_ptr<Engine> engine = std::make_unique<Engine>(renderer, std::move(input));
 
 	//const Vector2 windowSize = { 400, 720 };
-	const Vector2 windowSize = { 1280, 720};
+	//const Vector2 windowSize = { 1280, 720};
 	//const Vector2 windowSize = { 1600, 1000};
 	//const Vector2 windowSize = { 1920, 1080 };
 	//const Vector2 windowSize = { 2000, 1000 };
-	//const Vector2 windowSize = { 2560, 1440 };
+	const Vector2 windowSize = { 2560, 1440 };
 
 	const Vector2 engineUnits = { 2560, 1440 };
 	
-	void* window = engine->GetRenderer().CreateWindow(windowSize.GetX(), windowSize.GetY(), engineUnits.GetX(), engineUnits.GetY());
+	void* window = engine->GetRenderer().CreateWindow(windowSize.GetX(), windowSize.GetY(), engineUnits.GetX(), engineUnits.GetY(), true);
 	engine->GetInput().RegisterWindow(window);
 
 	renderer->LoadTexture("test_sprite_60x60", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\texture\\test_sprite_60x60.png");
@@ -59,6 +59,9 @@ int main()
 		//Draw a grid with a cellsize of 10 EU
 		shader.SetFloat("cellPixelSizeX", engine->GetRenderer().WorldToScreen(Vector2(10, 0)).GetX() - engine->GetRenderer().WorldToScreen(Vector2(0, 0)).GetX());
 		shader.SetFloat("cellPixelSizeY", engine->GetRenderer().WorldToScreen(Vector2(0, 10)).GetY() - engine->GetRenderer().WorldToScreen(Vector2(0, 0)).GetY());
+
+		//Doesnt quite work how I want it do.. Should move the grid.. but makes me dizzy..
+		//shader.SetVector2f("pxOffset", engine->GetRenderer().GetCameraPosition().GetX(), engine->GetRenderer().GetCameraPosition().GetY());
 	});
 	renderer->LoadShader("hover", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\shaders\\hover.frag");
 	renderer->LoadShader("ignore_camera_rectangle", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\ignore_camera.vert", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.frag");

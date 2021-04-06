@@ -39,7 +39,7 @@ public:
 	void LoadShader(std::string name, std::string vertexShaderPath, std::string fragmentShaderPath, std::function<void(OpenGLShader&)> onUseCallback = {});
 	void LoadTexture(std::string name, std::string file, bool alpha = true);
 
-	virtual void* CreateWindow(int xResolution, int yResolution, int xEngineUnits, int yEngineUnits) override;
+	virtual void* CreateWindow(int xResolution, int yResolution, int xEngineUnits, int yEngineUnits, bool fullscreen) override;
 
 	// Inherited via IRenderer
 	virtual void BeginFrame() override;

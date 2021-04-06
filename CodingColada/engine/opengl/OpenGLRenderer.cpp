@@ -52,15 +52,25 @@ void OpenGLRenderer::LoadTexture(std::string name, std::string file, bool alpha)
 }
 
 //Defines how large the window is in pixels and how many EngineUnits (EU) that is
-void* OpenGLRenderer::CreateWindow(int xResolution, int yResolution, int xEngineUnits, int yEngineUnits)
+void* OpenGLRenderer::CreateWindow(int xResolution, int yResolution, int xEngineUnits, int yEngineUnits, bool fullscreen)
 {
 	engineUnitsOnOneScreen_ = glm::vec2(xEngineUnits, yEngineUnits);
-	glfwWindowHint(GLFW_RESIZABLE, true);
+
+	//TODO disabled resize, because it causes issues..
+	glfwWindowHint(GLFW_RESIZABLE, false);
 
 	int xPos, yPos, width, height;
 	auto primaryMonitor = glfwGetPrimaryMonitor();
 	glfwGetMonitorWorkarea(primaryMonitor, &xPos, &yPos, &width, &height);
-	window_ = glfwCreateWindow(xResolution, yResolution, "GLFWWindow", nullptr, nullptr);
+
+	if (fullscreen)
+	{
+		window_ = glfwCreateWindow(xResolution, yResolution, "GLFWWindow", primaryMonitor, nullptr);
+	}
+	else
+	{
+		window_ = glfwCreateWindow(xResolution, yResolution, "GLFWWindow", nullptr, nullptr);
+	}
 
 	glfwMakeContextCurrent(window_);
 

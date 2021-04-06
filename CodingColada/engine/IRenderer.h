@@ -24,5 +24,5 @@ public:
 	virtual Vector2 ScreenToWorld(Vector2 screenPosition) = 0;
 
 	//TODO. IInput needs a way to get the window so it can register for the input events
-	virtual void* CreateWindow(int xResolution, int yResolution, int xEngineUnits, int yEngineUnits) = 0;
+	virtual void* CreateWindow(int xResolution, int yResolution, int xEngineUnits, int yEngineUnits, bool fullscreen) = 0;
 };
