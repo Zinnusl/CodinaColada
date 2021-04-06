@@ -43,7 +43,7 @@ ServerApp::ServerApp(std::ostream& logger, std::unique_ptr<Engine> engine)
 void ServerApp::run()
 {
 	const Vector2 windowSize = { 2560, 1440 };
-	void* window = engine_->GetRenderer().CreateWindow(windowSize.GetX(), windowSize.GetY());
+	void* window = engine_->GetRenderer().CreateWindow(windowSize.GetX(), windowSize.GetY(), windowSize.GetX(), windowSize.GetY(), false);
 	engine_->GetInput().RegisterWindow(window);
 
 	auto gameManager = std::make_unique<GameManager>();
