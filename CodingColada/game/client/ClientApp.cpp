@@ -28,14 +28,16 @@ int main()
 	std::unique_ptr<OpenGLInput> input = std::make_unique<OpenGLInput>();
 	std::unique_ptr<Engine> engine = std::make_unique<Engine>(renderer, std::move(input));
 
-	const Vector2 windowSize = { 400, 720 };
-	//const Vector2 windowSize = { 1280, 720};
+	//const Vector2 windowSize = { 400, 720 };
+	const Vector2 windowSize = { 1280, 720};
 	//const Vector2 windowSize = { 1600, 1000};
 	//const Vector2 windowSize = { 1920, 1080 };
 	//const Vector2 windowSize = { 2000, 1000 };
 	//const Vector2 windowSize = { 2560, 1440 };
+
+	const Vector2 engineUnits = { 2560, 1440 };
 	
-	void* window = engine->GetRenderer().CreateWindow(windowSize.GetX(), windowSize.GetY());
+	void* window = engine->GetRenderer().CreateWindow(windowSize.GetX(), windowSize.GetY(), engineUnits.GetX(), engineUnits.GetY());
 	engine->GetInput().RegisterWindow(window);
 
 	renderer->LoadTexture("test_sprite_60x60", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\texture\\test_sprite_60x60.png");
@@ -51,7 +53,7 @@ int main()
 	renderer->LoadTexture("hovertile", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\Tile_Hover.png");
 	renderer->LoadTexture("tower_canon", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\canon_tower.png");
 
-	renderer->LoadShader("grid",	"..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\grid.vert",
+	renderer->LoadShader("grid",	"..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\ignore_camera.vert",
 									"..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\grid.frag", 
 		[&](OpenGLShader& shader) {
 		//Draw a grid with a cellsize of 10 EU
@@ -59,8 +61,14 @@ int main()
 		shader.SetFloat("cellPixelSizeY", engine->GetRenderer().WorldToScreen(Vector2(0, 10)).GetY() - engine->GetRenderer().WorldToScreen(Vector2(0, 0)).GetY());
 	});
 	renderer->LoadShader("hover", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\shaders\\hover.frag");
+	renderer->LoadShader("ignore_camera_rectangle", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\ignore_camera.vert", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.frag");
 
 	auto gameManager = std::make_unique<GameManager>();
+
+	auto yAxis = std::make_unique<GameObject>(Vector2{ -1, -1000000 });
+	yAxis->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ 2,2000000 }, Color(0, 1, 1, 0.2))));
+	auto xAxis = std::make_unique<GameObject>(Vector2{ -1000000, -1 });
+	xAxis->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ 2000000, 2}, Color(0, 1, 1, 0.2))));
 
 	auto testCube = std::make_unique<GameObject>(Vector2{ 0, 0 });
 	testCube->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ 10,10 }, Color(0, 0, 1, 1))));
@@ -116,6 +124,8 @@ int main()
 
 
 	engine->AddGameObject(std::move(engine_debug_grid));
+	engine->AddGameObject(std::move(xAxis));
+	engine->AddGameObject(std::move(yAxis));
 	engine->AddGameObject(std::move(gameManager));
 	engine->AddGameObject(std::move(cameraManager));
 

@@ -9,6 +9,12 @@ Ball::Ball(Vector2 position, Vector2 velocity)
 {
 }
 
+void Ball::OnDraw(float subframe, float deltaTime)
+{
+	GameObject::OnDraw(subframe, deltaTime);
+	currentPosition_ = engine_->GetRenderer().ScreenToWorld(engine_->GetInput().GetMousePosition());
+}
+
 void Ball::OnPhysicsUpdate(float deltaTime)
 {
 	GameObject::OnPhysicsUpdate(deltaTime);
@@ -30,7 +36,6 @@ void Ball::OnPhysicsUpdate(float deltaTime)
 	}
 	
 	//currentPosition_ = newPos;
-	currentPosition_ = engine_->GetRenderer().ScreenToWorld(engine_->GetInput().GetMousePosition());
 }
 
 void Ball::OnDebugTreeNode()

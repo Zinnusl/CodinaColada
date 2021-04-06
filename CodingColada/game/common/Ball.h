@@ -10,6 +10,7 @@ class Ball : public GameObject
 public:
 	Ball(Vector2 position, Vector2 velocity = { 0.0005,0.0005 });
 
+	virtual void OnDraw(float subframe, float deltaTime) override;
 	void OnPhysicsUpdate(float deltaTime) override;
 
 	void OnDebugTreeNode() override;

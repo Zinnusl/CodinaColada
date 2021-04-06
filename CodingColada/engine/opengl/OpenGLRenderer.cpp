@@ -51,8 +51,10 @@ void OpenGLRenderer::LoadTexture(std::string name, std::string file, bool alpha)
 	textures_.emplace(std::make_pair(name, OpenGLTexture2D::LoadTextureFromFile(file.c_str(), alpha)));
 }
 
-void* OpenGLRenderer::CreateWindow(int xResolution, int yResolution)
+//Defines how large the window is in pixels and how many EngineUnits (EU) that is
+void* OpenGLRenderer::CreateWindow(int xResolution, int yResolution, int xEngineUnits, int yEngineUnits)
 {
+	engineUnitsOnOneScreen_ = glm::vec2(xEngineUnits, yEngineUnits);
 	glfwWindowHint(GLFW_RESIZABLE, true);
 
 	int xPos, yPos, width, height;
@@ -83,12 +85,11 @@ void* OpenGLRenderer::CreateWindow(int xResolution, int yResolution)
 	const char* glsl_version = "#version 130";
 	ImGui_ImplOpenGL3_Init(glsl_version);
 
-	ingameUnitOnOneScreen_ = glm::vec2(1920, 1080);
 	//TODO. The question here is: do I want the same things to be visible at any resolution? (probably). Therefore I woul need to hardcode the number.
 	// 	   Or do I want to higher resolution to see more:
 	//		projection_ = glm::ortho(0.0f, static_cast<float>(xResolution), 0.0f, static_cast<float>(yResolution), -1.f, 1.f);
 	//The projection is used to normalize coordinates to the [-1, 1] range that OpenGL uses. This means that at any 16:9 ratio square will look like a square
-	projection_ = glm::ortho(0.0f, static_cast<float>(ingameUnitOnOneScreen_.x), 0.0f, static_cast<float>(ingameUnitOnOneScreen_.y), -1.f, 1.f);
+	projection_ = glm::ortho(0.0f, static_cast<float>(xEngineUnits), 0.0f, static_cast<float>(yEngineUnits), -1.f, 1.f);
 
 	OpenGLShader defaultShader = OpenGLShader::CompileFromFile("..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.frag", nullptr);
 	defaultShader.SetMatrix4("projection", projection_, true);
@@ -152,6 +153,11 @@ Vector2 OpenGLRenderer::GetResolution()
 	return Vector2(display_w, display_h);
 }
 
+Vector2 OpenGLRenderer::GetEUResolution()
+{
+	return Vector2(engineUnitsOnOneScreen_.x, engineUnitsOnOneScreen_.y);
+}
+
 void OpenGLRenderer::SetCameraPosition(Vector2 position)
 {
 	cameraPosition_ = glm::vec2(position.GetX(), position.GetY());
@@ -176,7 +182,7 @@ Vector2 OpenGLRenderer::WorldToScreen(Vector2 worldPosition)
 {
 	Vector2 windowResolution = GetResolution();
 	Vector2 worldPosDelta = worldPosition + Vector2(cameraPosition_.x, cameraPosition_.y);
-	glm::vec2 scaling = glm::vec2(windowResolution.GetX() / ingameUnitOnOneScreen_.x, windowResolution.GetY()/ ingameUnitOnOneScreen_.y);
+	glm::vec2 scaling = glm::vec2(windowResolution.GetX() / engineUnitsOnOneScreen_.x, windowResolution.GetY()/ engineUnitsOnOneScreen_.y);
 	Vector2 screenPos = Vector2(worldPosDelta.GetX() * scaling.x * zoom_, worldPosDelta.GetY() * scaling.y * zoom_);
 	return screenPos;
 }
@@ -188,7 +194,7 @@ Vector2 OpenGLRenderer::ScreenToWorld(Vector2 screenPosition)
 	Vector2 windowResolution = GetResolution();
 
 	//Calculate how many pixels one EngineUnit (EU) is
-	glm::vec2 scaling = glm::vec2(ingameUnitOnOneScreen_.x / windowResolution.GetX(), ingameUnitOnOneScreen_.y / windowResolution.GetY());
+	glm::vec2 scaling = glm::vec2(engineUnitsOnOneScreen_.x / windowResolution.GetX(), engineUnitsOnOneScreen_.y / windowResolution.GetY());
 	
 	//Convert the screen position to world position
 	Vector2 worldPosition = Vector2(screenPosition.GetX() * scaling.x / zoom_, screenPosition.GetY() * scaling.y / zoom_);

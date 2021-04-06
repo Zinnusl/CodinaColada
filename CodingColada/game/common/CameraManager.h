@@ -4,6 +4,8 @@
 
 class CameraManager : public GameObject
 {
+private:
+	int panningSpeed_ = 16;
 public:
 	CameraManager();
 

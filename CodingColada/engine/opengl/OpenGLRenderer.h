@@ -13,7 +13,7 @@ class GLFWwindow;
 class OpenGLRenderer : public IRenderer
 {
 	//Defines how many engine units a full viewport is
-	glm::vec2 ingameUnitOnOneScreen_;
+	glm::vec2 engineUnitsOnOneScreen_;
 
 	//Projects the ingame units to normalized opengl coordinates ([-1,1])
 	glm::mat4 projection_;
@@ -39,7 +39,7 @@ public:
 	void LoadShader(std::string name, std::string vertexShaderPath, std::string fragmentShaderPath, std::function<void(OpenGLShader&)> onUseCallback = {});
 	void LoadTexture(std::string name, std::string file, bool alpha = true);
 
-	virtual void* CreateWindow(int xResolution, int yResolution) override;
+	virtual void* CreateWindow(int xResolution, int yResolution, int xEngineUnits, int yEngineUnits) override;
 
 	// Inherited via IRenderer
 	virtual void BeginFrame() override;
@@ -52,4 +52,5 @@ public:
 	virtual void SetZoom(float zoom) override;
 	virtual Vector2 WorldToScreen(Vector2 worldPosition) override;
 	virtual Vector2 ScreenToWorld(Vector2 screenPosition) override;
+	virtual Vector2 GetEUResolution() override;
 };

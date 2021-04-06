@@ -5,6 +5,9 @@
 
 CameraManager::CameraManager()
 {
+	IRenderer& renderer = engine_->GetRenderer();
+	auto euResolution = renderer.GetEUResolution();
+	renderer.SetCameraPosition(Vector2(euResolution.GetX() / 2, euResolution.GetY() / 2));
 }
 
 
@@ -18,21 +21,22 @@ void CameraManager::OnDraw(float subframe, float deltaTime)
 	IInput& input = engine_->GetInput();
 	IRenderer& renderer = engine_->GetRenderer();
 	Vector2 cameraPosition = renderer.GetCameraPosition();
-	if (input.GetKeyDown(GLFW_KEY_RIGHT))
+
+	if (input.GetKey(GLFW_KEY_RIGHT))
 	{
-		cameraPosition.SetX(cameraPosition.GetX() + 10);
+		cameraPosition.SetX(cameraPosition.GetX() + panningSpeed_ / deltaTime);
 	}
-	if (input.GetKeyDown(GLFW_KEY_LEFT))
+	if (input.GetKey(GLFW_KEY_LEFT))
 	{
-		cameraPosition.SetX(cameraPosition.GetX() - 10);
+		cameraPosition.SetX(cameraPosition.GetX() - panningSpeed_ / deltaTime);
 	}
-	if (input.GetKeyDown(GLFW_KEY_UP))
+	if (input.GetKey(GLFW_KEY_UP))
 	{
-		cameraPosition.SetY(cameraPosition.GetY() + 10);
+		cameraPosition.SetY(cameraPosition.GetY() + panningSpeed_ / deltaTime);
 	}
-	if (input.GetKeyDown(GLFW_KEY_DOWN))
+	if (input.GetKey(GLFW_KEY_DOWN))
 	{
-		cameraPosition.SetY(cameraPosition.GetY() - 10);
+		cameraPosition.SetY(cameraPosition.GetY() - panningSpeed_ / deltaTime);
 	}
 	renderer.SetCameraPosition(cameraPosition);
 
@@ -54,4 +58,5 @@ void CameraManager::OnDebugTreeNode()
 	IRenderer& renderer = engine_->GetRenderer();
 	ImGui::Text("Camera (%f, %f)", renderer.GetCameraPosition().GetX(), renderer.GetCameraPosition().GetY());
 	ImGui::Text("Zoom %f", renderer.GetZoom());
+	ImGui::InputInt("Panning speed", &panningSpeed_, 10);
 }
