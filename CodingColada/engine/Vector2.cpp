@@ -61,10 +61,29 @@ float Vector2::dot(const Vector2& other) const
 	return x_ * other.x_ + +y_ * other.y_;
 }
 
+bool Vector2::isPointInRectangle(const Vector2& point, const Vector2& rectStart, const Vector2& rectSize)
+{
+	if (point.GetX() >= rectStart.GetX() && point.GetX() <= rectStart.GetX() + rectSize.GetX()
+		&& point.GetY() >= rectStart.GetY() && point.GetY() <= rectStart.GetY() + rectSize.GetY())
+	{
+		return true;
+	}
+	return false;
+}
+
+bool Vector2::intersects(const Vector2& rectALeft, const Vector2& rectARight, const Vector2& rectBLeft, const Vector2& rectBRight)
+{
+	if (rectALeft.GetX() < rectBRight.GetX() && rectARight.GetX() > rectBLeft.GetX() &&
+		rectALeft.GetY() > rectBRight.GetY() && rectARight.GetY() < rectBLeft.GetY())
+	{
+		return true;
+	}
+	return false;
+}
+
 Vector2 Vector2::lerp(const Vector2& first, const Vector2& second, float t)
 {
-	auto tmp = first * (1.f - t) + second * t;
-	return tmp;
+	return first * (1.f - t) + second * t;;
 }
 
 float Vector2::GetX() const

@@ -28,5 +28,10 @@ public:
 
 	float dot(const Vector2& other) const;
 
+	static bool isPointInRectangle(const Vector2& point, const Vector2& rectStart, const Vector2& rectSize);
+	//TODO not sure if it works
+	static bool intersects(const Vector2& rectALeft, const Vector2& rectARight, const Vector2& rectBLeft, const Vector2& rectBRight);
+
 	static Vector2 lerp(const Vector2& first, const Vector2& second, float t);
+
 };

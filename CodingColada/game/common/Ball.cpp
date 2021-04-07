@@ -12,7 +12,8 @@ Ball::Ball(Vector2 position, Vector2 velocity)
 void Ball::OnDraw(float subframe, float deltaTime)
 {
 	GameObject::OnDraw(subframe, deltaTime);
-	currentPosition_ = engine_->GetRenderer().ScreenToWorld(engine_->GetInput().GetMousePosition());
+	Vector2 resolution = engine_->GetRenderer().GetResolution();
+	currentPosition_ = engine_->GetRenderer().ScreenToWorld(Vector2(resolution.GetX() - 100, resolution.GetY() - 100));
 }
 
 void Ball::OnPhysicsUpdate(float deltaTime)

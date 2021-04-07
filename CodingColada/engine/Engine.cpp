@@ -19,6 +19,11 @@ Engine::Engine(std::shared_ptr<IRenderer> renderer, std::unique_ptr<IInput> inpu
 
 void Engine::StartGame()
 {
+	for (auto& go : gameobjects_)
+	{
+		go.second->OnStart();
+	}
+
 	auto currentFrame = std::chrono::steady_clock::now();
 	auto lastFrame = std::chrono::steady_clock::now();
 
@@ -145,7 +150,6 @@ void Engine::AddGameObject(std::unique_ptr<GameObject> gameobject)
 {
 	//TODO how are ids generated?
 	static int32_t gameObjectId = 1;
-	gameobject->OnStart();
 	gameobjects_.insert(std::make_pair<>(gameObjectId++, std::move(gameobject)));
 }
 

@@ -99,7 +99,16 @@ void Grid::OnDraw(float subframe, float deltaTime)
 	{
 		building->OnDraw(subframe, deltaTime);
 	}
-	hoverTile_->OnDraw(subframe, deltaTime);
+
+	if (Vector2::isPointInRectangle(engine_->GetRenderer().ScreenToWorld(engine_->GetInput().GetMousePosition()), GetPosition(), cellSize_ * x_))
+	{
+		hoverTile_->OnDraw(subframe, deltaTime);
+	}
+	else
+	{
+		//Do nothing when mouse is not within grid
+		return;
+	}
 	
 	bool isCellFree = IsCellFree(hoverTile_->GetPosition());
 	if (isCellFree)
@@ -139,13 +148,6 @@ void Grid::OnDraw(float subframe, float deltaTime)
 void Grid::OnCollision(RigidbodyComponent& other)
 {
 	GameObject::OnCollision(other);
-
-	//TODO critical. This doesnt work! Because in order for this to run, the grid has to collide!
-	for (auto& building : buildings_)
-	{
-		building->OnCollision(other);
-	}
-	hoverTile_->OnCollision(other);
 }
 
 int32_t Grid::GetCellSize()

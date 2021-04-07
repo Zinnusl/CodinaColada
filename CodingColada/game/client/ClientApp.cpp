@@ -31,13 +31,13 @@ int main()
 	//const Vector2 windowSize = { 400, 720 };
 	//const Vector2 windowSize = { 1280, 720};
 	//const Vector2 windowSize = { 1600, 1000};
-	//const Vector2 windowSize = { 1920, 1080 };
+	const Vector2 windowSize = { 1920, 1080 };
 	//const Vector2 windowSize = { 2000, 1000 };
-	const Vector2 windowSize = { 2560, 1440 };
+	//const Vector2 windowSize = { 2560, 1440 };
 
 	const Vector2 engineUnits = { 2560, 1440 };
 	
-	void* window = engine->GetRenderer().CreateWindow(windowSize.GetX(), windowSize.GetY(), engineUnits.GetX(), engineUnits.GetY(), true);
+	void* window = engine->GetRenderer().CreateWindow(windowSize.GetX(), windowSize.GetY(), engineUnits.GetX(), engineUnits.GetY(), false);
 	engine->GetInput().RegisterWindow(window);
 
 	renderer->LoadTexture("test_sprite_60x60", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\texture\\test_sprite_60x60.png");
@@ -90,20 +90,12 @@ int main()
 
 	auto cameraManager = std::make_unique<CameraManager>();
 
-	//auto build_grid = std::make_unique<Grid>(8, 8, 64, Vector2{ 100,100 });
-	//build_grid->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ 8*64, 8*64 }, Color(1, 0, 0, 0.1))));
+	auto build_grid = std::make_unique<Grid>(8, 8, 10, Vector2{ 100,100 });
+	build_grid->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ 8*10, 8*10 }, Color(1, 0, 0, 0.1))));
 
 	auto engine_debug_grid = std::make_unique<GameObject>(Vector2(-1000000, -1000000));
 	engine_debug_grid->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{2000000, 2000000}, Color(0, 1, 0, 0.08), &OpenGLRenderer::shaders_["grid"])));
 
-	Vector2 paddleSize = { 20, 200 };
-	auto paddle1 = std::make_unique<Paddle>(Vector2(40, 400));
-	paddle1->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(paddleSize, Color(0, 0, 1, 1))));
-	paddle1->AddComponent(std::make_unique<RigidbodyComponent>(paddleSize));
-
-	auto paddle2 = std::make_unique<Paddle>(Vector2(1860, 400));
-	paddle2->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(paddleSize, Color(1, 0, 0, 1))));
-	paddle2->AddComponent(std::make_unique<RigidbodyComponent>(paddleSize));
 
 	auto ball = std::make_unique<Ball>(Vector2(800, 450));
 	//ball->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2(20), Color(0, 1, 0, 1))));
@@ -113,15 +105,15 @@ int main()
 
 	std::vector<std::shared_ptr<ISprite>> melonAnimation;
 	for (int i = 0; i < 10; i++) {
-		melonAnimation.push_back(std::make_unique<OpenGLSprite>(glm::vec2(64, 64), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["watermelon"]));
+		melonAnimation.push_back(std::make_unique<OpenGLSprite>(glm::vec2(16, 16), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["watermelon"]));
 	}
-	melonAnimation.push_back(std::make_unique<OpenGLSprite>(glm::vec2(64, 64), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["watermelon2"]));
-	melonAnimation.push_back(std::make_unique<OpenGLSprite>(glm::vec2(64, 64), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["watermelon3"]));
-	melonAnimation.push_back(std::make_unique<OpenGLSprite>(glm::vec2(64, 64), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["watermelon4"]));
-	melonAnimation.push_back(std::make_unique<OpenGLSprite>(glm::vec2(64, 64), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["watermelon5"]));
-	melonAnimation.push_back(std::make_unique<OpenGLSprite>(glm::vec2(64, 64), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["watermelon6"]));
-	melonAnimation.push_back(std::make_unique<OpenGLSprite>(glm::vec2(64, 64), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["watermelon7"]));
-	melonAnimation.push_back(std::make_unique<OpenGLSprite>(glm::vec2(64, 64), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["watermelon8"]));
+	melonAnimation.push_back(std::make_unique<OpenGLSprite>(glm::vec2(16, 16), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["watermelon2"]));
+	melonAnimation.push_back(std::make_unique<OpenGLSprite>(glm::vec2(16, 16), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["watermelon3"]));
+	melonAnimation.push_back(std::make_unique<OpenGLSprite>(glm::vec2(16, 16), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["watermelon4"]));
+	melonAnimation.push_back(std::make_unique<OpenGLSprite>(glm::vec2(16, 16), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["watermelon5"]));
+	melonAnimation.push_back(std::make_unique<OpenGLSprite>(glm::vec2(16, 16), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["watermelon6"]));
+	melonAnimation.push_back(std::make_unique<OpenGLSprite>(glm::vec2(16, 16), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["watermelon7"]));
+	melonAnimation.push_back(std::make_unique<OpenGLSprite>(glm::vec2(16, 16), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["watermelon8"]));
 	
 	ball->AddComponent(std::make_unique<AnimatedSpriteComponent>(melonAnimation, 100000.0f));
 
@@ -132,9 +124,7 @@ int main()
 	engine->AddGameObject(std::move(gameManager));
 	engine->AddGameObject(std::move(cameraManager));
 
-	//engine->AddGameObject(std::move(build_grid));
-	engine->AddGameObject(std::move(paddle1));
-	engine->AddGameObject(std::move(paddle2));
+	engine->AddGameObject(std::move(build_grid));
 	engine->AddGameObject(std::move(ball));
 
 	engine->AddGameObject(std::move(testCube));

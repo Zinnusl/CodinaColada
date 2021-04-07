@@ -30,7 +30,16 @@ void HoverTile::OnPhysicsUpdate(float deltaTime)
 
 void HoverTile::OnDebugTreeNode()
 {
-	ImGui::Text("HoverTile Position %f %f", currentPosition_.GetX(), currentPosition_.GetY());
+	ImGui::Separator();
+	ImGui::Text("HoverTile");
+	ImGui::Text("Position %f %f", currentPosition_.GetX(), currentPosition_.GetY());
+
+	Vector2 worldMousePos = engine_->GetRenderer().ScreenToWorld(engine_->GetInput().GetMousePosition());
+	
+	ImGui::Text("worldMousePos Position %f %f", worldMousePos.GetX(), worldMousePos.GetY());
+	ImGui::Text("worldMousePos MOD Position %f %f", fmod(worldMousePos.GetX(), grid_.GetCellSize()), fmod(worldMousePos.GetY(), grid_.GetCellSize()));
+
+	ImGui::Separator();
 }
 
 void HoverTile::OnDraw(float subframe, float deltaTime)
@@ -38,20 +47,27 @@ void HoverTile::OnDraw(float subframe, float deltaTime)
 	GameObject::OnDraw(subframe, deltaTime);
 
 	//TODO an object like this should probably not be smooth moved (this movement is dependend on physic ticks.. really dont want this here)
-	Vector2 mousePos = engine_->GetRenderer().ScreenToWorld(engine_->GetInput().GetMousePosition());
+	Vector2 worldMousePos = engine_->GetRenderer().ScreenToWorld(engine_->GetInput().GetMousePosition());
 
-	//TODO really shouldnt need to substract screen resolution.. check coordinate systems
-	
-	float halfScreenHeight = engine_->GetRenderer().GetResolution().GetY() / 2;
-	float delta = mousePos.GetY() - halfScreenHeight;
-	float newPosY = mousePos.GetY() - delta * 2;
-	mousePos.SetY(newPosY - fmod(newPosY, grid_.GetCellSize()));
-	mousePos.SetX(mousePos.GetX() - fmod(mousePos.GetX(), grid_.GetCellSize()));
-	
-	/*
-	Vector2 mouseWorld = engine_->GetRenderer().ScreenToWorld(mousePos);
-	mouseWorld.SetX(mouseWorld.GetX() - fmod(mouseWorld.GetX(), grid_.GetCellSize()));
-	mouseWorld.SetY(mouseWorld.GetY() - fmod(mouseWorld.GetY(), grid_.GetCellSize()));
-	*/
-	currentPosition_ = mousePos;
+	Vector2 newPos;
+
+	if (worldMousePos.GetX() < 0)
+	{
+		newPos.SetX(worldMousePos.GetX() - fmod(worldMousePos.GetX(), grid_.GetCellSize()) - grid_.GetCellSize());
+	}
+	else
+	{
+		newPos.SetX(worldMousePos.GetX() - fmod(worldMousePos.GetX(), grid_.GetCellSize()));
+	}
+
+	if(worldMousePos.GetY() < 0)
+	{
+		newPos.SetY(worldMousePos.GetY() - fmod(worldMousePos.GetY(), grid_.GetCellSize()) - grid_.GetCellSize());
+	}
+	else
+	{
+		newPos.SetY(worldMousePos.GetY() - fmod(worldMousePos.GetY(), grid_.GetCellSize()));
+	}
+
+	currentPosition_ = newPos;
 }
