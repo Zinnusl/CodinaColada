@@ -11,8 +11,8 @@
 #include <string> 
 
 
-Engine::Engine(std::shared_ptr<IRenderer> renderer, std::unique_ptr<IInput> input)
-	: renderer_(std::move(renderer)), input_(std::move(input))
+Engine::Engine(std::shared_ptr<IRenderer> renderer, std::unique_ptr<IInput> input, std::unique_ptr<IAudio> audio)
+	: renderer_(std::move(renderer)), input_(std::move(input)), audio_(std::move(audio))
 {
 	GameObject::engine_ = this;
 }
@@ -44,6 +44,7 @@ void Engine::StartGame()
 		//Handle input
 		//needs to be outside to allow to pause game
 		input_->ProcessInput();
+		audio_->Update();
 		currentFrame = std::chrono::steady_clock::now();
 		auto deltaTime = std::chrono::duration_cast<std::chrono::microseconds>(currentFrame - lastFrame).count();
 
@@ -161,4 +162,9 @@ IRenderer& Engine::GetRenderer() const
 IInput& Engine::GetInput() const
 {
 	return *input_;
+}
+
+IAudio& Engine::GetAudio() const
+{
+	return *audio_;
 }

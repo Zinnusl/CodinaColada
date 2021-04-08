@@ -2,6 +2,7 @@
 #include <chrono>
 #include "../../engine/Engine.h"
 #include "../../engine/IRenderer.h"
+#include "../../engine/audio/FMODSoundManager.h"
 #include "../../engine/GameObject.h"
 #include "../../engine/ShapeComponent.h"
 #include "../../engine/SpriteComponent.h"
@@ -26,7 +27,9 @@ int main()
 {
 	std::shared_ptr<OpenGLRenderer> renderer = std::make_shared<OpenGLRenderer>();
 	std::unique_ptr<OpenGLInput> input = std::make_unique<OpenGLInput>();
-	std::unique_ptr<Engine> engine = std::make_unique<Engine>(renderer, std::move(input));
+	std::unique_ptr<FMODSoundManager> audio = std::make_unique<FMODSoundManager>();
+	std::unique_ptr<Engine> engine = std::make_unique<Engine>(renderer, std::move(input), std::move(audio));
+
 
 	//const Vector2 windowSize = { 400, 720 };
 	//const Vector2 windowSize = { 1280, 720};
@@ -53,7 +56,7 @@ int main()
 	renderer->LoadTexture("hovertile", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\Tile_Hover.png");
 	renderer->LoadTexture("tower_canon", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\canon_tower.png");
 
-	renderer->LoadShader("grid",	"..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\ignore_camera.vert",
+	renderer->LoadShader("grid",	"..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert",
 									"..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\grid.frag", 
 		[&](OpenGLShader& shader) {
 		//Draw a grid with a cellsize of 10 EU
@@ -63,8 +66,19 @@ int main()
 		//Doesnt quite work how I want it do.. Should move the grid.. but makes me dizzy..
 		//shader.SetVector2f("pxOffset", engine->GetRenderer().GetCameraPosition().GetX(), engine->GetRenderer().GetCameraPosition().GetY());
 	});
+	renderer->LoadShader("build_grid", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert",
+		"..\\..\\..\\..\\CodingColada\\game\\common\\resources\\shaders\\build_grid.frag",
+		[&](OpenGLShader& shader) {
+		//Draw a grid with a cellsize of 10 EU
+		shader.SetFloat("cellPixelSizeX", engine->GetRenderer().WorldToScreen(Vector2(10, 0)).GetX() - engine->GetRenderer().WorldToScreen(Vector2(0, 0)).GetX());
+		shader.SetFloat("cellPixelSizeY", engine->GetRenderer().WorldToScreen(Vector2(0, 10)).GetY() - engine->GetRenderer().WorldToScreen(Vector2(0, 0)).GetY());
+
+		shader.SetVector2f("pxOffset", engine->GetRenderer().GetCameraPosition().GetX(), engine->GetRenderer().GetCameraPosition().GetY());
+	});
 	renderer->LoadShader("hover", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\shaders\\hover.frag");
 	renderer->LoadShader("ignore_camera_rectangle", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\ignore_camera.vert", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.frag");
+	renderer->LoadShader("neon", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\shaders\\neon.frag");
+	renderer->LoadShader("neon_pulse", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\shaders\\neon_pulse.frag");
 
 	auto gameManager = std::make_unique<GameManager>();
 
@@ -90,12 +104,22 @@ int main()
 
 	auto cameraManager = std::make_unique<CameraManager>();
 
-	auto build_grid = std::make_unique<Grid>(8, 8, 10, Vector2{ 100,100 });
-	build_grid->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ 8*10, 8*10 }, Color(1, 0, 0, 0.1))));
-
 	auto engine_debug_grid = std::make_unique<GameObject>(Vector2(-1000000, -1000000));
-	engine_debug_grid->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{2000000, 2000000}, Color(0, 1, 0, 0.08), &OpenGLRenderer::shaders_["grid"])));
+	engine_debug_grid->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ 2000000, 2000000 }, Color(0, 1, 0, 0.08), &OpenGLRenderer::shaders_["grid"])));
 
+
+	auto background = std::make_unique<GameObject>(Vector2(0));
+	background->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ engineUnits.GetX(), engineUnits.GetY() }, Color(0, 1, 0, 0.08), &OpenGLRenderer::shaders_["neon_pulse"])));
+
+	int32_t x = 16;
+	int32_t y = 16;
+	int32_t cellSize = 64;
+
+	auto build_grid1 = std::make_unique<Grid>(x, y, cellSize, Vector2{ 128, 128 });
+	build_grid1->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ (float)x* cellSize, (float)y* cellSize }, Color(0.4, 0.3, 0.2, 0.9))));
+
+	auto build_grid2 = std::make_unique<Grid>(x, y, cellSize, Vector2{ x * cellSize + 64.f + 320, 128 });
+	build_grid2->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ (float)x * cellSize, (float)y * cellSize }, Color(0.4, 0.3, 0.2, 0.9))));
 
 	auto ball = std::make_unique<Ball>(Vector2(800, 450));
 	//ball->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2(20), Color(0, 1, 0, 1))));
@@ -119,20 +143,25 @@ int main()
 
 
 	engine->AddGameObject(std::move(engine_debug_grid));
+	engine->AddGameObject(std::move(background));
 	engine->AddGameObject(std::move(xAxis));
 	engine->AddGameObject(std::move(yAxis));
 	engine->AddGameObject(std::move(gameManager));
-	engine->AddGameObject(std::move(cameraManager));
+	//engine->AddGameObject(std::move(cameraManager));
 
-	engine->AddGameObject(std::move(build_grid));
+
+	engine->AddGameObject(std::move(build_grid1));
+	engine->AddGameObject(std::move(build_grid2));
 	engine->AddGameObject(std::move(ball));
 
+	/*
 	engine->AddGameObject(std::move(testCube));
 	engine->AddGameObject(std::move(testCube1));
 	engine->AddGameObject(std::move(testCube2));
 	
 	engine->AddGameObject(std::move(testSprite60x60));
 	engine->AddGameObject(std::move(testSprite60x60_2));
+	*/
 
 
 	engine->StartGame();

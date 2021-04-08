@@ -13,3 +13,8 @@ add_subdirectory ("CodingColada")
 # vcpkg install glm:x64-windows
 # vcpkg install imgui:x64-windows
 # vcpkg install asio:x64-windows
+
+
+#Are withing (can be built?) the FMOD examples download
+#fmod api/core/lib/x64/fmod.dll
+#fmod api/core/lib/x64/fmod_vc.lib

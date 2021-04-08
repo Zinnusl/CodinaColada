@@ -5,9 +5,11 @@
 
 CameraManager::CameraManager()
 {
+	/*
 	IRenderer& renderer = engine_->GetRenderer();
 	auto euResolution = renderer.GetEUResolution();
 	renderer.SetCameraPosition(Vector2(euResolution.GetX() / 2, euResolution.GetY() / 2));
+	*/
 }
 
 
@@ -22,21 +24,23 @@ void CameraManager::OnDraw(float subframe, float deltaTime)
 	IRenderer& renderer = engine_->GetRenderer();
 	Vector2 cameraPosition = renderer.GetCameraPosition();
 
+	float moveDelta = deltaTime / 1000000;
+
 	if (input.GetKey(GLFW_KEY_RIGHT))
 	{
-		cameraPosition.SetX(cameraPosition.GetX() + panningSpeed_ / deltaTime);
+		cameraPosition.SetX(cameraPosition.GetX() + panningSpeed_ * moveDelta);
 	}
 	if (input.GetKey(GLFW_KEY_LEFT))
 	{
-		cameraPosition.SetX(cameraPosition.GetX() - panningSpeed_ / deltaTime);
+		cameraPosition.SetX(cameraPosition.GetX() - panningSpeed_ * moveDelta);
 	}
 	if (input.GetKey(GLFW_KEY_UP))
 	{
-		cameraPosition.SetY(cameraPosition.GetY() + panningSpeed_ / deltaTime);
+		cameraPosition.SetY(cameraPosition.GetY() + panningSpeed_ * moveDelta);
 	}
 	if (input.GetKey(GLFW_KEY_DOWN))
 	{
-		cameraPosition.SetY(cameraPosition.GetY() - panningSpeed_ / deltaTime);
+		cameraPosition.SetY(cameraPosition.GetY() - panningSpeed_ * moveDelta);
 	}
 	renderer.SetCameraPosition(cameraPosition);
 

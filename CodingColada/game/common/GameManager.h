@@ -9,4 +9,5 @@ public:
 	void OnDraw(float subframe, float deltaTime) override;
 
 	void OnDebugTreeNode() override;
+	void OnStart() override;
 };

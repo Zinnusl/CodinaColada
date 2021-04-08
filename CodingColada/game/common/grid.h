@@ -14,6 +14,8 @@ class Grid : public GameObject
 {
 	struct Node
 	{
+		std::shared_ptr<GameObject> building;
+
 		int gCost_;
 		int hCost_;
 
@@ -44,8 +46,11 @@ class Grid : public GameObject
 	std::vector<std::shared_ptr<GameObject>> pathVisualisation_;
 
 	int64_t timeToFindPath_ = 0;
-	Vector2 gridSize_ = Vector2(64,64);
-	Node* nodes_[64][64];
+
+	Vector2 gridSize_;
+	std::vector<Node> nodes_;
+	Node& GetNode(int row, int column);
+
 	std::vector<Node*> path_;
 
 	ShapeComponent* shapeComponent_;
@@ -68,7 +73,7 @@ public:
 	int32_t GetCellSize();
 
 	//This is expensive
-	bool IsCellFree(Vector2 position);
+	bool IsCellFree(int x, int y);
 
 	void FindPath(Vector2 start, Vector2 end);
 };

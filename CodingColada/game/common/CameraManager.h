@@ -5,7 +5,7 @@
 class CameraManager : public GameObject
 {
 private:
-	int panningSpeed_ = 100;
+	int panningSpeed_ = 200;
 public:
 	CameraManager();
 

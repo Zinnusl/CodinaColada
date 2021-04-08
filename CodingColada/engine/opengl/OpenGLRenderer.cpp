@@ -168,6 +168,13 @@ Vector2 OpenGLRenderer::GetEUResolution()
 	return Vector2(engineUnitsOnOneScreen_.x, engineUnitsOnOneScreen_.y);
 }
 
+Vector2 OpenGLRenderer::EuToPixel(Vector2 position)
+{
+	auto euResolution = GetEUResolution();
+	auto resolution = GetResolution();
+	return Vector2((resolution.GetX() / euResolution.GetX()) * position.GetX(), (resolution.GetY() / euResolution.GetY()) * position.GetY());
+}
+
 void OpenGLRenderer::SetCameraPosition(Vector2 position)
 {
 	cameraPosition_ = glm::vec2(position.GetX(), position.GetY());

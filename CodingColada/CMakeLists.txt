@@ -10,7 +10,6 @@ file(GLOB_RECURSE GAME_COMMON_SOURCES LIST_DIRECTORIES true game/common/*.h game
 file(GLOB_RECURSE GAME_CLIENT_SOURCES LIST_DIRECTORIES true game/client/*.h game/client/*.cpp)
 file(GLOB_RECURSE GAME_SERVER_SOURCES LIST_DIRECTORIES true game/server/*.h game/server/*.cpp)
 
-
 # Add source to this project's executable.
 add_executable (Colada_Client ${ENGINE_SOURCES} ${GAME_COMMON_SOURCES} ${GAME_CLIENT_SOURCES})
 add_executable (Colada_Server ${ENGINE_SOURCES} ${GAME_COMMON_SOURCES} ${GAME_SERVER_SOURCES})
@@ -37,6 +36,9 @@ find_package(asio CONFIG REQUIRED)
 target_link_libraries(Colada_Client PRIVATE asio asio::asio)
 target_link_libraries(Colada_Server PRIVATE asio asio::asio)
 
+find_library(fmod fmod_vc HINTS "../${PROJECT_SOURCE_DIR}/lib")
+target_link_libraries(Colada_Client PRIVATE ${fmod})
+target_link_libraries(Colada_Server PRIVATE ${fmod})
 
 #enable usage of VS Profiler
 SET_TARGET_PROPERTIES(Colada_Client PROPERTIES LINK_FLAGS "/PROFILE")

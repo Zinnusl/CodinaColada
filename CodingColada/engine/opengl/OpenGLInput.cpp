@@ -81,6 +81,8 @@ void OpenGLInput::AddHandler(int key, handlerCallbackType callback)
 	keyHandlers_.push_back(callback);
 }
 
+
+//Returns the mouse position in screen coordinates
 Vector2 OpenGLInput::GetMousePosition()
 {
 	double xpos, ypos;

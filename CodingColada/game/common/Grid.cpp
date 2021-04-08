@@ -24,13 +24,17 @@
 Grid::Grid(int x, int y, int32_t cellSize, Vector2 position)
 	: x_(x), y_(y), cellSize_(cellSize), hoverTile_(std::make_unique<HoverTile>(*this)), GameObject(position)
 {
+	//first column, second column
+	//Zeile1, Column 3
+	// nodes_[col * col.size + row)
 	for (int x = 0; x < x_; x++)
 	{
 		for (int y = 0; y < y_; y++)
 		{
-			nodes_[x][y] = new Node(x, y);
+			nodes_.push_back(Node(x, y));
 		}
 	}
+
 	Vector2 hoverTileSize = Vector2(cellSize, cellSize);
 	hoverTile_->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(hoverTileSize, Color(0, 0, 1, 0.1), &OpenGLRenderer::shaders_["hover"])));
 	hoverTile_->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(cellSize, cellSize), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["hovertile"])));
@@ -100,7 +104,9 @@ void Grid::OnDraw(float subframe, float deltaTime)
 		building->OnDraw(subframe, deltaTime);
 	}
 
-	if (Vector2::isPointInRectangle(engine_->GetRenderer().ScreenToWorld(engine_->GetInput().GetMousePosition()), GetPosition(), cellSize_ * x_))
+	Vector2 mouseWorldPos = engine_->GetRenderer().ScreenToWorld(engine_->GetInput().GetMousePosition());
+
+	if (Vector2::isPointInRectangle(mouseWorldPos, GetPosition(), Vector2(cellSize_ * x_, cellSize_ * y_)))
 	{
 		hoverTile_->OnDraw(subframe, deltaTime);
 	}
@@ -110,7 +116,17 @@ void Grid::OnDraw(float subframe, float deltaTime)
 		return;
 	}
 	
-	bool isCellFree = IsCellFree(hoverTile_->GetPosition());
+	int column = (mouseWorldPos.GetX() - GetPosition().GetX()) / cellSize_;
+	int row = (mouseWorldPos.GetY() - GetPosition().GetY()) / cellSize_;
+
+	if (column >= x_ || row >= y_)
+	{
+		return;
+	}
+
+	//TODO WIP
+	bool isCellFree = IsCellFree(column,row);
+
 	if (isCellFree)
 	{
 		//TODO API: this is bad.. how can I change the color of a shape with logic on the parent gameobject??
@@ -128,20 +144,23 @@ void Grid::OnDraw(float subframe, float deltaTime)
 	{
 		auto tower = std::make_shared<Tower>(hoverTile_->GetPosition());
 		tower->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(cellSize_, cellSize_), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["tower_canon"])));
-		tower->AddComponent(std::make_unique<RigidbodyComponent>(Vector2(64)));
+
+		GetNode(column, row).building = tower;
+
 		buildings_.push_back(std::move(tower));
+		engine_->GetAudio().Play("..\\..\\..\\..\\CodingColada\\game\\common\\resources\\audio\\build2.wav", 1);
 	}
 	if (GameObject::engine_->GetInput().GetMouse(1) && isCellFree)
 	{
-		auto stone = std::make_unique<Tower>(hoverTile_->GetPosition());
+		auto stone = std::make_shared<Tower>(hoverTile_->GetPosition());
 		stone->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(cellSize_, cellSize_), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["stone"])));
-		stone->AddComponent(std::make_unique<RigidbodyComponent>(Vector2(64)));
+		stone->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ (float)cellSize_ }, Color(1, 0, 0, 0.3), &OpenGLRenderer::shaders_["neon_pulse"])));
+
+		GetNode(column, row).building = stone;
+
 		buildings_.push_back(std::move(stone));
-		auto hoveredNode = GetNodeFromPosition(hoverTile_->GetPosition());
-		if (hoveredNode)
-		{
-			hoveredNode->walkable_ = false;
-		}
+		auto hoveredNode = GetNode(column, row);
+		hoveredNode.walkable_ = false;
 	}
 }
 
@@ -161,18 +180,13 @@ void Grid::OnStart()
 	spriteComponent_ = hoverTile_->GetFirstComponentOfType<SpriteComponent>();
 }
 
-bool Grid::IsCellFree(Vector2 position)
+bool Grid::IsCellFree(int x, int y)
 {
-	bool free = true;
-	for (auto& building : buildings_)
+	if (GetNode(x, y).building)
 	{
-		if (building->GetPosition() == position)
-		{
-			free = false;
-			break;
-		}
+		return false;
 	}
-	return free;
+	return true;
 }
 
 void Grid::FindPath(Vector2 start, Vector2 end)
@@ -242,6 +256,17 @@ void Grid::FindPath(Vector2 start, Vector2 end)
 	}
 }
 
+Grid::Node& Grid::GetNode(int row, int column)
+{
+	auto index = column + row * y_;
+	if (index < 0 || index >= nodes_.size())
+	{
+		printf("Error trying to oacces wrong index %d\n", index);
+	}
+	return nodes_[index];
+}
+
+
 std::vector<Grid::Node*> Grid::GetNeighbours(Node* node)
 {
 	std::vector<Node*> neighbours;
@@ -261,7 +286,7 @@ std::vector<Grid::Node*> Grid::GetNeighbours(Node* node)
 
 			if (checkX >= 0 && checkX < gridSize_.GetX() && checkY >= 0 && checkY < gridSize_.GetY())
 			{
-				neighbours.push_back(nodes_[checkX][checkY]);
+				neighbours.push_back(&GetNode(checkX, checkY));
 			}
 		}
 	}
@@ -305,9 +330,12 @@ void Grid::RetracePath(Node* startNode, Node* endNode)
 
 Grid::Node* Grid::GetNodeFromPosition(Vector2 position)
 {
-	if (position.GetX() < 0 || position.GetY() < 0  || position.GetX() > cellSize_ * cellSize_ || position.GetY() > cellSize_ * cellSize_)
+	int tmpX = (position.GetX() - GetPosition().GetX()) / cellSize_;
+	int tmpY = (position.GetY() - GetPosition().GetY()) / cellSize_;
+
+	if (tmpX >= x_ || tmpY >= y_)
 	{
 		return nullptr;
 	}
-	return nodes_[(int)position.GetX() / cellSize_][(int)position.GetY() / cellSize_];
+	return &GetNode(tmpX, tmpY);
 }

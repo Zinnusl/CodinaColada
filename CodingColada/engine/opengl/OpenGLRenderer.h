@@ -53,4 +53,6 @@ public:
 	virtual Vector2 WorldToScreen(Vector2 worldPosition) override;
 	virtual Vector2 ScreenToWorld(Vector2 screenPosition) override;
 	virtual Vector2 GetEUResolution() override;
+	virtual Vector2 EuToPixel(Vector2 position) override;
+
 };

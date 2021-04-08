@@ -26,6 +26,8 @@ OpenGLRectangleShape::OpenGLRectangleShape(Vector2 size, Color color, OpenGLShad
 
 void OpenGLRectangleShape::Draw(Engine& engine, GameObject& gameobject, float subframe, float deltaTime)
 {
+	Vector2 drawPosition = gameobject.GetDrawPosition(subframe);
+
 	glm::mat4 model = glm::mat4(1.0f);
 	model = glm::translate(model, glm::vec3(gameobject.GetDrawPosition(subframe).GetX() + size_.GetX() / 2,
 		gameobject.GetDrawPosition(subframe).GetY() + size_.GetY() / 2, 0.0f));
@@ -35,6 +37,9 @@ void OpenGLRectangleShape::Draw(Engine& engine, GameObject& gameobject, float su
 	model = glm::translate(model, glm::vec3(-0.5f * size_.GetX(), -0.5f * size_.GetY(), 0.0f));
 	model = glm::scale(model, glm::vec3(size_.GetX(), size_.GetY(), 1.0f));
 
+	auto pixels = engine.GetRenderer().EuToPixel(size_);
+	auto offset = engine.GetRenderer().EuToPixel(drawPosition);
+
 	//TODO we throw away like 300fps with these 2 lines. Due to changing the shader for every object. Solving this requires redisign. 
 	//We have to do batch rendering (first draw all using shader "rectangle", then all using "sprite" etc.)
 	if (customShader_)
@@ -42,6 +47,8 @@ void OpenGLRectangleShape::Draw(Engine& engine, GameObject& gameobject, float su
 		customShader_->Use();
 		customShader_->SetVector4f("color", glm::vec4(color_.r_, color_.g_, color_.b_, color_.a_));
 		customShader_->SetMatrix4("model", model);
+		customShader_->SetVector2f("resolution", glm::vec2(pixels.GetX(), pixels.GetY()));
+		customShader_->SetVector2f("offset", glm::vec2(offset.GetX(), offset.GetY()));
 	}
 	else
 	{

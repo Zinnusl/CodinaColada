@@ -24,3 +24,8 @@ void GameManager::OnDebugTreeNode()
 {
 	ImGui::Text("GameManager");
 }
+
+void GameManager::OnStart()
+{
+	engine_->GetAudio().Play("..\\..\\..\\..\\CodingColada\\game\\common\\resources\\audio\\background_music.mp3", 1);
+}
