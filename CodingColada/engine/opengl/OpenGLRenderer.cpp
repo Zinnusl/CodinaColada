@@ -71,6 +71,9 @@ void* OpenGLRenderer::CreateWindow(int xResolution, int yResolution, int xEngine
 	{
 		window_ = glfwCreateWindow(xResolution, yResolution, "GLFWWindow", nullptr, nullptr);
 	}
+	//TODO load image and set icon
+	//GLFWimage image;
+	//glfwSetWindowIcon(window_, 1, )
 
 	glfwMakeContextCurrent(window_);
 

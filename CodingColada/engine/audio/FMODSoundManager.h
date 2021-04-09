@@ -14,8 +14,7 @@ class FMODSoundManager : public IAudio
 	std::map<std::string, FMOD::Sound*> soundMap_;
 public:
 	FMODSoundManager();
-	virtual void Play(std::string path, float volume) override;
-	virtual void Loop(std::string path, float volume) override;
-
+	virtual void Play(std::string path, float volume, bool streamed = true) override;
+	virtual void Loop(std::string path, float volume, bool streamed = true) override;
 	virtual void Update() override;
 };

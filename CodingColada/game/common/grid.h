@@ -47,7 +47,6 @@ class Grid : public GameObject
 
 	int64_t timeToFindPath_ = 0;
 
-	Vector2 gridSize_;
 	std::vector<Node> nodes_;
 	Node& GetNode(int row, int column);
 
@@ -59,6 +58,8 @@ class Grid : public GameObject
 	int GetDistance(Node* a, Node* b);
 	void RetracePath(Node* startNode, Node* endNode);
 	Node* GetNodeFromPosition(Vector2 position);
+
+	void Clear();
 
 public:
 	Grid() = delete;
@@ -74,6 +75,7 @@ public:
 
 	//This is expensive
 	bool IsCellFree(int x, int y);
+	bool AddBuilding(int row, int column, std::shared_ptr<GameObject> building);
 
 	void FindPath(Vector2 start, Vector2 end);
 };

@@ -7,8 +7,17 @@ FMODSoundManager::FMODSoundManager()
 	system_->init(128, FMOD_INIT_NORMAL, nullptr);
 }
 
-void FMODSoundManager::Play(std::string path, float volume)
+void FMODSoundManager::Play(std::string path, float volume, bool streamed)
 {
+	if (streamed)
+	{
+		FMOD::Sound* pSound = nullptr;
+		system_->createStream(path.c_str(), FMOD_DEFAULT, nullptr, &pSound);
+		soundMap_.emplace(path, pSound);
+		system_->playSound(pSound, nullptr, false, &channel_);
+		return;
+	}
+
 	auto iterator = soundMap_.find(path);
 	if (iterator == soundMap_.end())
 	{
@@ -24,8 +33,30 @@ void FMODSoundManager::Play(std::string path, float volume)
 	}
 }
 
-void FMODSoundManager::Loop(std::string path, float volume)
+void FMODSoundManager::Loop(std::string path, float volume, bool streamed)
 {
+	if (streamed)
+	{
+		FMOD::Sound* pSound = nullptr;
+		system_->createStream(path.c_str(), FMOD_LOOP_NORMAL, nullptr, &pSound);
+		soundMap_.emplace(path, pSound);
+		system_->playSound(pSound, nullptr, false, &channel_);
+		return;
+	}
+
+	auto iterator = soundMap_.find(path);
+	if (iterator == soundMap_.end())
+	{
+		//Load audio
+		FMOD::Sound* pSound = nullptr;
+		system_->createSound(path.c_str(), FMOD_LOOP_NORMAL, nullptr, &pSound);
+		soundMap_.emplace(path, pSound);
+		system_->playSound(pSound, nullptr, false, &channel_);
+	}
+	else
+	{
+		system_->playSound(iterator->second, nullptr, false, &channel_);
+	}
 }
 
 void FMODSoundManager::Update()

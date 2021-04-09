@@ -5,13 +5,15 @@
 #include "Engine.h"
 
 Engine* GameObject::engine_;
+int64_t GameObject::nextGameObjectId_ = 0;
 
 GameObject::GameObject()
+	: id_(nextGameObjectId_++)
 {
 }
 
 GameObject::GameObject(Vector2 position)
-	: previousPosition_(position), currentPosition_(position)
+	: previousPosition_(position), currentPosition_(position), id_(nextGameObjectId_++)
 {
 	
 }
@@ -44,6 +46,11 @@ void GameObject::OnCollision(RigidbodyComponent& other)
 
 void GameObject::OnDebugTreeNode()
 {
+}
+
+int64_t GameObject::GetId()
+{
+	return id_;
 }
 
 Vector2 GameObject::GetPreviousPosition()

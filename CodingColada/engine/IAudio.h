@@ -5,7 +5,7 @@
 class IAudio
 {
 public:
-	virtual void Play(std::string path, float volume) = 0;
-	virtual void Loop(std::string path, float volume) = 0;
+	virtual void Play(std::string path, float volume, bool streamed) = 0;
+	virtual void Loop(std::string path, float volume, bool streamed) = 0;
 	virtual void Update() = 0;
 };

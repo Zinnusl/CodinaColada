@@ -30,7 +30,6 @@ int main()
 	std::unique_ptr<FMODSoundManager> audio = std::make_unique<FMODSoundManager>();
 	std::unique_ptr<Engine> engine = std::make_unique<Engine>(renderer, std::move(input), std::move(audio));
 
-
 	//const Vector2 windowSize = { 400, 720 };
 	//const Vector2 windowSize = { 1280, 720};
 	//const Vector2 windowSize = { 1600, 1000};
@@ -53,8 +52,17 @@ int main()
 	renderer->LoadTexture("watermelon6", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\melon6.png");
 	renderer->LoadTexture("watermelon7", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\melon7.png");
 	renderer->LoadTexture("watermelon8", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\melon8.png");
+	renderer->LoadTexture("codina_colada_logo1", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\loading\\codina_colada_logo1.png");
+	renderer->LoadTexture("codina_colada_logo2", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\loading\\codina_colada_logo2.png");
+	renderer->LoadTexture("codina_colada_logo3", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\loading\\codina_colada_logo3.png");
+	renderer->LoadTexture("codina_colada_logo4", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\loading\\codina_colada_logo4.png");
+	renderer->LoadTexture("codina_colada_logo5", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\loading\\codina_colada_logo5.png");
+	renderer->LoadTexture("codina_colada_logo6", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\loading\\codina_colada_logo6.png");
 	renderer->LoadTexture("hovertile", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\Tile_Hover.png");
 	renderer->LoadTexture("tower_canon", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\canon_tower.png");
+	renderer->LoadTexture("blocker", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\rect_border.png");
+	renderer->LoadTexture("blocker_red", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\rect_border_red.png");
+	renderer->LoadTexture("codina_colada_logo_16_9", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\codina_colada_logo_16_9.png");
 
 	renderer->LoadShader("grid",	"..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert",
 									"..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\grid.frag", 
@@ -80,48 +88,50 @@ int main()
 	renderer->LoadShader("neon", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\shaders\\neon.frag");
 	renderer->LoadShader("neon_pulse", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\shaders\\neon_pulse.frag");
 
-	auto gameManager = std::make_unique<GameManager>();
+	auto gameManager = std::make_shared<GameManager>();
+	gameManager->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(engineUnits.GetX(), engineUnits.GetY()), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["codina_colada_logo_16_9"])));
 
-	auto yAxis = std::make_unique<GameObject>(Vector2{ -1, -1000000 });
+
+	auto yAxis = std::make_shared<GameObject>(Vector2{ -1, -1000000 });
 	yAxis->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ 2,2000000 }, Color(0, 1, 1, 0.2))));
-	auto xAxis = std::make_unique<GameObject>(Vector2{ -1000000, -1 });
+	auto xAxis = std::make_shared<GameObject>(Vector2{ -1000000, -1 });
 	xAxis->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ 2000000, 2}, Color(0, 1, 1, 0.2))));
 
-	auto testCube = std::make_unique<GameObject>(Vector2{ 0, 0 });
+	auto testCube = std::make_shared<GameObject>(Vector2{ 0, 0 });
 	testCube->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ 10,10 }, Color(0, 0, 1, 1))));
 
-	auto testCube1 = std::make_unique<GameObject>(Vector2{ 30,0 });
+	auto testCube1 = std::make_shared<GameObject>(Vector2{ 30,0 });
 	testCube1->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ 10,10 }, Color(0, 0, 1, 1))));
 
-	auto testCube2 = std::make_unique<GameObject>(Vector2{ 10,10 });
+	auto testCube2 = std::make_shared<GameObject>(Vector2{ 10,10 });
 	testCube2->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ 20,20 }, Color(0, 0, 1, 1))));
 
-	auto testSprite60x60 = std::make_unique<GameObject>(Vector2{ 0,0 });
+	auto testSprite60x60 = std::make_shared<GameObject>(Vector2{ 0,0 });
 	testSprite60x60->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(10, 10), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["test_sprite_60x60"])));
 
-	auto testSprite60x60_2 = std::make_unique<GameObject>(Vector2{ 10,10 });
+	auto testSprite60x60_2 = std::make_shared<GameObject>(Vector2{ 10,10 });
 	testSprite60x60_2->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(10, 10), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["test_sprite_60x60"])));
 
-	auto cameraManager = std::make_unique<CameraManager>();
+	auto cameraManager = std::make_shared<CameraManager>();
 
-	auto engine_debug_grid = std::make_unique<GameObject>(Vector2(-1000000, -1000000));
+	auto engine_debug_grid = std::make_shared<GameObject>(Vector2(-1000000, -1000000));
 	engine_debug_grid->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ 2000000, 2000000 }, Color(0, 1, 0, 0.08), &OpenGLRenderer::shaders_["grid"])));
 
 
-	auto background = std::make_unique<GameObject>(Vector2(0));
+	auto background = std::make_shared<GameObject>(Vector2(0));
 	background->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ engineUnits.GetX(), engineUnits.GetY() }, Color(0, 1, 0, 0.08), &OpenGLRenderer::shaders_["neon_pulse"])));
 
 	int32_t x = 16;
 	int32_t y = 16;
 	int32_t cellSize = 64;
 
-	auto build_grid1 = std::make_unique<Grid>(x, y, cellSize, Vector2{ 128, 128 });
+	auto build_grid1 = std::make_shared<Grid>(x, y, cellSize, Vector2{ 128, 128 });
 	build_grid1->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ (float)x* cellSize, (float)y* cellSize }, Color(0.4, 0.3, 0.2, 0.9))));
 
-	auto build_grid2 = std::make_unique<Grid>(x, y, cellSize, Vector2{ x * cellSize + 64.f + 320, 128 });
+	auto build_grid2 = std::make_shared<Grid>(x, y, cellSize, Vector2{ x * cellSize + 64.f + 320, 128 });
 	build_grid2->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ (float)x * cellSize, (float)y * cellSize }, Color(0.4, 0.3, 0.2, 0.9))));
 
-	auto ball = std::make_unique<Ball>(Vector2(800, 450));
+	auto ball = std::make_shared<Ball>(Vector2(800, 450));
 	//ball->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2(20), Color(0, 1, 0, 1))));
 	//ball->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(64, 64), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["watermelon"])));
 	ball->AddComponent(std::make_unique<RigidbodyComponent>(Vector2(64)));
@@ -138,15 +148,23 @@ int main()
 	melonAnimation.push_back(std::make_unique<OpenGLSprite>(glm::vec2(16, 16), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["watermelon6"]));
 	melonAnimation.push_back(std::make_unique<OpenGLSprite>(glm::vec2(16, 16), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["watermelon7"]));
 	melonAnimation.push_back(std::make_unique<OpenGLSprite>(glm::vec2(16, 16), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["watermelon8"]));
-	
 	ball->AddComponent(std::make_unique<AnimatedSpriteComponent>(melonAnimation, 100000.0f));
 
+	std::vector<std::shared_ptr<ISprite>> loadingAnimation;
+	loadingAnimation.push_back(std::make_unique<OpenGLSprite>(glm::vec2(128, 128), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["codina_colada_logo1"]));
+	loadingAnimation.push_back(std::make_unique<OpenGLSprite>(glm::vec2(128, 128), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["codina_colada_logo2"]));
+	loadingAnimation.push_back(std::make_unique<OpenGLSprite>(glm::vec2(128, 128), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["codina_colada_logo3"]));
+	loadingAnimation.push_back(std::make_unique<OpenGLSprite>(glm::vec2(128, 128), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["codina_colada_logo4"]));
+	loadingAnimation.push_back(std::make_unique<OpenGLSprite>(glm::vec2(128, 128), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["codina_colada_logo5"]));
+	loadingAnimation.push_back(std::make_unique<OpenGLSprite>(glm::vec2(128, 128), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["codina_colada_logo6"]));
+	gameManager->AddComponent(std::make_unique<AnimatedSpriteComponent>(loadingAnimation, 100000.0f));
+	
 
 	engine->AddGameObject(std::move(engine_debug_grid));
 	engine->AddGameObject(std::move(background));
 	engine->AddGameObject(std::move(xAxis));
 	engine->AddGameObject(std::move(yAxis));
-	engine->AddGameObject(std::move(gameManager));
+
 	//engine->AddGameObject(std::move(cameraManager));
 
 
@@ -154,6 +172,7 @@ int main()
 	engine->AddGameObject(std::move(build_grid2));
 	engine->AddGameObject(std::move(ball));
 
+	engine->AddGameObject(std::move(gameManager));
 	/*
 	engine->AddGameObject(std::move(testCube));
 	engine->AddGameObject(std::move(testCube1));
@@ -162,7 +181,6 @@ int main()
 	engine->AddGameObject(std::move(testSprite60x60));
 	engine->AddGameObject(std::move(testSprite60x60_2));
 	*/
-
 
 	engine->StartGame();
 

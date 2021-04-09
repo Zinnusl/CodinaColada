@@ -5,6 +5,7 @@ cmake_minimum_required (VERSION 3.8)
 
 project ("CodingColada")
 
+
 file(GLOB_RECURSE ENGINE_SOURCES LIST_DIRECTORIES true engine/*.h engine/*.cpp)
 file(GLOB_RECURSE GAME_COMMON_SOURCES LIST_DIRECTORIES true game/common/*.h game/common/*.cpp)
 file(GLOB_RECURSE GAME_CLIENT_SOURCES LIST_DIRECTORIES true game/client/*.h game/client/*.cpp)
@@ -36,7 +37,7 @@ find_package(asio CONFIG REQUIRED)
 target_link_libraries(Colada_Client PRIVATE asio asio::asio)
 target_link_libraries(Colada_Server PRIVATE asio asio::asio)
 
-find_library(fmod fmod_vc HINTS "../${PROJECT_SOURCE_DIR}/lib")
+find_library(fmod fmod_vc HINTS "${PROJECT_SOURCE_DIR}/lib")
 target_link_libraries(Colada_Client PRIVATE ${fmod})
 target_link_libraries(Colada_Server PRIVATE ${fmod})
 

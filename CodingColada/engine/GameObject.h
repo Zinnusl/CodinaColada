@@ -6,6 +6,7 @@
 
 #include <vector>
 #include <memory>
+#include <cstdint>
 
 class Engine;
 class RigidbodyComponent;
@@ -15,7 +16,10 @@ class RigidbodyComponent;
 **/
 class GameObject : std::enable_shared_from_this<GameObject>
 {
+	int64_t id_;
 	Vector2 previousPosition_;
+
+	static int64_t nextGameObjectId_;
 
 protected:
 	Vector2 currentPosition_;
@@ -28,6 +32,7 @@ public:
 	GameObject(Vector2 position);
 	static Engine* engine_;
 			
+	int64_t GetId();
 	Vector2 GetPreviousPosition();
 	Vector2 GetPosition();
 	Vector2 GetDrawPosition(float t);

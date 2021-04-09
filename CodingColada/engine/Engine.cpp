@@ -116,7 +116,7 @@ void Engine::StartGame()
 			ImGui::Checkbox("Pause", &pauseGame);
 			ImGui::Separator();
 			ImGui::SliderInt("Physic tps", &ticksPerSecond, 1, 128);
-			
+
 			if (ImGui::TreeNode("GameObjects"))
 			{
 				for (auto& it : gameobjects_)
@@ -133,6 +133,11 @@ void Engine::StartGame()
 			ImGui::End();
 		}
 		renderer_->EndFrame();
+		for (auto& deletionId : gameObjectsMarkedForDeletion)
+		{
+			gameobjects_.erase(deletionId);
+		}
+		gameObjectsMarkedForDeletion.clear();
 		lastFrame = currentFrame;
 	}
 }
@@ -147,12 +152,22 @@ bool Engine::IsStopped()
 	return stopGame;
 }
 
-void Engine::AddGameObject(std::unique_ptr<GameObject> gameobject)
+void Engine::AddGameObject(std::shared_ptr<GameObject> gameobject)
 {
-	//TODO how are ids generated?
-	static int32_t gameObjectId = 1;
-	gameobjects_.insert(std::make_pair<>(gameObjectId++, std::move(gameobject)));
+	
+	gameobjects_.insert(std::make_pair<>(gameobject->GetId(), std::move(gameobject)));
 }
+
+void Engine::RemoveGameObject(std::shared_ptr<GameObject> gameobject)
+{
+	gameObjectsMarkedForDeletion.push_back(gameobject->GetId());
+}
+
+void Engine::RemoveGameObject(GameObject& gameobject)
+{
+	gameObjectsMarkedForDeletion.push_back(gameobject.GetId());
+}
+
 
 IRenderer& Engine::GetRenderer() const
 {

@@ -59,13 +59,17 @@ void Grid::OnPhysicsUpdate(float deltaTime)
 	}
 
 	pathVisualisation_.clear();
-	//FindPath(Vector2(200, 200), hoverTile_->GetPosition());
+	FindPath(Vector2(0, 2), Vector2(5, 6));
 }
 
 void Grid::OnDebugTreeNode()
 {
 	GameObject::OnDebugTreeNode();
 	ImGui::Text("Grid");
+	if (ImGui::Button("Clear"))
+	{
+		Clear();
+	}
 	ImGui::Text("PixelSize %f", cellSize_ * engine_->GetRenderer().GetZoom());
 	ImGui::Text("A* Pathtime %dms", timeToFindPath_);
 	ImGui::Text("camera position x: %f y: %f", engine_->GetRenderer().GetCameraPosition().GetX(), engine_->GetRenderer().GetCameraPosition().GetY());
@@ -143,24 +147,26 @@ void Grid::OnDraw(float subframe, float deltaTime)
 	if (GameObject::engine_->GetInput().GetMouseDown(0) && isCellFree)
 	{
 		auto tower = std::make_shared<Tower>(hoverTile_->GetPosition());
-		tower->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(cellSize_, cellSize_), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["tower_canon"])));
-
+		//tower->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(cellSize_, cellSize_), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["tower_canon"])));
+		tower->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(cellSize_, cellSize_), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["blocker_red"])));
 		GetNode(column, row).building = tower;
-
+		GetNode(column, row).walkable_ = false;
 		buildings_.push_back(std::move(tower));
-		engine_->GetAudio().Play("..\\..\\..\\..\\CodingColada\\game\\common\\resources\\audio\\build2.wav", 1);
+		engine_->GetAudio().Play("..\\..\\..\\..\\CodingColada\\game\\common\\resources\\audio\\build2.wav", 1, false);
 	}
 	if (GameObject::engine_->GetInput().GetMouse(1) && isCellFree)
 	{
 		auto stone = std::make_shared<Tower>(hoverTile_->GetPosition());
-		stone->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(cellSize_, cellSize_), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["stone"])));
-		stone->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ (float)cellSize_ }, Color(1, 0, 0, 0.3), &OpenGLRenderer::shaders_["neon_pulse"])));
+		stone->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(cellSize_, cellSize_), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["blocker"])));
+		//stone->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ (float)cellSize_ }, Color(1, 0, 0, 0.3), &OpenGLRenderer::shaders_["neon_pulse"])));
 
 		GetNode(column, row).building = stone;
 
 		buildings_.push_back(std::move(stone));
-		auto hoveredNode = GetNode(column, row);
-		hoveredNode.walkable_ = false;
+
+		GetNode(column, row).walkable_ = false;
+
+		engine_->RemoveGameObject(*this);
 	}
 }
 
@@ -189,12 +195,26 @@ bool Grid::IsCellFree(int x, int y)
 	return true;
 }
 
+bool Grid::AddBuilding(int row, int column, std::shared_ptr<GameObject> building)
+{
+	if (!IsCellFree(row, column))
+	{
+		return false;
+	}
+	auto node = GetNode(column, row);
+	node.building = building;
+	node.walkable_ = false;
+	buildings_.push_back(building);
+	return true;
+}
+
+
 void Grid::FindPath(Vector2 start, Vector2 end)
 {
 	auto startTime = std::chrono::steady_clock::now();
 
-	Node* startNode = GetNodeFromPosition(start);
-	Node* targetNode = GetNodeFromPosition(end);
+	Node* startNode = &GetNode(start.GetX(), start.GetY());
+	Node* targetNode = &GetNode(end.GetX(), end.GetY());
 
 	if (!startNode || !startNode->walkable_ || !targetNode || !targetNode->walkable_)
 	{
@@ -284,7 +304,7 @@ std::vector<Grid::Node*> Grid::GetNeighbours(Node* node)
 			int checkX = node->gridX_ + x;
 			int checkY = node->gridY_ + y;
 
-			if (checkX >= 0 && checkX < gridSize_.GetX() && checkY >= 0 && checkY < gridSize_.GetY())
+			if (checkX >= 0 && checkX < x_ && checkY >= 0 && checkY < y_)
 			{
 				neighbours.push_back(&GetNode(checkX, checkY));
 			}
@@ -322,7 +342,7 @@ void Grid::RetracePath(Node* startNode, Node* endNode)
 	for (auto& node : path_)
 	{
 		Vector2 pathTileSize = Vector2(cellSize_, cellSize_);
-		std::unique_ptr<PathTile> pathTile = std::make_unique<PathTile>(Vector2(node->gridX_ * cellSize_, node->gridY_ * cellSize_));
+		std::unique_ptr<PathTile> pathTile = std::make_unique<PathTile>(Vector2(GetPosition().GetX() + node->gridX_ * cellSize_, GetPosition().GetY() + node->gridY_ * cellSize_));
 		pathTile->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(pathTileSize, Color(0, 0, 1, 1))));
 		pathVisualisation_.push_back(std::move(pathTile));
 	}
@@ -338,4 +358,13 @@ Grid::Node* Grid::GetNodeFromPosition(Vector2 position)
 		return nullptr;
 	}
 	return &GetNode(tmpX, tmpY);
+}
+
+void Grid::Clear()
+{
+	buildings_.clear();
+	for (auto& node : nodes_)
+	{
+		node.walkable_ = true;
+	}
 }

@@ -11,7 +11,6 @@
 class Engine
 {
 public:
-	typedef int32_t idType;
 
 protected:
 	bool stopGame = false;
@@ -20,7 +19,8 @@ protected:
 	std::unique_ptr<IInput> input_;
 	std::unique_ptr<IAudio> audio_;
 
-	std::unordered_map<idType, std::unique_ptr<GameObject>> gameobjects_;
+	std::unordered_map<int32_t, std::shared_ptr<GameObject>> gameobjects_;
+	std::vector<int32_t> gameObjectsMarkedForDeletion;
 
 public:
 
@@ -31,7 +31,9 @@ public:
 	void StopGame();
 	bool IsStopped();
 
-	void AddGameObject(std::unique_ptr<GameObject> gameobject);
+	void AddGameObject(std::shared_ptr<GameObject> gameobject);
+	void RemoveGameObject(std::shared_ptr<GameObject> gameobject);
+	void RemoveGameObject(GameObject& gameobject);
 
 	IRenderer& GetRenderer() const;
 	IInput& GetInput() const;
