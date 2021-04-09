@@ -121,15 +121,22 @@ int main()
 	auto background = std::make_shared<GameObject>(Vector2(0));
 	background->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ engineUnits.GetX(), engineUnits.GetY() }, Color(0, 1, 0, 0.08), &OpenGLRenderer::shaders_["neon_pulse"])));
 
-	int32_t x = 16;
-	int32_t y = 16;
-	int32_t cellSize = 64;
+	int32_t x = 32;
+	int32_t y = 32;
+	int32_t cellSize = 32;
+	std::vector<Vector2> blockers;
+	blockers.push_back(Vector2(0, 0));
+	blockers.push_back(Vector2(3, 13));
+	blockers.push_back(Vector2(4, 13));
+	blockers.push_back(Vector2(5, 14));
 
 	auto build_grid1 = std::make_shared<Grid>(x, y, cellSize, Vector2{ 128, 128 });
 	build_grid1->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ (float)x* cellSize, (float)y* cellSize }, Color(0.4, 0.3, 0.2, 0.9))));
+	build_grid1->SetupLevel(Vector2(1,1), Vector2(6, 8), blockers);
 
 	auto build_grid2 = std::make_shared<Grid>(x, y, cellSize, Vector2{ x * cellSize + 64.f + 320, 128 });
 	build_grid2->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ (float)x * cellSize, (float)y * cellSize }, Color(0.4, 0.3, 0.2, 0.9))));
+	build_grid2->SetupLevel(Vector2(1, 1), Vector2(6, 8), blockers);
 
 	auto ball = std::make_shared<Ball>(Vector2(800, 450));
 	//ball->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2(20), Color(0, 1, 0, 1))));

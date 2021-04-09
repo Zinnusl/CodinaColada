@@ -45,6 +45,8 @@ class Grid : public GameObject
 	std::vector<std::shared_ptr<GameObject>> buildings_;
 	std::vector<std::shared_ptr<GameObject>> pathVisualisation_;
 
+	Vector2 pathStart_;
+	Vector2 pathEnd_;
 	int64_t timeToFindPath_ = 0;
 
 	std::vector<Node> nodes_;
@@ -78,4 +80,5 @@ public:
 	bool AddBuilding(int row, int column, std::shared_ptr<GameObject> building);
 
 	void FindPath(Vector2 start, Vector2 end);
+	void SetupLevel(Vector2 pathStart, Vector2 pathEnd, std::vector<Vector2> blockers);
 };

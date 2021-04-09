@@ -59,7 +59,7 @@ void Grid::OnPhysicsUpdate(float deltaTime)
 	}
 
 	pathVisualisation_.clear();
-	FindPath(Vector2(0, 2), Vector2(5, 6));
+	FindPath(pathStart_, pathEnd_);
 }
 
 void Grid::OnDebugTreeNode()
@@ -161,12 +161,8 @@ void Grid::OnDraw(float subframe, float deltaTime)
 		//stone->AddComponent(std::make_unique<ShapeComponent>(std::make_unique<OpenGLRectangleShape>(Vector2{ (float)cellSize_ }, Color(1, 0, 0, 0.3), &OpenGLRenderer::shaders_["neon_pulse"])));
 
 		GetNode(column, row).building = stone;
-
 		buildings_.push_back(std::move(stone));
-
 		GetNode(column, row).walkable_ = false;
-
-		engine_->RemoveGameObject(*this);
 	}
 }
 
@@ -273,6 +269,22 @@ void Grid::FindPath(Vector2 start, Vector2 end)
 				}
 			}
 		}
+	}
+}
+
+void Grid::SetupLevel(Vector2 pathStart, Vector2 pathEnd, std::vector<Vector2> blockers)
+{
+	Clear();
+	pathStart_ = pathStart;
+	pathEnd_ = pathEnd;
+	for (auto& blockerPosition : blockers)
+	{
+		auto blocker = std::make_shared<Tower>(GetPosition() + blockerPosition * cellSize_);
+		blocker->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(cellSize_, cellSize_), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["blocker"])));
+
+		GetNode(blockerPosition.GetX(), blockerPosition.GetY()).building = blocker;
+		buildings_.push_back(std::move(blocker));
+		GetNode(blockerPosition.GetX(), blockerPosition.GetY()).walkable_ = false;
 	}
 }
 
