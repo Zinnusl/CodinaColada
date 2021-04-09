@@ -12,5 +12,5 @@ std::string Player::GetName()
 
 int32_t Player::GetScore()
 {
-	return score_();
+	return score_;
 }

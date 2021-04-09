@@ -48,3 +48,18 @@ SET_TARGET_PROPERTIES(Colada_Server PROPERTIES LINK_FLAGS "/PROFILE")
 #c++17
 target_compile_features(Colada_Client PRIVATE cxx_std_17)
 target_compile_features(Colada_Server PRIVATE cxx_std_17)
+
+
+configure_file("${PROJECT_SOURCE_DIR}/lib/fmod.dll" ${CMAKE_BINARY_DIR} COPYONLY)
+
+# REQUIRED PACKAGES:
+# vcpkg install glfw3:x64-windows
+# vcpkg install glad:x64-windows
+# vcpkg install glm:x64-windows
+# vcpkg install imgui:x64-windows
+# vcpkg install asio:x64-windows
+
+
+#Are withing (can be built?) the FMOD examples download
+#fmod api/core/lib/x64/fmod.dll
+#fmod api/core/lib/x64/fmod_vc.lib
