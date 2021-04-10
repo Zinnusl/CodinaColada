@@ -86,7 +86,7 @@ int main()
 	renderer->LoadShader("hover", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\shaders\\hover.frag");
 	renderer->LoadShader("ignore_camera_rectangle", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\ignore_camera.vert", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.frag");
 	renderer->LoadShader("neon", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\shaders\\neon.frag");
-	renderer->LoadShader("neon_pulse", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\shaders\\neon_pulse.frag");
+	renderer->LoadShader("neon_pulse", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\shaders/neon_pulse.frag");
 
 	auto gameManager = std::make_shared<GameManager>();
 	gameManager->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(engineUnits.GetX(), engineUnits.GetY()), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["codina_colada_logo_16_9"])));

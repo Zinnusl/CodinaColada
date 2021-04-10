@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "Vector2.h"
-#include "Color.h"
+#include "OpenGLRenderer/Color.h"
 
 class RectangleShape : public IShape
 {

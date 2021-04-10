@@ -3,6 +3,7 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
+<<<<<<< HEAD
 project ("CodingColada")
 
 if (UNIX)
@@ -17,6 +18,25 @@ file(GLOB_RECURSE GAME_SERVER_SOURCES LIST_DIRECTORIES true game/server/*.h game
 # Add source to this project's executable.
 add_executable (Colada_Client ${ENGINE_SOURCES} ${GAME_COMMON_SOURCES} ${GAME_CLIENT_SOURCES})
 add_executable (Colada_Server ${ENGINE_SOURCES} ${GAME_COMMON_SOURCES} ${GAME_SERVER_SOURCES})
+=======
+file(GLOB_RECURSE SOURCES LIST_DIRECTORIES false src/*.h src/*.cpp)
+
+# Add source to this project's executable.
+message("CodingColada Sources:")
+message("${SOURCES}")
+add_executable (CodingColada ${SOURCES})
+
+# TODO: Add tests and install targets if needed.
+
+find_path(BOOST_DI_INCLUDE NAMES "boost/di.hpp" PATHS ../di/include/)
+target_include_directories(CodingColada PRIVATE ${BOOST_DI_INCLUDE})
+
+find_path(BOOST_DI_INCLUDE_EXTENSION NAMES "boost/di/extension/injector.hpp" PATHS ../di/extension/include/)
+target_include_directories(CodingColada PRIVATE ${BOOST_DI_INCLUDE_EXTENSION})
+
+find_package(SDL2)
+target_link_libraries(CodingColada PRIVATE SDL2::SDL2 SDL2::SDL2main)
+>>>>>>> origin
 
 find_package(glfw3)
 target_link_libraries(Colada_Client PRIVATE glfw)
@@ -27,8 +47,12 @@ target_link_libraries(Colada_Client PRIVATE glad::glad)
 target_link_libraries(Colada_Server PRIVATE glad::glad)
 
 find_package(glm CONFIG REQUIRED)
+<<<<<<< HEAD
 target_link_libraries(Colada_Client PRIVATE glm::glm)
 target_link_libraries(Colada_Server PRIVATE glm::glm)
+=======
+target_link_libraries(CodingColada PRIVATE glm)
+>>>>>>> origin
 
 find_package(imgui CONFIG REQUIRED)
 target_link_libraries(Colada_Client PRIVATE imgui::imgui) 

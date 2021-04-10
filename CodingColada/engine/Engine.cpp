@@ -10,11 +10,15 @@
 #include <iostream>
 #include <string> 
 
+<<<<<<< HEAD:CodingColada/engine/Engine.cpp
 
 Engine::Engine(std::shared_ptr<IRenderer> renderer, std::unique_ptr<IInput> input, std::unique_ptr<IAudio> audio)
 	: renderer_(std::move(renderer)), input_(std::move(input)), audio_(std::move(audio))
+=======
+Engine::Engine(IRenderer& renderer, IInput& input)
+	: renderer_(renderer), input_(input)
+>>>>>>> origin:CodingColada/src/Engine.cpp
 {
-	GameObject::engine_ = this;
 }
 
 void Engine::StartGame()
@@ -39,44 +43,24 @@ void Engine::StartGame()
 
 	while (!stopGame)
 	{
+<<<<<<< HEAD:CodingColada/engine/Engine.cpp
 		microSecondsPerTick = 1000000 / ticksPerSecond;
 
 		//Handle input
 		//needs to be outside to allow to pause game
 		input_->ProcessInput();
 		audio_->Update();
+=======
+		// Needs to be outside to allow to pause game
+		input_.ProcessInput();
+
+>>>>>>> origin:CodingColada/src/Engine.cpp
 		currentFrame = std::chrono::steady_clock::now();
 		auto deltaTime = std::chrono::duration_cast<std::chrono::microseconds>(currentFrame - lastFrame).count();
 
 		if (!pauseGame)
 		{
-			timeSinceLastPhysicsTick += deltaTime;
-
-			//Check for collisions. This should be part of physics simulation. It is also very buggy and O(n^2)
-			for (const auto& gameobject : gameobjects_)
-			{
-				RigidbodyComponent* rb = gameobject.second->GetFirstComponentOfType<RigidbodyComponent>();
-				if (!rb)
-				{
-					continue;
-				}
-				for (const auto& gameobject : gameobjects_)
-				{
-					auto otherRb = gameobject.second->GetFirstComponentOfType<RigidbodyComponent>();
-					if (!otherRb)
-					{
-						continue;
-					}
-					if (rb != otherRb)
-					{
-						bool isCollided = rb->CheckCollision(*otherRb);
-						if (isCollided)
-						{
-							otherRb->GetGameobject().OnCollision(*rb);
-						}
-					}
-				}
-			}
+			timeSinceLastPhysicsTick += (int32_t)deltaTime;
 
 			//Since the physics simulation is not tied to the framerate, we need to interpolate between the old and the new positions.
 			//The t value for interpolation is the subframe.
@@ -89,7 +73,11 @@ void Engine::StartGame()
 				//run physics simulation
 				for (const auto& gameobject : gameobjects_)
 				{
+<<<<<<< HEAD:CodingColada/engine/Engine.cpp
 					gameobject.second->OnPhysicsUpdate(timeSinceLastPhysicsTick);
+=======
+					gameobject.second->OnUpdate((float)timeSinceLastPhysicsTick);
+>>>>>>> origin:CodingColada/src/Engine.cpp
 					//gameobject.second->OnUpdate(microSecondsPerTick);
 				}
 				timeSinceLastPhysicsTick = 0;
@@ -102,7 +90,7 @@ void Engine::StartGame()
 		}
 
 		//Draw 
-		renderer_->BeginFrame();
+		renderer_.BeginFrame();
 		for (const auto& gameobject : gameobjects_)
 		{
 			//gameobject.second->OnDraw(0);
@@ -132,12 +120,17 @@ void Engine::StartGame()
 			}
 			ImGui::End();
 		}
+<<<<<<< HEAD:CodingColada/engine/Engine.cpp
 		renderer_->EndFrame();
 		for (auto& deletionId : gameObjectsMarkedForDeletion)
 		{
 			gameobjects_.erase(deletionId);
 		}
 		gameObjectsMarkedForDeletion.clear();
+=======
+		renderer_.EndFrame();
+
+>>>>>>> origin:CodingColada/src/Engine.cpp
 		lastFrame = currentFrame;
 	}
 }
@@ -149,7 +142,12 @@ void Engine::StopGame()
 
 bool Engine::IsStopped()
 {
+<<<<<<< HEAD:CodingColada/engine/Engine.cpp
 	return stopGame;
+=======
+	static int32_t gameObjectId = 1;
+	gameobjects_.insert(std::make_pair<>(gameObjectId++, std::move(gameobject)));
+>>>>>>> origin:CodingColada/src/Engine.cpp
 }
 
 void Engine::AddGameObject(std::shared_ptr<GameObject> gameobject)
@@ -171,11 +169,12 @@ void Engine::RemoveGameObject(GameObject& gameobject)
 
 IRenderer& Engine::GetRenderer() const
 {
-	return *renderer_;
+	return renderer_;
 }
 
 IInput& Engine::GetInput() const
 {
+<<<<<<< HEAD:CodingColada/engine/Engine.cpp
 	return *input_;
 }
 
@@ -183,3 +182,7 @@ IAudio& Engine::GetAudio() const
 {
 	return *audio_;
 }
+=======
+	return input_;
+}
+>>>>>>> origin:CodingColada/src/Engine.cpp

@@ -3,11 +3,14 @@
 #include "Vector2.h"
 
 #include "IComponent.h"
+#include "IEngine.h"
+#include "RigidbodyComponent.h"
 
 #include <vector>
 #include <memory>
 #include <cstdint>
 
+<<<<<<< HEAD:CodingColada/engine/GameObject.h
 class Engine;
 class RigidbodyComponent;
 
@@ -23,16 +26,33 @@ class GameObject : std::enable_shared_from_this<GameObject>
 
 protected:
 	Vector2 currentPosition_;
+=======
+class GameObject
+{
+protected:
+	IEngine& engine_;
+	Vector2 position_;
+>>>>>>> origin:CodingColada/src/GameObject.h
 	Vector2 rotation_;
 
 	std::vector<std::unique_ptr<IComponent>> components_;
 
 public:
+<<<<<<< HEAD:CodingColada/engine/GameObject.h
 	GameObject();
 	GameObject(Vector2 position);
 	static Engine* engine_;
 			
 	int64_t GetId();
+=======
+	GameObject(IEngine& engine);
+	GameObject(IEngine& engine, Vector2 position);
+
+	virtual void OnUpdate(float deltaTime);
+	virtual void OnDraw(float subframe);
+	virtual void OnCollision(RigidbodyComponent& other); // WTF GameObject <> RigidbodyComponent sollten nicht interagieren... (besser zu collisiion subscriben)
+	
+>>>>>>> origin:CodingColada/src/GameObject.h
 	Vector2 GetPreviousPosition();
 	Vector2 GetPosition();
 	Vector2 GetDrawPosition(float t);
@@ -41,6 +61,7 @@ public:
 
 	void AddComponent(std::unique_ptr <IComponent> component);
 	void RemoveComponent(IComponent& component);
+<<<<<<< HEAD:CodingColada/engine/GameObject.h
 
 	//templates have to be defined in header
 	template<class T>
@@ -73,3 +94,6 @@ public:
 	virtual void OnCollision(RigidbodyComponent& other);
 	virtual void OnDebugTreeNode();
 };
+=======
+};
+>>>>>>> origin:CodingColada/src/GameObject.h
