@@ -5,6 +5,10 @@ cmake_minimum_required (VERSION 3.8)
 
 project ("CodingColada")
 
+include(../../vcpkg/scripts/buildsystems/vcpkg.cmake)
+
+message(${PROJECT_SOURCE_DIR})
+message(${PROJECT_SOURCE_DIR})
 
 file(GLOB_RECURSE ENGINE_SOURCES LIST_DIRECTORIES true engine/*.h engine/*.cpp)
 file(GLOB_RECURSE GAME_COMMON_SOURCES LIST_DIRECTORIES true game/common/*.h game/common/*.cpp)
@@ -33,17 +37,19 @@ find_package(imgui CONFIG REQUIRED)
 target_link_libraries(Colada_Client PRIVATE imgui::imgui) 
 target_link_libraries(Colada_Server PRIVATE imgui::imgui) 
 
-find_package(asio CONFIG REQUIRED)
-target_link_libraries(Colada_Client PRIVATE asio asio::asio)
-target_link_libraries(Colada_Server PRIVATE asio asio::asio)
+#find_package(asio CONFIG REQUIRED)
+#target_link_libraries(Colada_Client PRIVATE asio asio::asio)
+#target_link_libraries(Colada_Server PRIVATE asio asio::asio)
 
-find_library(fmod fmod_vc HINTS "${PROJECT_SOURCE_DIR}/lib")
+#linux
+find_library(fmod libfmodL.so HINTS "${PROJECT_SOURCE_DIR}/lib")
 target_link_libraries(Colada_Client PRIVATE ${fmod})
 target_link_libraries(Colada_Server PRIVATE ${fmod})
+#coppy libfmodL.so.12 to /usr/lib 
 
 #enable usage of VS Profiler
-SET_TARGET_PROPERTIES(Colada_Client PROPERTIES LINK_FLAGS "/PROFILE")
-SET_TARGET_PROPERTIES(Colada_Server PROPERTIES LINK_FLAGS "/PROFILE")
+#SET_TARGET_PROPERTIES(Colada_Client PROPERTIES LINK_FLAGS "/PROFILE")
+#SET_TARGET_PROPERTIES(Colada_Server PROPERTIES LINK_FLAGS "/PROFILE")
 
 #c++17
 target_compile_features(Colada_Client PRIVATE cxx_std_17)
@@ -51,6 +57,7 @@ target_compile_features(Colada_Server PRIVATE cxx_std_17)
 
 
 configure_file("${PROJECT_SOURCE_DIR}/lib/fmod.dll" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file("${PROJECT_SOURCE_DIR}/lib/libfmodL.so" ${CMAKE_BINARY_DIR} COPYONLY)
 
 # REQUIRED PACKAGES:
 # vcpkg install glfw3:x64-windows

@@ -3,6 +3,8 @@
 #include "../RectangleShape.h"
 #include "../Vector2.h"
 
+#include <memory>
+
 
 class Engine;
 class OpenGLShader;

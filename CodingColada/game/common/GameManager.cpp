@@ -50,5 +50,5 @@ void GameManager::OnStart()
 {
 	splashScreen_ = GetFirstComponentOfType<SpriteComponent>();
 	loadingAnimation_ = GetFirstComponentOfType<AnimatedSpriteComponent>();
-	engine_->GetAudio().Loop("..\\..\\..\\..\\CodingColada\\game\\common\\resources\\audio\\background_music.mp3", 1, true);
+	engine_->GetAudio().Loop("../../../../CodingColada/game/common/resources/audio/background_music.mp3", 1, true);
 }

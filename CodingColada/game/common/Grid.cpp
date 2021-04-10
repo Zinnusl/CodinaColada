@@ -152,7 +152,7 @@ void Grid::OnDraw(float subframe, float deltaTime)
 		GetNode(column, row).building = tower;
 		GetNode(column, row).walkable_ = false;
 		buildings_.push_back(std::move(tower));
-		engine_->GetAudio().Play("..\\..\\..\\..\\CodingColada\\game\\common\\resources\\audio\\build2.wav", 1, false);
+		engine_->GetAudio().Play("../../../../CodingColada/game/common/resources/audio/build2.wav", 1, false);
 	}
 	if (GameObject::engine_->GetInput().GetMouse(1) && isCellFree)
 	{

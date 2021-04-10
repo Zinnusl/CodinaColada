@@ -41,6 +41,7 @@ OpenGLRenderer::~OpenGLRenderer()
 //Loads a shader from .vert and .frag file
 void OpenGLRenderer::LoadShader(std::string name, std::string vertexShaderPath, std::string fragmentShaderPath, std::function<void(OpenGLShader&)> onUseCallback)
 {
+	printf("Vertex Shader Path %s\n", vertexShaderPath.c_str());
 	OpenGLShader shader = OpenGLShader::CompileFromFile(vertexShaderPath.c_str(), fragmentShaderPath.c_str(), nullptr, onUseCallback);
 	shader.SetMatrix4("projection", projection_, true);
 	shaders_.emplace(std::make_pair(name, shader));
@@ -104,11 +105,11 @@ void* OpenGLRenderer::CreateWindow(int xResolution, int yResolution, int xEngine
 	//The projection is used to normalize coordinates to the [-1, 1] range that OpenGL uses. This means that at any 16:9 ratio square will look like a square
 	projection_ = glm::ortho(0.0f, static_cast<float>(xEngineUnits), 0.0f, static_cast<float>(yEngineUnits), -1.f, 1.f);
 
-	OpenGLShader defaultShader = OpenGLShader::CompileFromFile("..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.frag", nullptr);
+	OpenGLShader defaultShader = OpenGLShader::CompileFromFile("../../../../CodingColada/engine/opengl/shader/default.vert", "../../../../CodingColada/engine/opengl/shader/default.frag", nullptr);
 	defaultShader.SetMatrix4("projection", projection_, true);
 	shaders_.emplace(std::make_pair("colada_shader_default", defaultShader));
 
-	OpenGLShader spriteShader = OpenGLShader::CompileFromFile("..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\sprite.vert", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\sprite.frag", nullptr);
+	OpenGLShader spriteShader = OpenGLShader::CompileFromFile("../../../../CodingColada/engine/opengl/shader/sprite.vert", "../../../../CodingColada/engine/opengl/shader/sprite.frag", nullptr);
 	spriteShader.SetMatrix4("projection", projection_, true);
 	shaders_.emplace(std::make_pair("colada_shader_sprite", spriteShader));
 

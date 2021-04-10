@@ -42,30 +42,30 @@ int main()
 	void* window = engine->GetRenderer().CreateWindow(windowSize.GetX(), windowSize.GetY(), engineUnits.GetX(), engineUnits.GetY(), false);
 	engine->GetInput().RegisterWindow(window);
 
-	renderer->LoadTexture("test_sprite_60x60", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\texture\\test_sprite_60x60.png");
-	renderer->LoadTexture("stone", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\stone.png");
-	renderer->LoadTexture("watermelon", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\melon1.png");
-	renderer->LoadTexture("watermelon2", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\melon2.png");
-	renderer->LoadTexture("watermelon3", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\melon3.png");
-	renderer->LoadTexture("watermelon4", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\melon4.png");
-	renderer->LoadTexture("watermelon5", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\melon5.png");
-	renderer->LoadTexture("watermelon6", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\melon6.png");
-	renderer->LoadTexture("watermelon7", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\melon7.png");
-	renderer->LoadTexture("watermelon8", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\melon8.png");
-	renderer->LoadTexture("codina_colada_logo1", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\loading\\codina_colada_logo1.png");
-	renderer->LoadTexture("codina_colada_logo2", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\loading\\codina_colada_logo2.png");
-	renderer->LoadTexture("codina_colada_logo3", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\loading\\codina_colada_logo3.png");
-	renderer->LoadTexture("codina_colada_logo4", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\loading\\codina_colada_logo4.png");
-	renderer->LoadTexture("codina_colada_logo5", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\loading\\codina_colada_logo5.png");
-	renderer->LoadTexture("codina_colada_logo6", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\loading\\codina_colada_logo6.png");
-	renderer->LoadTexture("hovertile", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\Tile_Hover.png");
-	renderer->LoadTexture("tower_canon", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\canon_tower.png");
-	renderer->LoadTexture("blocker", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\rect_border.png");
-	renderer->LoadTexture("blocker_red", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\rect_border_red.png");
-	renderer->LoadTexture("codina_colada_logo_16_9", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\textures\\codina_colada_logo_16_9.png");
+	renderer->LoadTexture("test_sprite_60x60", "../../../../CodingColada/engine/opengl/texture/test_sprite_60x60.png");
+	renderer->LoadTexture("stone", "../../../../CodingColada/game/common/resources/textures/stone.png");
+	renderer->LoadTexture("watermelon", "../../../../CodingColada/game/common/resources/textures/melon1.png");
+	renderer->LoadTexture("watermelon2", "../../../../CodingColada/game/common/resources/textures/melon2.png");
+	renderer->LoadTexture("watermelon3", "../../../../CodingColada/game/common/resources/textures/melon3.png");
+	renderer->LoadTexture("watermelon4", "../../../../CodingColada/game/common/resources/textures/melon4.png");
+	renderer->LoadTexture("watermelon5", "../../../../CodingColada/game/common/resources/textures/melon5.png");
+	renderer->LoadTexture("watermelon6", "../../../../CodingColada/game/common/resources/textures/melon6.png");
+	renderer->LoadTexture("watermelon7", "../../../../CodingColada/game/common/resources/textures/melon7.png");
+	renderer->LoadTexture("watermelon8", "../../../../CodingColada/game/common/resources/textures/melon8.png");
+	renderer->LoadTexture("codina_colada_logo1", "../../../../CodingColada/game/common/resources/textures/loading/codina_colada_logo1.png");
+	renderer->LoadTexture("codina_colada_logo2", "../../../../CodingColada/game/common/resources/textures/loading/codina_colada_logo2.png");
+	renderer->LoadTexture("codina_colada_logo3", "../../../../CodingColada/game/common/resources/textures/loading/codina_colada_logo3.png");
+	renderer->LoadTexture("codina_colada_logo4", "../../../../CodingColada/game/common/resources/textures/loading/codina_colada_logo4.png");
+	renderer->LoadTexture("codina_colada_logo5", "../../../../CodingColada/game/common/resources/textures/loading/codina_colada_logo5.png");
+	renderer->LoadTexture("codina_colada_logo6", "../../../../CodingColada/game/common/resources/textures/loading/codina_colada_logo6.png");
+	renderer->LoadTexture("hovertile", "../../../../CodingColada/game/common/resources/textures/Tile_Hover.png");
+	renderer->LoadTexture("tower_canon", "../../../../CodingColada/game/common/resources/textures/canon_tower.png");
+	renderer->LoadTexture("blocker", "../../../../CodingColada/game/common/resources/textures/rect_border.png");
+	renderer->LoadTexture("blocker_red", "../../../../CodingColada/game/common/resources/textures/rect_border_red.png");
+	renderer->LoadTexture("codina_colada_logo_16_9", "../../../../CodingColada/game/common/resources/textures/codina_colada_logo_16_9.png");
 
-	renderer->LoadShader("grid",	"..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert",
-									"..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\grid.frag", 
+	renderer->LoadShader("grid",	"../../../../CodingColada/engine/opengl/shader/default.vert",
+									"../../../../CodingColada/engine/opengl/shader/grid.frag", 
 		[&](OpenGLShader& shader) {
 		//Draw a grid with a cellsize of 10 EU
 		shader.SetFloat("cellPixelSizeX", engine->GetRenderer().WorldToScreen(Vector2(10, 0)).GetX() - engine->GetRenderer().WorldToScreen(Vector2(0, 0)).GetX());
@@ -74,8 +74,8 @@ int main()
 		//Doesnt quite work how I want it do.. Should move the grid.. but makes me dizzy..
 		//shader.SetVector2f("pxOffset", engine->GetRenderer().GetCameraPosition().GetX(), engine->GetRenderer().GetCameraPosition().GetY());
 	});
-	renderer->LoadShader("build_grid", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert",
-		"..\\..\\..\\..\\CodingColada\\game\\common\\resources\\shaders\\build_grid.frag",
+	renderer->LoadShader("build_grid", "../../../../CodingColada/engine/opengl/shader/default.vert",
+		"../../../../CodingColada/game/common/resources/shaders/build_grid.frag",
 		[&](OpenGLShader& shader) {
 		//Draw a grid with a cellsize of 10 EU
 		shader.SetFloat("cellPixelSizeX", engine->GetRenderer().WorldToScreen(Vector2(10, 0)).GetX() - engine->GetRenderer().WorldToScreen(Vector2(0, 0)).GetX());
@@ -83,10 +83,10 @@ int main()
 
 		shader.SetVector2f("pxOffset", engine->GetRenderer().GetCameraPosition().GetX(), engine->GetRenderer().GetCameraPosition().GetY());
 	});
-	renderer->LoadShader("hover", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\shaders\\hover.frag");
-	renderer->LoadShader("ignore_camera_rectangle", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\ignore_camera.vert", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.frag");
-	renderer->LoadShader("neon", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\shaders\\neon.frag");
-	renderer->LoadShader("neon_pulse", "..\\..\\..\\..\\CodingColada\\engine\\opengl\\shader\\default.vert", "..\\..\\..\\..\\CodingColada\\game\\common\\resources\\shaders\\neon_pulse.frag");
+	renderer->LoadShader("hover", "../../../../CodingColada/engine/opengl/shader/default.vert", "../../../../CodingColada/game/common/resources/shaders/hover.frag");
+	renderer->LoadShader("ignore_camera_rectangle", "../../../../CodingColada/engine/opengl/shader/ignore_camera.vert", "../../../../CodingColada/engine/opengl/shader/default.frag");
+	renderer->LoadShader("neon", "../../../../CodingColada/engine/opengl/shader/default.vert", "../../../../CodingColada/game/common/resources/shaders/neon.frag");
+	renderer->LoadShader("neon_pulse", "../../../../CodingColada/engine/opengl/shader/default.vert", "../../../../CodingColada/game/common/resources/shaders/neon_pulse.frag");
 
 	auto gameManager = std::make_shared<GameManager>();
 	gameManager->AddComponent(std::make_unique<SpriteComponent>(std::make_unique<OpenGLSprite>(glm::vec2(engineUnits.GetX(), engineUnits.GetY()), OpenGLRenderer::shaders_["colada_shader_sprite"], OpenGLRenderer::textures_["codina_colada_logo_16_9"])));

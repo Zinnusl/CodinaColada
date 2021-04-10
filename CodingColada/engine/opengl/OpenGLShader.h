@@ -10,7 +10,7 @@ public:
     // state
     unsigned int ID;
 
-    std::function<void(OpenGLShader)> OnUseCallback_;
+    std::function<void(OpenGLShader&)> OnUseCallback_;
     // constructor
     OpenGLShader() { }
     // sets the current shader as active

@@ -7,6 +7,7 @@
 #include <vector>
 #include <memory>
 #include <cstdint>
+#include <algorithm>
 
 class Engine;
 class RigidbodyComponent;
