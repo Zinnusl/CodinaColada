@@ -5,6 +5,9 @@ cmake_minimum_required (VERSION 3.8)
 
 project ("CodingColada")
 
+if (UNIX)
+    include(../../vcpkg/scripts/buildsystems/vcpkg.cmake)
+endif (UNIX)
 
 file(GLOB_RECURSE ENGINE_SOURCES LIST_DIRECTORIES true engine/*.h engine/*.cpp)
 file(GLOB_RECURSE GAME_COMMON_SOURCES LIST_DIRECTORIES true game/common/*.h game/common/*.cpp)
@@ -14,8 +17,6 @@ file(GLOB_RECURSE GAME_SERVER_SOURCES LIST_DIRECTORIES true game/server/*.h game
 # Add source to this project's executable.
 add_executable (Colada_Client ${ENGINE_SOURCES} ${GAME_COMMON_SOURCES} ${GAME_CLIENT_SOURCES})
 add_executable (Colada_Server ${ENGINE_SOURCES} ${GAME_COMMON_SOURCES} ${GAME_SERVER_SOURCES})
-
-# TODO: Add tests and install targets if needed.
 
 find_package(glfw3)
 target_link_libraries(Colada_Client PRIVATE glfw)
@@ -33,24 +34,32 @@ find_package(imgui CONFIG REQUIRED)
 target_link_libraries(Colada_Client PRIVATE imgui::imgui) 
 target_link_libraries(Colada_Server PRIVATE imgui::imgui) 
 
-find_package(asio CONFIG REQUIRED)
-target_link_libraries(Colada_Client PRIVATE asio asio::asio)
-target_link_libraries(Colada_Server PRIVATE asio asio::asio)
+#find_package(asio CONFIG REQUIRED)
+#target_link_libraries(Colada_Client PRIVATE asio asio::asio)
+#target_link_libraries(Colada_Server PRIVATE asio asio::asio)
 
-find_library(fmod fmod_vc HINTS "${PROJECT_SOURCE_DIR}/lib")
+if (WIN32)
+    find_library(fmod fmod_vc HINTS "${PROJECT_SOURCE_DIR}/lib")
+    configure_file("${PROJECT_SOURCE_DIR}/lib/fmod.dll" ${CMAKE_BINARY_DIR} COPYONLY)
+endif (WIN32)
+
+if (UNIX)
+    find_library(fmod libfmodL.so.12 HINTS "${PROJECT_SOURCE_DIR}/lib")
+    configure_file("${PROJECT_SOURCE_DIR}/lib/libfmodL.so.12" /usr/lib COPYONLY)
+endif (UNIX)
+
 target_link_libraries(Colada_Client PRIVATE ${fmod})
 target_link_libraries(Colada_Server PRIVATE ${fmod})
 
 #enable usage of VS Profiler
-SET_TARGET_PROPERTIES(Colada_Client PROPERTIES LINK_FLAGS "/PROFILE")
-SET_TARGET_PROPERTIES(Colada_Server PROPERTIES LINK_FLAGS "/PROFILE")
+if (WIN32)
+    #SET_TARGET_PROPERTIES(Colada_Client PROPERTIES LINK_FLAGS "/PROFILE")
+    #SET_TARGET_PROPERTIES(Colada_Server PROPERTIES LINK_FLAGS "/PROFILE")
+endif (WIN32)
 
 #c++17
 target_compile_features(Colada_Client PRIVATE cxx_std_17)
 target_compile_features(Colada_Server PRIVATE cxx_std_17)
-
-
-configure_file("${PROJECT_SOURCE_DIR}/lib/fmod.dll" ${CMAKE_BINARY_DIR} COPYONLY)
 
 # REQUIRED PACKAGES:
 # vcpkg install glfw3:x64-windows
